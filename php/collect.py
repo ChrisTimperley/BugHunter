@@ -12,6 +12,7 @@ def process_bug(id):
     r = requests.get('https://bugs.php.net/bug.php', params={'id': id})
     doc = html.fromstring(r.content)
 
+    # Fetch meta-data and detailed report
     summary         = read_field(doc, '//td[@id="summary"]')
     status          = read_field(doc, '//tr[@id="categorization"]/td[1]')
     package         = read_field(doc, '//tr[@id="categorization"]/td[2]/a')
@@ -25,17 +26,22 @@ def process_bug(id):
     cve             = read_field(doc, '//tr[@id="private"]/td[2]')
     note            = doc.xpath('//pre[@class="note"]/text()')[0]
 
-    print "ID: %d" % id
-    print "Summary: %s" % summary
-    print "Submitted: %s" % submitted
-    print "Modified: %s" % modified
-    print "Status: %s" % status
-    print "Package: %s" % package
-    print "Version: %s" % version
-    print "OS: %s" % os
-    print "Private: %s" % private
-    print "CVE: %s" % cve
-    print "\n\n%s" % note
+    # Find all SVN/Git commits
+    commits = doc.xpath('//div[@class="comment type_svn"]/pre[1]/a/@href')
+    commits = filter(lambda c: not c.startswith('bug.php'), commits)
+    print commits
+
+#    print "ID: %d" % id
+#    print "Summary: %s" % summary
+#    print "Submitted: %s" % submitted
+#    print "Modified: %s" % modified
+#    print "Status: %s" % status
+#    print "Package: %s" % package
+#    print "Version: %s" % version
+#    print "OS: %s" % os
+#    print "Private: %s" % private
+#    print "CVE: %s" % cve
+#    print "\n\n%s" % note
 
 #
 process_bug(63740)
