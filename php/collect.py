@@ -17,8 +17,9 @@ def read_field(doc, field):
 #
 # Note: id must be greater than zero
 def fetch_bug(id):
-    print "fetching bug: %d" % id
-    file_path = './bug-%d.json' % id
+    id_s = format(id, '07')
+    print "fetching bug: %d" % id_s
+    file_path = './bug-%d.json' % id_s
 
     # Have we already downloaded this bug to disk?
     if os.path.isfile(file_path):
@@ -39,7 +40,7 @@ def fetch_bug(id):
 
     try:
         jsn = {
-            'id':           id,
+            'id':           id_s,
             'summary':      read_field(doc, '//td[@id="summary"]'),
             'status':       read_field(doc, '//tr[@id="categorization"]/td[1]'),
             'package':      read_field(doc, '//tr[@id="categorization"]/td[2]/a'),
@@ -55,7 +56,7 @@ def fetch_bug(id):
             'note':         read_field(doc, '//pre[@class="note"]')
         }
     except:
-        print "Unexpected error when reading bug: %d" % id
+        print "Unexpected error when reading bug: %d" % id_s
         raise
 
     # Save to disk
@@ -63,7 +64,7 @@ def fetch_bug(id):
         with open(file_path, 'w') as f:
             json.dump(jsn, f, indent=2)
     except:
-        print "Unexpected error when writing bug report to file: %d" % id
+        print "Unexpected error when writing bug report to file: %d" % id_s
         raise
 
     return jsn
@@ -76,7 +77,7 @@ def fetch_bugs(lim):
     for bug in pool.map(fetch_bug, range(1, lim + 1)):
         if bug is None:
             continue
-        doc[str(bug['id'])] = bug
+        doc[bug['id']] = bug
     with open('bugs.json', 'w') as f:
         json.dump(doc, f, indent=2, sort_keys=True)
     return doc
