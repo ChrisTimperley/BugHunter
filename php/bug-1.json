@@ -1,0 +1,33 @@
+{
+  "status": "Not a bug", 
+  "commits": [
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=XXX", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=XXX", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=XXX", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=XXX", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=XXX", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=XXX", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=296329", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=300959", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=304492", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=304647", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=307144", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=319056", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=325902", 
+    "https://github.com/orieg/php-judy/issues/1", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=332232", 
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=336038"
+  ], 
+  "private": "No", 
+  "assigned": "", 
+  "id": 1, 
+  "package": "Scripting Engine problem", 
+  "modified": "2014-04-03 18:32 UTC", 
+  "submitted": "1998-01-25 11:06 UTC", 
+  "summary": "Apache 1.3b3 + mod_php3 is slow", 
+  "note": "When PHP3 is linked into Apache 1.3b3 on Solaris 2.5.1 the\r\nweb server becomes extremely sluggish or won't answer requests\r\nat all.  \n", 
+  "version": "3.0b3", 
+  "submitter": "rasmus at lerdorf dot on dot ca", 
+  "cve": "", 
+  "os": "Solaris 2.5.1"
+}

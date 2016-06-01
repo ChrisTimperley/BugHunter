@@ -1,0 +1,20 @@
+{
+  "status": "Closed", 
+  "commits": [
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=320521", 
+    "http://doc.php.net/php/dochowto/chapter-conventions.php", 
+    "http://git.php.net/?p=pecl/numbers/bitset.git;a=commit;h=6bb94b49d70305b28f42eeecf8001a828d2544ff"
+  ], 
+  "private": "No", 
+  "assigned": "", 
+  "id": 7, 
+  "package": "Compile Failure", 
+  "modified": "1998-02-06 13:01 UTC", 
+  "submitted": "1998-01-26 17:00 UTC", 
+  "summary": "apache 1.3b3 fails to compile with php3 module", 
+  "note": "I have compiled php3 as apache module with mysql support\r\nsuccessfully.\r\n\r\nBut apache with php3 failed to compile with messages\r\nabout undeclared struct timeval in main/http_main.c and \r\nrlim_t in main/http_core.c. (I fixed it temporarily by \r\nputting appropriate declaration in main/httpd.h).\r\n\r\nI dont understand how a module could cause these errors\r\nbut I had no problems with php3.0b3, that's why I'm\r\nreporting that here :)\n", 
+  "version": "3.0 Latest CVS", 
+  "submitter": "koles at atrey dot karlin dot mff dot cuni dot cz", 
+  "cve": "", 
+  "os": "Linux 2.0.33 (Redhat 5.0)"
+}

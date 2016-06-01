@@ -1,0 +1,18 @@
+{
+  "status": "Closed", 
+  "commits": [
+    "http://svn.php.net/viewvc/?view=revision&amp;revision=323929"
+  ], 
+  "private": "No", 
+  "assigned": "", 
+  "id": 5, 
+  "package": "Compile Failure", 
+  "modified": "1998-01-29 14:20 UTC", 
+  "submitted": "1998-01-25 19:46 UTC", 
+  "summary": "fclose in php3_minit_file undeclared", 
+  "note": "Compiling under SunOS 4.1.4:  gcc error trace:\r\n\r\nfunctions/file.c: In function `php3_minit_file':\r\nfunctions/file.c:254: `fclose' undeclared (first use this function)\r\nfunctions/file.c:254: (Each undeclared identifier is reported only once\r\nfunctions/file.c:254: for each function it appears in.)    \r\n\r\nApparently BROKEN_SUN_HEADERS does not get automatically set.\r\nHow are these supposed to get set?  Not set by configure.\r\n\r\n\n", 
+  "version": "3.0b3", 
+  "submitter": "asparks at nss dot harris dot com", 
+  "cve": "", 
+  "os": "SunOS 4.1.4"
+}
