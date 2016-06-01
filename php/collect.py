@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import sys
 import json
 import requests
 import os.path
@@ -61,18 +62,18 @@ def fetch_bug(id):
 # Keeps fetching PHP bugs until it runs out of them, then it writes a summary
 # of them to bugs.json.
 # Single-threaded for now.
-def fetch_bugs():
+def fetch_bugs(lim):
     doc = {} 
-    id = 0
-    while True:
-        id += 1
+    for id in range(1, lim + 1):
         res = fetch_bug(id)
-        if res is None:
-            break
-        doc[str(id)] = res
+        if not res is None:
+            doc[str(id)] = res
     with open('bugs.json', 'w') as f:
         json.dump(doc, f, indent=2)
     return doc
 
 if __name__ == "__main__":
-    fetch_bugs()
+    if len(sys.argv) != 2:
+        print "ERROR: expected ID of most recently reported bug"
+    else:
+        fetch_bugs(int(sys.argv[1]))
