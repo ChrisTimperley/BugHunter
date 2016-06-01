@@ -2,19 +2,34 @@
 import requests
 from lxml import html
 
+def read_field(doc, field):
+  query = field + '/text()'
+  res = doc.xpath(query)
+  return (res[0] if len(res) == 1 else "")
+
 # Extracts information about a bug with a given ID from bugs.php.net
 def process_bug(id):
     r = requests.get('https://bugs.php.net/bug.php', params={'id': id})
     doc = html.fromstring(r.content)
 
-    summary = doc.xpath('//td[@id="summary"]/text()')[0]
-    status = doc.xpath('//tr[@id="categorization"]/td[1]/text()')[0]
-    package = doc.xpath('//tr[@id="categorization"]/td[2]/a/text()')[0]
+    summary         = read_field(doc, '//td[@id="summary"]')
+    status          = read_field(doc, '//tr[@id="categorization"]/td[1]')
+    package         = read_field(doc, '//tr[@id="categorization"]/td[2]/a')
+    submitted       = read_field(doc, '//tr[@id="submission"]/td[1]')
+    modified        = read_field(doc, '//tr[@id="submission"]/td[2]')
+    submitted_by    = read_field(doc, '//tr[@id="submitter"]/td[1]')
+    assigned_to     = read_field(doc, '//tr[@id="submitter"]/td[2]/a')
+    version         = read_field(doc, '//tr[@id="situation"]/td[1]')
+    os              = read_field(doc, '//tr[@id="situation"]/td[2]')
 
     print "ID: %d" % id
     print "Summary: %s" % summary
+    print "Submitted: %s" % submitted
+    print "Modified: %s" % modified
     print "Status: %s" % status
     print "Package: %s" % package
+    print "Version: %s" % version
+    print "OS: %s" % os
 
 #
 process_bug(63740)
