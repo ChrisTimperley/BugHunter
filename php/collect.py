@@ -21,6 +21,9 @@ def process_bug(id):
     assigned_to     = read_field(doc, '//tr[@id="submitter"]/td[2]/a')
     version         = read_field(doc, '//tr[@id="situation"]/td[1]')
     os              = read_field(doc, '//tr[@id="situation"]/td[2]')
+    private         = read_field(doc, '//tr[@id="private"]/td[1]')
+    cve             = read_field(doc, '//tr[@id="private"]/td[2]')
+    note            = doc.xpath('//pre[@class="note"]/text()')[0]
 
     print "ID: %d" % id
     print "Summary: %s" % summary
@@ -30,6 +33,9 @@ def process_bug(id):
     print "Package: %s" % package
     print "Version: %s" % version
     print "OS: %s" % os
+    print "Private: %s" % private
+    print "CVE: %s" % cve
+    print "\n\n%s" % note
 
 #
 process_bug(63740)
