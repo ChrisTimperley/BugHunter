@@ -58,13 +58,21 @@ def fetch_bug(id):
 
     return jsn
 
-# Single-threaded, for now
+# Keeps fetching PHP bugs until it runs out of them, then it writes a summary
+# of them to bugs.json.
+# Single-threaded for now.
 def fetch_bugs():
     doc = {} 
-    for id in range(1, 10):
-        doc[str(id)] = fetch_bug(id)
+    id = 0
+    while True:
+        id += 1
+        res = fetch_bug(id)
+        if res is None:
+            break
+        doc[str(id)] = res
     with open('bugs.json', 'w') as f:
         json.dump(doc, f, indent=2)
     return doc
-   
-fetch_bugs()
+
+if __name__ == "__main__":
+    fetch_bugs()
