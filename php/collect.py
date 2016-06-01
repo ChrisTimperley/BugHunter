@@ -37,26 +37,34 @@ def fetch_bug(id):
     commits = filter(lambda c: not c.startswith('bug.php'), commits)
     commits = list(set(commits))
 
-    jsn = {
-        'id':           id,
-        'summary':      read_field(doc, '//td[@id="summary"]'),
-        'status':       read_field(doc, '//tr[@id="categorization"]/td[1]'),
-        'package':      read_field(doc, '//tr[@id="categorization"]/td[2]/a'),
-        'submitted':    read_field(doc, '//tr[@id="submission"]/td[1]'),
-        'modified':     read_field(doc, '//tr[@id="submission"]/td[2]'),
-        'submitter':    read_field(doc, '//tr[@id="submitter"]/td[1]'),
-        'assigned':     read_field(doc, '//tr[@id="submitter"]/td[2]/a'),
-        'version':      read_field(doc, '//tr[@id="situation"]/td[1]'),
-        'os':           read_field(doc, '//tr[@id="situation"]/td[2]'),
-        'private':      read_field(doc, '//tr[@id="private"]/td[1]'),
-        'cve':          read_field(doc, '//tr[@id="private"]/td[2]'),
-        'commits':      commits,
-        'note':         doc.xpath('//pre[@class="note"]/text()')[0]
-    }
+    try:
+        jsn = {
+            'id':           id,
+            'summary':      read_field(doc, '//td[@id="summary"]'),
+            'status':       read_field(doc, '//tr[@id="categorization"]/td[1]'),
+            'package':      read_field(doc, '//tr[@id="categorization"]/td[2]/a'),
+            'submitted':    read_field(doc, '//tr[@id="submission"]/td[1]'),
+            'modified':     read_field(doc, '//tr[@id="submission"]/td[2]'),
+            'submitter':    read_field(doc, '//tr[@id="submitter"]/td[1]'),
+            'assigned':     read_field(doc, '//tr[@id="submitter"]/td[2]/a'),
+            'version':      read_field(doc, '//tr[@id="situation"]/td[1]'),
+            'os':           read_field(doc, '//tr[@id="situation"]/td[2]'),
+            'private':      read_field(doc, '//tr[@id="private"]/td[1]'),
+            'cve':          read_field(doc, '//tr[@id="private"]/td[2]'),
+            'commits':      commits,
+            'note':         doc.xpath('//pre[@class="note"]/text()')[0]
+        }
+    except:
+        print "Unexpected error when reading bug: %d" % id
+        raise
 
     # Save to disk
-    with open(file_path, 'w') as f:
-        json.dump(jsn, f, indent=2)
+    try:
+        with open(file_path, 'w') as f:
+            json.dump(jsn, f, indent=2)
+    except:
+        print "Unexpected error when writing bug report to file: %d" % id
+        raise
 
     return jsn
 
@@ -70,7 +78,7 @@ def fetch_bugs(lim):
             continue
         doc[str(bug['id'])] = bug
     with open('bugs.json', 'w') as f:
-        json.dump(doc, f, indent=2)
+        json.dump(doc, f, indent=2, sort_keys=True)
     return doc
 
 if __name__ == "__main__":
