@@ -52,7 +52,7 @@ def fetch_bug(id):
             'private':      read_field(doc, '//tr[@id="private"]/td[1]'),
             'cve':          read_field(doc, '//tr[@id="private"]/td[2]'),
             'commits':      commits,
-            'note':         doc.xpath('//pre[@class="note"]/text()')[0]
+            'note':         read_field(doc, '//pre[@class="note"]')
         }
     except:
         print "Unexpected error when reading bug: %d" % id
