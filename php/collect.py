@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+import multiprocessing
 import json
 import requests
 import os.path
@@ -34,6 +35,7 @@ def fetch_bug(id):
     # Find all SVN/Git commits
     commits = doc.xpath('//div[@class="comment type_svn"]/pre[1]/a/@href')
     commits = filter(lambda c: not c.startswith('bug.php'), commits)
+    commits = list(set(commits))
 
     jsn = {
         'id':           id,
@@ -53,7 +55,6 @@ def fetch_bug(id):
     }
 
     # Save to disk
-    file_path = './bug-%d.json' % id
     with open(file_path, 'w') as f:
         json.dump(jsn, f, indent=2)
 
@@ -61,13 +62,13 @@ def fetch_bug(id):
 
 # Keeps fetching PHP bugs until it runs out of them, then it writes a summary
 # of them to bugs.json.
-# Single-threaded for now.
 def fetch_bugs(lim):
-    doc = {} 
-    for id in range(1, lim + 1):
-        res = fetch_bug(id)
-        if not res is None:
-            doc[str(id)] = res
+    pool = multiprocessing.Pool()
+    doc = {}
+    for bug in pool.map(fetch_bug, range(1, lim + 1)):
+        if bug is None:
+            continue
+        doc[str(bug['id'])] = bug
     with open('bugs.json', 'w') as f:
         json.dump(doc, f, indent=2)
     return doc
