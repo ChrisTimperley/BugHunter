@@ -3,7 +3,7 @@ import sys
 import json
 
 IGNORED_PACKAGES = ['Compile Failure', 'Feature/Change Request',
-    'Installation problem', 'Documentation problem']
+    'Installation problem', 'Documentation problem', 'Translation problem']
 
 def keep_bug(bug):
     if bug['status'] != 'Closed':
