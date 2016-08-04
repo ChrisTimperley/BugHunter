@@ -22,7 +22,8 @@ def commit_to_json(commit):
             'email': commit.committer.email,
             'name': commit.committer.name
         },
-        'date': commit.committed_date
+        'date': commit.committed_date,
+        'files': [commit.stats.files.keys()]
     }
 
 def fixes_to_json_file(fixes, fn):
