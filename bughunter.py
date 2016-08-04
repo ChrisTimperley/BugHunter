@@ -5,6 +5,7 @@ import git
 import os
 import os.path
 import subprocess
+import multiprocessing
 
 # Create null file handler for subprocess calls
 FNULL = open(os.devnull, 'w')
@@ -53,6 +54,8 @@ class Fix(object):
         if self.__files is None:
             self.__files = self.__commit.stats.files.keys()
         return self.__files
+    def source_files(self):
+        return filter(lambda s: s.endswith('.c'),self.files())
 
     # Determines whether this object is indeed a fix
     def is_fix(self):
@@ -68,7 +71,7 @@ class Fix(object):
             repo.git.reset('--hard')
             repo.git.checkout(self.__identifier, b='preprocessing')
 
-            # configure and compile the program
+            # build the program
             assert subprocess.Popen('./buildconf',
                     shell=True,
                     #stdout=FNULL, stderr=subprocess.STDOUT,
@@ -77,6 +80,19 @@ class Fix(object):
                     shell=True,
                     #stdout=FNULL, stderr=subprocess.STDOUT,
                     cwd=repo.working_dir).wait() == 0, "failed to configure"
+            assert subprocess.Popen('make clean && make',
+                    shell=True,
+                    #stdout=FNULL, stderr=subprocess.STDOUT,
+                    cwd=repo.working_dir).wait() == 0, "failed to make"
+
+            # copy preprocessed files to database
+            cp_to_dir = os.path.join(db.directory(), self.identifier())
+            os.makedirs(os.path.dirname(cp_to))
+            for fn in self.source_files():
+                fn = fn[:-2] + '.i'
+                cp_from = os.path.join(repo.working_dir, fn)
+                cp_to = os.path.join(cp_to_dir, fn)
+                shutil.copyfile(cp_from, cp_to)
 
         # destroy the branch and revert back to master
         finally:
@@ -121,9 +137,13 @@ class FixDB(object):
     def repository(self):
         return self.__repo
 
+    # Returns the name of the directory that this database belongs to
+    def directory(self):
+        return os.path.join(os.getcwd(), "database/%s" % self.__name)
+
     # Returns the name of the index file for this project
     def indexFileName(self):
-        return "database/%s/database.json" % self.__name
+        return "%s/database.json" % self.directory()
 
     # Builds the contents of this fix database from scratch, then saves to disk
     def build(self):
@@ -166,6 +186,6 @@ if __name__ == "__main__":
 
 
 
-        print fix.build_files(db.repository())
+        fix.build_files(db.repository())
     else:
         print "Error: expected a single argument, specifying the path to the repository which should be inspected."
