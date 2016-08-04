@@ -41,6 +41,10 @@ class Fix(object):
                 (not (any (s in msg for s in BUG_ANTI_MARKERS))) and \
                 any(f.endswith('.c') for f in self.files())
 
+    #
+    def get_files(self):
+        x
+
     def to_json(self):
         return {
             'id': self.identifier(),
@@ -52,13 +56,6 @@ class Fix(object):
             'date': self.date(),
             'files': self.files()
         }
-
-# Determines whether a given commit contains the fix to a bug
-def commit_contains_fix(commit):
-    msg = commit.message.lower()
-    return  any(s in msg for s in BUG_MARKERS) and \
-                not (any (s in msg for s in BUG_ANTI_MARKERS)) and \
-                any(f.endswith('.c') for f in commit.stats.files.keys())
 
 def fixes_to_json_file(fixes, fn):
     with open(fn, 'w') as f:
