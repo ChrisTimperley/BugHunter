@@ -26,8 +26,8 @@ class Fix(object):
         elif json:
             self.__identifier = jsn['id']
             self.__message = jsn['message']
-            self.__email = jsn['email']
-            self.__name = jsn['name']
+            self.__email = jsn['committer']['email']
+            self.__name = jsn['committer']['name']
             self.__date = jsn['date']
             self.__files = jsn['files']
 
