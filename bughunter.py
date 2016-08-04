@@ -4,6 +4,10 @@ import sys
 import git
 import os
 import os.path
+import subprocess
+
+# Create null file handler for subprocess calls
+FNULL = open(os.devnull, 'w')
 
 # Any commit containing a bug marker will be treated as a bug fix, unless the
 # commit also contains an anti-marker
@@ -57,6 +61,30 @@ class Fix(object):
                 (not (any (s in msg for s in BUG_ANTI_MARKERS))) and \
                 any(f.endswith('.c') for f in self.files())
 
+    #
+    def build_files(self, repo):
+        # revert the repository to this commit in a separate branch
+        try:
+            repo.git.reset('--hard')
+            repo.git.checkout(self.__identifier, b='preprocessing')
+
+            # configure and compile the program
+            assert subprocess.Popen('./buildconf',
+                    shell=True,
+                    #stdout=FNULL, stderr=subprocess.STDOUT,
+                    cwd=repo.working_dir).wait() == 0, "failed to buildconf"
+            assert subprocess.Popen('./configure "CC=cc -save-temps" "GCC=gcc -save-temps"',
+                    shell=True,
+                    #stdout=FNULL, stderr=subprocess.STDOUT,
+                    cwd=repo.working_dir).wait() == 0, "failed to configure"
+
+        # destroy the branch and revert back to master
+        finally:
+            print "-- switching to master and destroying branch"
+            repo.git.reset('--hard')
+            repo.git.checkout('master')
+            repo.git.branch('-D', 'preprocessing')
+
     # Returns a JSON description of this fix, in the form of a Dict
     def to_json(self):
         return {
@@ -78,6 +106,7 @@ class FixDB(object):
     def __init__(self, repoPath):
         self.__name = os.path.basename(repoPath)
         self.__repo = git.Repo(repoPath, odbt=git.GitCmdObjectDB)
+        self.__repo.git.checkout('master')
 
         # Load the fixes from the JSON index file for this repo, if one exists
         if os.path.isfile(self.indexFileName()):
@@ -85,6 +114,9 @@ class FixDB(object):
         # Otherwise, generate the index file from scratch and save it to disk
         else:
             self.build()
+
+    def fixes(self):
+        return self.__fixes
 
     def repository(self):
         return self.__repo
@@ -97,7 +129,7 @@ class FixDB(object):
     def build(self):
         print "Building fix database from scratch..."
         print "Extracting commits from repository..."
-        commits = map(Fix, self.repository().iter_commits())
+        commits = map(Fix, self.epository().iter_commits())
         print "Filtering fixes from list of commits..."
         self.__fixes = filter(Fix.is_fix, commits)
         print "Finished filtering - found %d fixes" % len(self.__fixes)
@@ -127,8 +159,13 @@ class FixDB(object):
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        print "Usage: bughunter [repository]"
+        print "Usage: ./bughunter.py [repository]"
     elif len(sys.argv) == 2:
-        FixDB(sys.argv[1].strip())
+        db = FixDB(sys.argv[1].strip())
+        fix = db.fixes()[0]
+
+
+
+        print fix.build_files(db.repository())
     else:
         print "Error: expected a single argument, specifying the path to the repository which should be inspected."
