@@ -1,0 +1,6771 @@
+[
+  {
+    "date": 1450386920, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "dedf86311b85ef3af8cf6503e528aa52e755ac97", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1450210358, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed use of it after free.", 
+    "id": "1d91699e8e23dab4c221c8402c7f086264a485ee", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1450209516, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Onion test fixed to work with faster DHT.", 
+    "id": "9a87f03aec08bebe4beed3ae4d2391a75e36393b", 
+    "files": [
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1449611418, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed DHT bug.", 
+    "id": "4f33b27f6b366426e29068db4a0d87a10a736d43", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1448121926, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Increase max file transfer speed.\n\nFix bug that limited it to 1K packets per second.", 
+    "id": "73b2144edcfd1ca617e9054479b66ab0c0361a14", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1447963820, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed division by 0.", 
+    "id": "548fafc4ddef6c60d79498d59a576bd66e6a0373", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1447286321, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Attempted fix of UDP disconnect bug that happens when both ipv4 and ipv6 are connected.", 
+    "id": "22634a4b93dda5b17cb357cd84ac46fcfdc22519", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1447118033, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "File transfer fixes.\n\nFixed file transfers disconnecting tox clients from each other in\nsome network conditions.", 
+    "id": "7022cef26edfccd2d4a5d47d3b7179958af7ce6a", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1445633662, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "Eniz Vukovic"
+    }, 
+    "message": "Fixed error in last commit.", 
+    "id": "d8a85d9a78149497c8e7ad39197934a288d9a7c2", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1445633662, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "Eniz Vukovic"
+    }, 
+    "message": "Fixed some memory related bugs.", 
+    "id": "b23819a4d17b5ec083e47a2e0f659bc7fb9980b3", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1445633661, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "Eniz Vukovic"
+    }, 
+    "message": "Fix PACKET_ID_OFFLINE fallinthrough PACKET_ID_NICKNAME\n\nThis fixes the PACKET_ID_OFFLINE handling code incorrectly falling through to the PACKET_ID_NICKNAME handling code\n\nThis bug resulted in a friend B's name being wiped on friend A's client after B removes A\n\nFixes tux3/qTox#1967\n\nFixes #1426", 
+    "id": "9c824105a91f8ee37d61c9356d6a80f58ca00fba", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1442250344, 
+    "committer": {
+      "email": "barrdetwix@gmail.com", 
+      "name": "tux3"
+    }, 
+    "message": "Fix PACKET_ID_OFFLINE fallinthrough PACKET_ID_NICKNAME\n\nThis fixes the PACKET_ID_OFFLINE handling code incorrectly falling through to the PACKET_ID_NICKNAME handling code\n\nThis bug resulted in a friend B's name being wiped on friend A's client after B removes A\n\nFixes tux3/qTox#1967\n\nFixes #1426", 
+    "id": "54cec872d8e0e3fc31439ac6a7f905ba6ace625a", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1439417964, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fix bug in codec initialization", 
+    "id": "bf5e9b89d2a67c293aae503c03e193307ea7990b", 
+    "files": [
+      "toxav/video.c"
+    ]
+  }, 
+  {
+    "date": 1438905844, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed memory leak during session cleanup and fixed naming.", 
+    "id": "657a57b406717a3ff08233eef14f20818c137f47", 
+    "files": [
+      "toxav/toxav.h", 
+      "toxav/audio.c", 
+      "other/apidsl/toxav.in.h", 
+      "toxav/rtp.c", 
+      "testing/av_test.c"
+    ]
+  }, 
+  {
+    "date": 1437620152, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "1de2ef78cfa498eef1b11f1e768b8d61bc1718ca", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1437529777, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "ba857a203ae76a4e9b814adaebeaffa394464731", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1437445313, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some strange build issues.", 
+    "id": "553f3ea51302ac9f7c946457c7914dfee380f3a6", 
+    "files": [
+      "toxav/msi.h", 
+      "toxav/msi.c", 
+      "toxav/rtp.c", 
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1437272044, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "defdc879f0472eb4c4be0d1dbff5478fd02f1686", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1436540093, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed CALL_STATE naming", 
+    "id": "7d5de68364f83662a19e45e6e3ab021414178df5", 
+    "files": [
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.h", 
+      "other/apidsl/toxav.in.h"
+    ]
+  }, 
+  {
+    "date": 1435974773, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed Tox reporting itself as being connected with TCP when using UDP only on LAN.", 
+    "id": "c259250abb86a01ae7e3fc906380417427f38ca1", 
+    "files": [
+      "auto_tests/tox_test.c", 
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1435783806, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed missing include toxav_old.h", 
+    "id": "4bc2413c4451560e912617fd7432c4b6f141ccf7", 
+    "files": [
+      "toxav/toxav.h", 
+      "toxav/toxav_old.h", 
+      "toxav/toxav_old.c"
+    ]
+  }, 
+  {
+    "date": 1435546287, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed last PR.", 
+    "id": "219fabc0f5dbaac7968cb7728d25dface3ebb2ea", 
+    "files": [
+      "toxcore/TCP_connection.c"
+    ]
+  }, 
+  {
+    "date": 1435544129, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "6aaac706fab61bbb777f025d0a2bea3800efc3de", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1435285114, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "f2be0a3c5da66f62cc82b8aecca6350251e48f55", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1435026859, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "f0433595f9c118bd19f1bf310ae65c02fbb2eb22", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1434597070, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "c13fb9a34dbf603c9dd7450bb34f83ac068465e8", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1434420667, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "48ef0f3241e0bde931d53c5c7799e8a75c52a481", 
+    "files": [
+      "toxcore/friend_connection.c"
+    ]
+  }, 
+  {
+    "date": 1434250245, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "1bfb76bafe18ac8233c675f956662ea4ac764507", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1434200434, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed sample size in callback and other stuff", 
+    "id": "a3132feddb25656e33c7ce8c9bc6abc78657a01e", 
+    "files": [
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/audio.c", 
+      "testing/av_test.c", 
+      "auto_tests/toxav_many_test.c"
+    ]
+  }, 
+  {
+    "date": 1432687929, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed rare bug where userstatus, name, etc... would not be sent to friend.", 
+    "id": "ce077eeeb3fc418d24176c17bbb07bf47b966021", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1432686624, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug when deleting friend that we are connected to in group chat.", 
+    "id": "f7d203925fa450ab6774b1fd712a2d033ab4c044", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1431739670, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed friends getting disconnected when transferring files.", 
+    "id": "b5d712502ba05cfc89edb6de04077f763effc445", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1431528316, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault in tox-bootstrapd.", 
+    "id": "06188e981801d18c103d1525f5d463b2967fcd88", 
+    "files": [
+      "other/bootstrap_daemon/tox-bootstrapd.c"
+    ]
+  }, 
+  {
+    "date": 1431461760, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fix bug", 
+    "id": "64037017cc3804d9921bd9780570685871df8f0b", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/msi.c", 
+      "toxav/toxav.h"
+    ]
+  }, 
+  {
+    "date": 1431033243, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed inconsistencies", 
+    "id": "73fbc2296117f8a507e8ed9399e1cf13f19ddb19", 
+    "files": [
+      "testing/av_test.c", 
+      "toxav/toxav.h", 
+      "toxav/rtp.c", 
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c", 
+      "toxav/rtp.h"
+    ]
+  }, 
+  {
+    "date": 1430743221, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible connection issue.", 
+    "id": "84d4f95038f706458987ac64315e0d9779b4cac7", 
+    "files": [
+      "toxcore/friend_connection.c", 
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1430512165, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed* api comments and some bugs", 
+    "id": "eb6e8aa290a7423b666d037981fb453a6f897861", 
+    "files": [
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c", 
+      "toxav/toxav.h", 
+      "toxav/video.c", 
+      "auto_tests/toxav_many_test.c"
+    ]
+  }, 
+  {
+    "date": 1430511239, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "a01a05a943a1739afd5dab8f5ae1ded88e61ca0d", 
+    "files": [
+      "toxcore/list.c"
+    ]
+  }, 
+  {
+    "date": 1430510759, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some non standard C.", 
+    "id": "6da97bb48a69b1290667067d073d0b7f79967f47", 
+    "files": [
+      "toxdns/toxdns.c"
+    ]
+  }, 
+  {
+    "date": 1430507618, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some non standard C.\n\nReplaced void * with uint8_t * in list.c", 
+    "id": "7d13f1928e604b87c29ca22d8bf14e962c1cc8ed", 
+    "files": [
+      "toxcore/list.c", 
+      "toxcore/list.h", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1430441503, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some warnings.\n\nRemoved useless include.", 
+    "id": "b2c966a6e39cb9c7be9b498da2e603e0111e5223", 
+    "files": [
+      "toxcore/Messenger.h", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1430347230, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Added many test and fixed various warnings", 
+    "id": "b2b11f0fba52bcba5acb3ba9e4aa4da119d76093", 
+    "files": [
+      "toxav/msi.c", 
+      "auto_tests/Makefile.inc", 
+      "toxav/rtp.c", 
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c", 
+      "auto_tests/toxav_many_test.c"
+    ]
+  }, 
+  {
+    "date": 1430065153, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed one case of the connection callback not getting called on reconnection.", 
+    "id": "6a1efc32e635a86b0d848d058ba152403c49bec2", 
+    "files": [
+      "toxcore/friend_connection.c"
+    ]
+  }, 
+  {
+    "date": 1429922385, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some possible connection issues.", 
+    "id": "28de3f59fdfc185e42d3d5393de7fd5ba78eae5d", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1429888182, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed a couple possible issues with the friend connection callback.\n\nA TCP callback could be received when only a UDP connection was present.\n\nIncreased a UDP timeout to make it less likely to time out and switch to TCP.", 
+    "id": "3e256e429f6b2d3b8d3b49c1beac62f3b2f138ee", 
+    "files": [
+      "toxcore/Messenger.h", 
+      "toxcore/net_crypto.h", 
+      "toxcore/TCP_connection.h", 
+      "toxcore/Messenger.c", 
+      "toxcore/net_crypto.c", 
+      "toxcore/TCP_connection.c"
+    ]
+  }, 
+  {
+    "date": 1429837148, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some warnings.", 
+    "id": "e24d57d46745a4f646b3efd5df5281bbf762a0be", 
+    "files": [
+      "toxcore/TCP_connection.c"
+    ]
+  }, 
+  {
+    "date": 1429710333, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed a case where the tcp_data_callback would get called when the\nconnection only worked 1 way.", 
+    "id": "fc549805c1abfeac3d73f88aa95c1f58dc5ef499", 
+    "files": [
+      "toxcore/TCP_connection.c"
+    ]
+  }, 
+  {
+    "date": 1429709556, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "390f94bfd54995106c53d8fd0bea67ce9dce8176", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1429709356, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "50b81dc669c0f726a02baee542deed66ffa8f1b9", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1429708257, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "db0438644c2ad85719ed0866d85cd3df9a71300b", 
+    "files": [
+      "toxcore/TCP_connection.c"
+    ]
+  }, 
+  {
+    "date": 1429226361, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Some fixes and improvements.\n\nFixed that the first TCP relays in the list would never be disconnected\neven if they were useless.", 
+    "id": "de8956267c06444443e43980a53e7ded49ee4d3a", 
+    "files": [
+      "toxcore/TCP_connection.h", 
+      "toxcore/TCP_connection.c"
+    ]
+  }, 
+  {
+    "date": 1429141933, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak in TCP connection.", 
+    "id": "be014f9e3c90edd34f3aaa158036b2e96b598bab", 
+    "files": [
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1429059376, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed windows warning.", 
+    "id": "2ff39d3d546e39803f8416f521b23f8cf0a8dd87", 
+    "files": [
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1428350243, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed onion test.", 
+    "id": "cf436fde1273afa5f526b89189f91eebde65365e", 
+    "files": [
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1428281726, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed typo.", 
+    "id": "db931f0aa9176f020a1d3fbd7bca41862419ed6a", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1428096020, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed offline callback being called when connection timed out and died\nwithout ever actually being connected.", 
+    "id": "b279a4a8835e4371df08a5ad4e590f87200cb883", 
+    "files": [
+      "toxcore/friend_connection.c"
+    ]
+  }, 
+  {
+    "date": 1427507351, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed file transfer bug.\n\nThis should have been at the beginning of the loop, not the end.", 
+    "id": "1d583fa1118edeff48b5461a855b9d32c6aa0cb0", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1426802566, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed group audio issues when getting an old audio packet.", 
+    "id": "2b2c9f37a61d677ecca47c88bb993d1d4f88e3ee", 
+    "files": [
+      "toxav/group.c"
+    ]
+  }, 
+  {
+    "date": 1426180288, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed tox_new issue.", 
+    "id": "28d707662b11c120e21697c3f1b208cdf7c6d0b2", 
+    "files": [
+      "toxcore/tox.c"
+    ]
+  }, 
+  {
+    "date": 1425949190, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small issue.", 
+    "id": "f5eca31637cbcbdd44f3fefc9139aa8ef0d1bd5e", 
+    "files": [
+      "testing/tox_shell.c"
+    ]
+  }, 
+  {
+    "date": 1425925957, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed case where a recv and a sending file would have the same number.\n\nrecv file numbers are now (file num in packet + 1) << 16", 
+    "id": "4c4ffb74093037ab6cd02d310a07b73022becf83", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1425576650, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Code cleanups.\n\nFixed wrong variable used, removed useless elements of struct.", 
+    "id": "ac7da66529884da7db6a72fdf20f02748b849396", 
+    "files": [
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1425259915, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Properly fixed encryptsave_test.c", 
+    "id": "36c3a270fd5fff5e33371a91861db16e5816964a", 
+    "files": [
+      "auto_tests/encryptsave_test.c"
+    ]
+  }, 
+  {
+    "date": 1424911818, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "837d4698bbe4ae8e6f8242259516d23240195195", 
+    "files": [
+      "toxcore/tox.c"
+    ]
+  }, 
+  {
+    "date": 1424572414, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible TCP server bug.\n\nFunction returned success when should have returned failure.", 
+    "id": "bca649fa676c4a867e7501ab43d59b95ecf96bd0", 
+    "files": [
+      "toxcore/TCP_server.c"
+    ]
+  }, 
+  {
+    "date": 1424205974, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed friend_not_valid function.\n\nIt now returns if friend is valid or not not only if memory location is\nvalid.", 
+    "id": "7cefc9c4582c367092cd6187ea924da9a1fcf2f0", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1424125820, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed header protectors and cleaning up the msi", 
+    "id": "7329f3b3d461a8f7738fa4b13a2dffc8d6a5b5f5", 
+    "files": [
+      "toxav/msi.c", 
+      "toxav/msi.h", 
+      "toxav/toxav.h", 
+      "toxav/toxav.c", 
+      "toxav/codec.h", 
+      "toxav/rtp.h"
+    ]
+  }, 
+  {
+    "date": 1423434889, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test.", 
+    "id": "78ea33b3f00d91b7995d9dd543c4620c777c956b", 
+    "files": [
+      "auto_tests/encryptsave_test.c"
+    ]
+  }, 
+  {
+    "date": 1423431048, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak in test.", 
+    "id": "23d76f484a12c34f89e905e949718707026158e7", 
+    "files": [
+      "auto_tests/toxav_basic_test.c"
+    ]
+  }, 
+  {
+    "date": 1423430585, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak.", 
+    "id": "ee3adf26413f11a83fcabb7e1cf394e2235a8d6c", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1423359351, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed incompatible pointer type warning", 
+    "id": "14d942c1e11e10fcd423218b564881fa0bcc1510", 
+    "files": [
+      "other/bootstrap_node_packets.c"
+    ]
+  }, 
+  {
+    "date": 1423268320, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak.", 
+    "id": "62f8910fb7af847646c08b5986dfa27970dcad3c", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1423253767, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak.", 
+    "id": "01b4ad7a8a6e872d6f43e3922742d34511f60135", 
+    "files": [
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1423253616, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak.", 
+    "id": "7e7b7f6c339d553d59dc648df667df8475ab7606", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1422728902, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug where mutex would be destroyed but not recreated for new\nnet_crypto connection.\n\nOnly destroy mutex when it is realloced out.", 
+    "id": "33f65929e3f430e9542192d0adf98f1252a911f4", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1421805608, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed gcc warnings.", 
+    "id": "b10aaecee55631654ecfe8de42e3235a096e9645", 
+    "files": [
+      "toxcore/onion.c"
+    ]
+  }, 
+  {
+    "date": 1421719314, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed gcc warnings.", 
+    "id": "236a13f2ee2de98474e6310c2e75dc0b5aea1f62", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1421518702, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed logger build issue.", 
+    "id": "a8bf060815f775849853ad1c7e1dcd16dd2e0388", 
+    "files": [
+      "toxcore/logger.c"
+    ]
+  }, 
+  {
+    "date": 1421373645, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "553a8dd7bdab4bfed36352bb3fdf2ce2f514d0fb", 
+    "files": [
+      "toxencryptsave/toxencryptsave.c"
+    ]
+  }, 
+  {
+    "date": 1421046396, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed Windows build\nApparently ERROR was defined as some constant somewhere on Windows.", 
+    "id": "045ebf11b8eef9507aaa17a39bc9779256814f93", 
+    "files": [
+      "toxcore/logger.c"
+    ]
+  }, 
+  {
+    "date": 1420946657, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed use after free.", 
+    "id": "3b991212b7fdc6a4c9a656109dd43a9909cd11c2", 
+    "files": [
+      "toxcore/logger.c"
+    ]
+  }, 
+  {
+    "date": 1420165842, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Code cleanups.\n\nMoved some functions to onion.c.\n\nFixed possible portability issues.", 
+    "id": "93a998d15a983614de680dfe1f690f59f777698f", 
+    "files": [
+      "toxcore/network.h", 
+      "toxcore/network.c", 
+      "toxcore/onion.c", 
+      "toxcore/crypto_core.c"
+    ]
+  }, 
+  {
+    "date": 1419642771, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug with auto tests and cleaned up the code a bit.", 
+    "id": "c2e394c5c2a60927b543c8eb9791724edca917ff", 
+    "files": [
+      "toxcore/TCP_server.h", 
+      "toxcore/tox.c", 
+      "toxcore/TCP_server.c", 
+      "toxcore/net_crypto.c", 
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1419538247, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.\n\nSet friend in onion as offline when friend goes offline.", 
+    "id": "a4f0b65ad72682e6ca2becf3081f7e5e72a0f7af", 
+    "files": [
+      "toxcore/friend_connection.c"
+    ]
+  }, 
+  {
+    "date": 1419217932, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug in tox_load where names of size TOX_MAX_NAME_LENGTH didn't\nload.", 
+    "id": "dd59d99a7a1ef8074e8faf3e0bc2823fc0b01b6f", 
+    "files": [
+      "auto_tests/tox_test.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1418764248, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some A/V threading issues.\n\nAudio dropping on video calls issue should no longer happen.", 
+    "id": "ecba631493b1c75b17ea9ef00421ba2d8d2f2bc5", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1418688296, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test.", 
+    "id": "d6da08fe9d86fa5f03d0a2fe74960d62bc0c00fc", 
+    "files": [
+      "auto_tests/dht_test.c"
+    ]
+  }, 
+  {
+    "date": 1418435743, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leaks.", 
+    "id": "4e1e3150d3a6529a47ffb9c2ceb925f143ffea96", 
+    "files": [
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1418434887, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed a memory leak", 
+    "id": "05cc7df031c523378ed1b2db0c1258ce57262b07", 
+    "files": [
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1418424477, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed video packet assembling.\n\nVideo should look better now.", 
+    "id": "12f396fcc26d7633bcaeb9c02658acb5c68acba8", 
+    "files": [
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1418324095, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed crash when connection was killed during the packet callback.", 
+    "id": "d7f57132772e69c2f9f3596c6525d9d37393f9be", 
+    "files": [
+      "toxcore/friend_connection.c", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1418166819, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed tox_test.c", 
+    "id": "4ec9295259fa74b921628195c8028a1b7622ec94", 
+    "files": [
+      "auto_tests/tox_test.c"
+    ]
+  }, 
+  {
+    "date": 1417994635, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue with wrong size being passed to opus_decode().", 
+    "id": "af0d6c0695e3c459989b911b6fb62ce40058440e", 
+    "files": [
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1417635661, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible threading issues.", 
+    "id": "f6b3e6e8fe98d2457827ac6da944e715f008a08a", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1417634561, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible threading issue.", 
+    "id": "475c157d68b53e9d6666c678bfb2dc0c2e126216", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1417633363, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible threading issue.", 
+    "id": "4a27f61956559fbdc2e18c66cd57f5de3d9024ea", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1417633130, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible threading issues.", 
+    "id": "d8a8e8b982ca5e6a8fef5474b26af9b3c8b77f54", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1417632738, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible threading issue.", 
+    "id": "be9c6f88d3c3a204958a2e3d3817850c215a8e06", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1417566954, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug where group chat would see connection as offline when it was online.\n\nClarified something in the docs.", 
+    "id": "607003509b98dc90607ce6ec822c975ea7b68223", 
+    "files": [
+      "toxcore/group.c", 
+      "docs/Group-Chats.md"
+    ]
+  }, 
+  {
+    "date": 1417295390, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug where video didn't work anymore.\n\nSome other cleanups.", 
+    "id": "e254c4fe3e7431a22614851156648e9ae8ff9577", 
+    "files": [
+      "toxcore/util.c", 
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1417198227, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed toxav issues.", 
+    "id": "db68c6eff6adb63acba9e5d3733ec4e395ee87c1", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1416954206, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed threading issues in toxcore.", 
+    "id": "a7a225d1d6c37418c59cdd56357aa32d5464c787", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1416954164, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed integer rollover bug in toxav.", 
+    "id": "6e361a52fb0baac63bad56d71ffa90b1d26fb729", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1416947481, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "28ffa035cb9e19ffed73255b9cde9657da57b79b", 
+    "files": [
+      "toxav/group.c"
+    ]
+  }, 
+  {
+    "date": 1416524752, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small issue where group audio would jumble up sometimes at start of stream.", 
+    "id": "1ef2092bcca76158b6ea0675c9e07fef166363b6", 
+    "files": [
+      "toxav/group.c"
+    ]
+  }, 
+  {
+    "date": 1415980985, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some threading related issues in toxcore.", 
+    "id": "9cd1102f4aa03000c8f52d8d539c2a5b7527a93e", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1415815097, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Properly fixed group av issue.", 
+    "id": "2f93ba3a62706f87e0186ecbeeb59400d5a2b71e", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1415797028, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed groupchat bug that caused peers to not connect to each other.", 
+    "id": "6d00288d989ebfdd351ba7d66d5bd18cb85e50ba", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1415757679, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed group av issues.", 
+    "id": "26a6bde6b3836b828dd77aca5e01c0b8d4d2380b", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1415756660, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed audio groupchat issue.", 
+    "id": "3e612eecf610ae64fb540bd5f209d43bc87ff526", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1415713063, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "bf0289ef80f9c5dac5071966719f3f245583d571", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1415711389, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some audio group chat issues.", 
+    "id": "370d553b6e81fda0f83406eb59f0ca4bdf7650e9", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1415660589, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed irc syncbot.", 
+    "id": "534efc73498f3567474ef54f49614ded6cd3f6bc", 
+    "files": [
+      "testing/irc_syncbot.c"
+    ]
+  }, 
+  {
+    "date": 1414252875, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo_trip"
+    }, 
+    "message": "Fixed possible threading issues.", 
+    "id": "9c480acecf1029fbba916a3f56ca902b9272e24b", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1413922549, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo_trip"
+    }, 
+    "message": "Fixed unaligned memory access.", 
+    "id": "3c874bcf62ab4e453d745547512bd8a0835d3bcb", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1413171080, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed a typo", 
+    "id": "e677bbc89e208004a833873436931adca7359fef", 
+    "files": [
+      "other/bootstrap_daemon/tox-bootstrapd.c"
+    ]
+  }, 
+  {
+    "date": 1412989792, 
+    "committer": {
+      "email": "sean@tox.im", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Enable IPv6, fix systemd PID bug", 
+    "id": "532ace635a095d4613e37f880b573ad126671aef", 
+    "files": [
+      "other/bootstrap_daemon/tox-bootstrapd.c"
+    ]
+  }, 
+  {
+    "date": 1412438619, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed group peer chosing algorithm.\n\nGroups should be much more stable.", 
+    "id": "07ab8e52876df4e80171bcdbeccd4bb6872bb3e5", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1412369643, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed group bugs.\n\nConnections should now die when appropriate instead of lingering\nendlessly.", 
+    "id": "45ca02f5a20fcc2b1d255ae06aa126fa8c5207ec", 
+    "files": [
+      "toxcore/group.c"
+    ]
+  }, 
+  {
+    "date": 1412012751, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed crash in tox_new().", 
+    "id": "ad804855f9b70a6bab88e9ba6362f0f613f6d019", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1411413437, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed typo.", 
+    "id": "e0725ac74ccef6cccbc0fc0beffd7d25a9cfc1ae", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1411413168, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Some fixes to avatar pull request.\n\nSome bug fixes.\n\nGrouped all avatar related functions in the same place in tox.h", 
+    "id": "21be438b2b3f7aa1b65b76a7f528eacfe5b634db", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1411326935, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test.", 
+    "id": "900d72f9511790add88313f31b17d6ca8d81a49c", 
+    "files": [
+      "auto_tests/toxav_many_test.c"
+    ]
+  }, 
+  {
+    "date": 1411325723, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed memory leak.", 
+    "id": "c43526be9c62b2909d733c5bb8061f6b9333acf5", 
+    "files": [
+      "auto_tests/tox_test.c", 
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1410714481, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed toxencryptsave include issue.", 
+    "id": "5a2a756671202a6d462913ce8ca2b3882679bbde", 
+    "files": [
+      "toxencryptsave/toxencryptsave.h", 
+      "toxencryptsave/toxencryptsave.c"
+    ]
+  }, 
+  {
+    "date": 1410292089, 
+    "committer": {
+      "email": "fake.saneki@gmail.com", 
+      "name": "saneki"
+    }, 
+    "message": "Fixed spacing", 
+    "id": "98a93c7880dfc4ce0e1466dae3d1757df580378b", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/Messenger.c", 
+      "toxcore/DHT.c", 
+      "toxcore/DHT.h", 
+      "toxcore/Messenger.h"
+    ]
+  }, 
+  {
+    "date": 1410193244, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added tests for custom lossy and lossless packets.\n\nFixed bug with lossless packets.", 
+    "id": "a0302b7acaef47805f93718630e501acdd3a3d00", 
+    "files": [
+      "auto_tests/tox_test.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1410095093, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Updated docs.\n\nFixed possible issue in last commit.", 
+    "id": "9ac8a5fe626afef0f4bed2a54ec1df3185f2d992", 
+    "files": [
+      "toxcore/onion_client.c", 
+      "docs/Prevent_Tracking.txt", 
+      "toxcore/onion_announce.h"
+    ]
+  }, 
+  {
+    "date": 1409744991, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed iOS possible SIGPIPE issue.\n\nApparently on iOS UDP sockets can SIGPIPE (what the fuck apple?).", 
+    "id": "38c411ec3a2b8796e98506eb3ccaa9eb192b430e", 
+    "files": [
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1409273645, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed gcc warnings.", 
+    "id": "411457dc8fed37cee29dad80f2cbf3816b14f11a", 
+    "files": [
+      "toxcore/onion_client.c", 
+      "toxcore/TCP_server.c", 
+      "toxcore/onion_announce.c", 
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1408668914, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some gcc warnings.", 
+    "id": "69a55b87d2e9fd750abbb6c201176f39179e0981", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1408305577, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed some warnings", 
+    "id": "d00c3c32d20572c72f7db01a281373230e2ff900", 
+    "files": [
+      "other/bootstrap_daemon/tox-bootstrapd.c"
+    ]
+  }, 
+  {
+    "date": 1407891406, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug that led to increased bandwidth usage.", 
+    "id": "19b07f7e80097f1a65c1e358140cd441d6ba67b6", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1407694539, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "0faa2fbad28c093537b9e32bb1c5be2636e41fbc", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1407168543, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed threading bug.", 
+    "id": "9445b40fb55d6d7ed9da3744de6fcabc61963167", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1406913752, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Disable decode deadline, fixed build error.", 
+    "id": "77df39863e8e2103bda195ec76b2a255baf1acb4", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1406825196, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible threading issues.\n\nsend_lossy_cryptpacket() can get called from another thread meaning\nthe connection can be killed while the packet is sending.", 
+    "id": "d270cf550abd168cfa7a96a8aceb78622bdfc92f", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1406555933, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "e1158be5a6fa10187dc70ef88a0b7c6dc0cf18ac", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1406417068, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed buffer overflow", 
+    "id": "ee3822f24b14a76e6e1d833f521618f38bdc26b9", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1406413618, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed tests and conflicts", 
+    "id": "fc230c86714eb05b69c4a8b9501332a8e32b3e49", 
+    "files": [
+      "auto_tests/Makefile.inc", 
+      "toxav/toxav.h", 
+      "toxav/rtp.c", 
+      "toxav/codec.c", 
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c", 
+      "toxav/codec.h", 
+      "auto_tests/toxav_many_test.c"
+    ]
+  }, 
+  {
+    "date": 1406250042, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed crash.", 
+    "id": "84c28337d248bad2319b5c001108b198dbd6bc5c", 
+    "files": [
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1406249767, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some issues with queue.\n\ndisconnecting then reconnecting right away should no longer kill\naudio transmission.", 
+    "id": "da03feaaced60e251006992e790abc8c00911826", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1406245538, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Rewrote audio packet queue.\n\nAudio killing itself after 20 minutes in a call should be fixed.", 
+    "id": "443abcfafe7c194555f29ff4c297228d486a184e", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/codec.h", 
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1406042687, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "511d197e8ce60cfdc8bb956d94483c4e6ec5725d", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1405963776, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug where two Tox clients sometimes didn't reconnect right\nafter disconnecting due to them getting stuck in a connection loop.", 
+    "id": "fdb5d890a3b211ecc95450887c99d2891d405728", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1405908605, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed conflicts", 
+    "id": "79115259a81dc958041f18573f34299c083cebea", 
+    "files": [
+      "toxdns/Makefile.inc", 
+      "toxcore/TCP_client.h", 
+      "docs/TODO", 
+      "toxcore/TCP_client.c", 
+      "toxcore/TCP_server.h", 
+      "configure.ac", 
+      "toxcore/TCP_server.c", 
+      "other/fun/bootstrap_node_info.py", 
+      "toxcore/group_chats.c", 
+      "auto_tests/toxav_many_test.c", 
+      "INSTALL.md", 
+      "toxcore/ping_array.c", 
+      "toxav/msi.c", 
+      "toxcore/network.c", 
+      "toxcore/network.h", 
+      "m4/ax_have_epoll.m4", 
+      "README.md", 
+      "toxcore/net_crypto.h", 
+      "toxcore/tox.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c", 
+      "toxav/toxav.h", 
+      "toxcore/onion_client.c", 
+      "toxav/rtp.c", 
+      "toxav/codec.c", 
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1405822085, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Set some functions as static, fixed warning.", 
+    "id": "f0a172f1989c9626d3986099f086ea3ff202563b", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1405557598, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug with TCP nonce not getting incremented.", 
+    "id": "bcfb1261ac4ab5f6470924f473c8c18bc5f98f01", 
+    "files": [
+      "toxcore/TCP_server.c", 
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1405462924, 
+    "committer": {
+      "email": "notsecure@marek.ca", 
+      "name": "notsecure"
+    }, 
+    "message": "fixed some issues", 
+    "id": "96249e8b020c76e9f80da6538ea19699612479dc", 
+    "files": [
+      "toxcore/TCP_server.c"
+    ]
+  }, 
+  {
+    "date": 1405445972, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed TCP bug.\n\nPacket was being copied with a wrong, smaller length.", 
+    "id": "ae7a11cae9e220ce0a66bc48977104495759a01a", 
+    "files": [
+      "toxcore/TCP_server.c", 
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1405442157, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug with TCP.\n\nDon't increment nonce if packet was discarded instead of being sent.", 
+    "id": "078d60ab929ca7ba50ba9e7de5745456c6114352", 
+    "files": [
+      "toxcore/TCP_server.c", 
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1405099810, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some small TCP issues.", 
+    "id": "21e797ac90a06232aef03e47faecc048910ba1e3", 
+    "files": [
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1404844763, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some timer related issues.", 
+    "id": "bd4c142e38afd7c03a23721a3e8261e15aacf973", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1404835453, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed threading bug that could cause segfaults.", 
+    "id": "7ce9816e40cdfc448b6306839948bceffb38dd32", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1404834687, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed deadlock.", 
+    "id": "9874173d71969792330d8fbc612bee6093100e60", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1404830328, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible out of bounds read.", 
+    "id": "2772bffeebcda9c1947c9855fc4ad42ddb32cbea", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1404789596, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault and other possible bugs in msi.c\n\ntoxav should no longer have weird behaviour when a dead call times out.", 
+    "id": "95d737cb5f16df4d22eecc2a947b4e9689be754e", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1404776941, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed overflow bug.", 
+    "id": "b4f43b4222eb033ee9af940641a00535f6091e95", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1404611387, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed msi_session being used after being freed.", 
+    "id": "dfa483ba0d440519b044f831b3349a562df003e0", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1404585379, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "The width and height set during the video encoder initialization is\nnow described as the maximum width and height of images.\n\nThis is to work around what appears to be a bug in libvpx where the\nresolution of the stream can be decreased but increasing it above\nits originally set value introduces memory corruption.", 
+    "id": "65b4c026f4a2aa965f89f28958fe75bceb16475c", 
+    "files": [
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c", 
+      "toxav/toxav.h", 
+      "toxav/codec.h", 
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1404578818, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug when loading friends list already containing an added friend.", 
+    "id": "bdb00322e3ecb9eb213ce01688089cdad39304f0", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1404566035, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed conflicts", 
+    "id": "ebdc236d51b569b4817771fe0251ee86c1fee257", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/codec.h", 
+      "toxav/rtp.c", 
+      "toxav/codec.c"
+    ]
+  }, 
+  {
+    "date": 1404515390, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed out of bounds read.\n\npayload_type seems to be completely useless and should be removed.", 
+    "id": "83b9fbc1dcaf5155af80ef58c83ddc138a99e648", 
+    "files": [
+      "toxav/rtp.c"
+    ]
+  }, 
+  {
+    "date": 1404399480, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Removed redundant code and fixed toxav codec actions being called when call inactive", 
+    "id": "d3560a3a77dea199d25d0209288e07aeb5909abb", 
+    "files": [
+      "toxav/msi.c", 
+      "auto_tests/Makefile.inc", 
+      "toxav/msi.h", 
+      "toxav/Makefile.inc", 
+      "toxav/event.c", 
+      "toxav/codec.c", 
+      "toxav/toxav.c", 
+      "toxav/codec.h", 
+      "toxav/event.h"
+    ]
+  }, 
+  {
+    "date": 1404331481, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed const related warnings.", 
+    "id": "c4f0650ae33e1669bfc994ef4f76c6c31e4d63c0", 
+    "files": [
+      "auto_tests/tox_test.c", 
+      "testing/nTox.c", 
+      "toxav/msi.c", 
+      "auto_tests/TCP_test.c", 
+      "toxav/rtp.c"
+    ]
+  }, 
+  {
+    "date": 1404157312, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed video in call sometimes freezing.\n\nThis should not happen anymore.", 
+    "id": "bc5eafac208f00b32d384d2b9c566f3f1ae4c534", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1403897282, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed tox_do_interval() returning value so high it broke A/V.", 
+    "id": "00127e335b7dec4d70abe981922bf6f33fd56d04", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1403819562, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed calling msi_reject more than once possibly causing issues.", 
+    "id": "0d98869f3cf445ecbe1fdc2a13c272f2e9b28e4e", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1403818957, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug if more than one ringing msi packet was sent to us.", 
+    "id": "ac4def6cd879af324647e9f66df9b403126bc401", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1403816713, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault that happened because calls could be hanged up more\nthan once.", 
+    "id": "2735b4a8debc15709a073f03c8b36ba95ef6977b", 
+    "files": [
+      "toxav/msi.h", 
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1403723074, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some more possible issues with file transfers/conjestion control.", 
+    "id": "a058a1727334b9ae6c16cd47122938846104bb9d", 
+    "files": [
+      "toxcore/net_crypto.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1403616766, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed video bitrate being set way higher than it should.\n\nVideo bitrate is set in kb/s not b/s.", 
+    "id": "a7c55409fc1d7584c0d53468f582ddaf6d1d7fba", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/toxav.h"
+    ]
+  }, 
+  {
+    "date": 1403403750, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issues with list introduced in the last commit.", 
+    "id": "e6699f60eff70075f62d062470f5fec3bd56f497", 
+    "files": [
+      "toxcore/list.c"
+    ]
+  }, 
+  {
+    "date": 1403320212, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed a case when public key contained null bytes", 
+    "id": "2037d272106f625382d0c1cd2dd74acf2838db90", 
+    "files": [
+      "other/fun/strkey.c"
+    ]
+  }, 
+  {
+    "date": 1403317713, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed sodium include", 
+    "id": "b85f192b795b0c79800b1f578da6d7dccd68e1b5", 
+    "files": [
+      "other/fun/cracker.c"
+    ]
+  }, 
+  {
+    "date": 1403216585, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed bug when adjusting queue size", 
+    "id": "88a131a2e8ea0780f9719f18970ee581c32724b5", 
+    "files": [
+      "toxav/rtp.c"
+    ]
+  }, 
+  {
+    "date": 1402961543, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "The comments say this function only returns -1 on error, fixed that.", 
+    "id": "2de0840d8a4947cd6760aec2ced5a4f6388b9e77", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1402879779, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some warnings.", 
+    "id": "881b2d900d1998981fb6b9938ec66012d049635f", 
+    "files": [
+      "other/bootstrap_node_packets.c", 
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1402759916, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some issues in toxdns and added a test.\n\nAdded request_id.\n\nrequest_id must be obtained with tox_generate_dns3_string, stored,\nthen passed to tox_decrypt_dns3_TXT when we want to decrypt the\nreceived response.", 
+    "id": "d6a9ce3175bc80f1b04694b3c1415807a1fbab18", 
+    "files": [
+      "testing/nToxAudio.h", 
+      "testing/dns3_test.c", 
+      "testing/Makefile.inc", 
+      "toxdns/toxdns.h", 
+      "toxdns/toxdns.c"
+    ]
+  }, 
+  {
+    "date": 1402686305, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed typo.\n\nThis typo doesn't seem to cause any issue because according to the\ncode in vanilla NaCl the first crypto_box_ZEROBYTES (for encryption)\nand crypto_box_BOXZEROBYTES (for decryption) of the array passed to\nthe crypto_box*() functions don't need to be zero for it to work.\n\nThe documentation however clearly states that they need to be zero\nwhich means they need to be zero.", 
+    "id": "0b4640a508d6ceeb8983aa819cd70f01ceeec481", 
+    "files": [
+      "toxcore/crypto_core.c"
+    ]
+  }, 
+  {
+    "date": 1402586120, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "pthread is now a core dependency instead of just a toxav dependency.\n\nFixed possible thread bug with sending A/V packets.\n\nTODO: eventually make toxcore thread safe.", 
+    "id": "2740099da010846fdb38883ae74cff31b014ca61", 
+    "files": [
+      "toxcore/Makefile.inc", 
+      "configure.ac", 
+      "toxcore/net_crypto.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1402492694, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault when logging was enabled.\n\nm->chats[c] can be NULL if more than one group chat is created and\none of the first ones is deleted.", 
+    "id": "63f25f86d38542c989898680ee091f7eb2306353", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1402440700, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some warnings.", 
+    "id": "2fa8815a8516c2cb51ce3c508fc40e7db8d4e103", 
+    "files": [
+      "auto_tests/toxav_basic_test.c", 
+      "toxcore/tox.c", 
+      "toxcore/tox.h"
+    ]
+  }, 
+  {
+    "date": 1402233697, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some nTox bugs.", 
+    "id": "7a11c10429beb7337e8598bf204233e775b407b5", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1402059612, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug in list.", 
+    "id": "2cbfbef6e55fa7879e159a9bc3ffdad61fdd068d", 
+    "files": [
+      "toxcore/list.c"
+    ]
+  }, 
+  {
+    "date": 1402010163, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed regression that made packet_send_rate increase even when\nno data was transmitted.", 
+    "id": "a4ac1497a5ab4fbb13f998c9fffb14c07d4b380a", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1401924961, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed bug when passing invalid call index", 
+    "id": "11ca389e38d2f7713def07393cf736821dc34a45", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1401663352, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed TOX_MAX_MESSAGE_LENGTH define.\n\nRemoved some useless code from toxcore.\n\nAstyled core code with new version of astyle.", 
+    "id": "1bad0b5eea2406524ef498ed1e8e53666aa91739", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/assoc.c", 
+      "toxcore/Messenger.h", 
+      "toxcore/util.c", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.c", 
+      "toxcore/network.c", 
+      "toxcore/network.h", 
+      "testing/nTox.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1401661990, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed typo.\n\nThis typo doesn't actually cause any side effects unless you are like\nstqism and have a C library that doesn't have mempcpy().", 
+    "id": "7c1b801bd04f6e0dce401a8de02dacba8435e19e", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1401550042, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed byte order and removed log functions from misc_tools", 
+    "id": "d7c11573751eea005d3b1938ae3298c265d48fd6", 
+    "files": [
+      "toxcore/util.c", 
+      "toxav/msi.c", 
+      "toxcore/util.h", 
+      "toxav/rtp.c", 
+      "toxcore/misc_tools.h"
+    ]
+  }, 
+  {
+    "date": 1401488983, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed potential memleaks", 
+    "id": "2ebefb85b7f5ae28db1e8c11196467efd3c914cf", 
+    "files": [
+      "toxav/media.c", 
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1401316055, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed Tox sync.", 
+    "id": "ec25f64407cdc40f4bfc93260fe1e0006971d6ea", 
+    "files": [
+      "testing/tox_sync.c"
+    ]
+  }, 
+  {
+    "date": 1401124973, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed tox_get_num_online_friends function.\n\nRemoved useless code.", 
+    "id": "da3b6a04a93f5a7322e26c8899dbd455d5006585", 
+    "files": [
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1401036309, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed issue.", 
+    "id": "2a719f316810c3edfa6ca37b9db6fa5dbc0bf02d", 
+    "files": [
+      "auto_tests/toxav_many_test.c"
+    ]
+  }, 
+  {
+    "date": 1400793166, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed an issue in list.\n\nCleaned up TCP server a bit.", 
+    "id": "ad28acd18ea6275dad285895ac2abd4a0482b469", 
+    "files": [
+      "toxcore/TCP_server.h", 
+      "toxcore/list.c", 
+      "toxcore/TCP_server.c"
+    ]
+  }, 
+  {
+    "date": 1400789172, 
+    "committer": {
+      "email": "notsecure@marek.ca", 
+      "name": "notsecure"
+    }, 
+    "message": "fixed list_remove", 
+    "id": "49ab5ac0e557d030f0a3c1ed340c07aa013f4e0b", 
+    "files": [
+      "toxcore/list.c"
+    ]
+  }, 
+  {
+    "date": 1400768302, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Changed lossy packet function names to better ones.\n\nFixed rtp checking the wrong return value for one.", 
+    "id": "a54d098f6fc67cb288badc163d24f152930f1c74", 
+    "files": [
+      "toxav/rtp.c", 
+      "toxcore/Messenger.c", 
+      "toxcore/Messenger.h"
+    ]
+  }, 
+  {
+    "date": 1400745992, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed nodes never being marked as used", 
+    "id": "0f0ef7af6307fb1883e7421998f132975feadd00", 
+    "files": [
+      "toxcore/assoc.c"
+    ]
+  }, 
+  {
+    "date": 1400727648, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed memory allocation type inconsistency", 
+    "id": "d9f5e01bd7ad792a3ddd51b5b9d61d543baf1ec9", 
+    "files": [
+      "toxav/msi.c"
+    ]
+  }, 
+  {
+    "date": 1400592086, 
+    "committer": {
+      "email": "notsecure@marek.ca", 
+      "name": "notsecure"
+    }, 
+    "message": "fixed some mistakes", 
+    "id": "6eae3d5ad7cb984314c6ff2b12756bbc4324af54", 
+    "files": [
+      "toxcore/list.c", 
+      "toxcore/TCP_server.c"
+    ]
+  }, 
+  {
+    "date": 1400518596, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed a bug where someone could just send back the ping request packet\nwith only the first byte set to 1 instead of 0 and the public key set\nto the one of the reciever as a valid response packet.\n\nThis breaks network compatibility with all previous cores.", 
+    "id": "e85feb8a3db42a0285b940a090c60102fae50374", 
+    "files": [
+      "toxcore/ping.c", 
+      "docs/updates/DHT.md"
+    ]
+  }, 
+  {
+    "date": 1400457541, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed a bug", 
+    "id": "261a70353ff316cc993c23faf07cb0f60e2e5819", 
+    "files": [
+      "other/bootstrap_daemon/tox_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1400438612, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed out of bounds write.", 
+    "id": "906969d376244fadcf188c0297df2605bf407dd5", 
+    "files": [
+      "other/bootstrap_daemon/tox_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1400435921, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible connection issue.", 
+    "id": "376eecafd3cbb044c5651cb0cb688d9517abb633", 
+    "files": [
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1400432361, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed TCP client connection isse.", 
+    "id": "8cb3ddda8b42441f135df38e283ac3c3d1d075a4", 
+    "files": [
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1400429757, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed connection issue.", 
+    "id": "d573271f0359cd084cf3de6f13b3b1bf87fa0d2d", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1400361354, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed this", 
+    "id": "ea96c1758ae42c59978c450f9e11496a55d49ee5", 
+    "files": [
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1400351368, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug in TCP server where memory was expected to be zero but\nsometimes wasn't.", 
+    "id": "80e4e5663fac23c4f57f58264caff6aa04a27713", 
+    "files": [
+      "toxcore/TCP_server.c"
+    ]
+  }, 
+  {
+    "date": 1400277026, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed typo.", 
+    "id": "86c191c2d4d4721f93067565b078b9d691a61c00", 
+    "files": [
+      "toxcore/net_crypto.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1400262139, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed TCP_client connections not timing out correctly.", 
+    "id": "1f7d8b71f01507623e2ff44e8e815a0a0aec105a", 
+    "files": [
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1400254001, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some issues in TCP_server.\n\nTimed out connections now remove themselves correctly.\n\nIf a peer with the same public key as another tries to connect,\nthe old connection is killed.", 
+    "id": "297281dea5166aa2dd12fd98e9148562645d4725", 
+    "files": [
+      "toxcore/TCP_server.h", 
+      "toxcore/TCP_server.c"
+    ]
+  }, 
+  {
+    "date": 1400186979, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possibility that packet_send_rate would get stuck.", 
+    "id": "1e7164fcee879a4392ccb45c80607bd5b5c71352", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1400063405, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Really fixed TCP_test.", 
+    "id": "8afe4a4fd7c963c6e2375832a830437bc1a1620f", 
+    "files": [
+      "auto_tests/TCP_test.c"
+    ]
+  }, 
+  {
+    "date": 1400028754, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed TCP_test.\n\nTCP_test now tests set_tcp_connection_number.", 
+    "id": "c2523a3c67ef3b55edec140e5238dc01d1a83da3", 
+    "files": [
+      "auto_tests/TCP_test.c"
+    ]
+  }, 
+  {
+    "date": 1399997380, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed tox_test sometimes timing out.", 
+    "id": "8d50e4a866731ddccd5fe54420b7a10e12e84327", 
+    "files": [
+      "auto_tests/tox_test.c"
+    ]
+  }, 
+  {
+    "date": 1399942791, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some issues.\n\nFriends with multiple ips (on LAN) should be handled better.\n\nRemade the function to check the crypto connection status.", 
+    "id": "2ea0657a6d37602357cf0c95c594a52f38273b12", 
+    "files": [
+      "toxcore/net_crypto.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1399938499, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "5b58da35f94884db535c5e54164d3771ef2c0bc7", 
+    "files": [
+      "toxcore/ping_array.c"
+    ]
+  }, 
+  {
+    "date": 1399938224, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed onion test.", 
+    "id": "53cc5ea6a9b31879443290993267da58f7404a85", 
+    "files": [
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1399851323, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed issue where callbacks were not set for accepted connection.", 
+    "id": "87cec792062a755675e53b5603049cdb067aa70f", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1399686397, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small issues.\n\nAdded set_buffer_end().\n\nFile transfer test now checks if pieces arrive correctly.", 
+    "id": "b0731f54cd6c891283565e0082ad06481c274415", 
+    "files": [
+      "toxcore/net_crypto.h", 
+      "auto_tests/tox_test.c", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1399586871, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed major denial of service issue.", 
+    "id": "89022326d3742defd9c7b1111ddcda53688d85be", 
+    "files": [
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1399486694, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.\n\nmemcmp is easy to confuse visually with memcpy but they do very different\nthings.\n\nIt was also comparing (copying) the senders real public key with their DHT\npublic key.", 
+    "id": "9fccb80eec1398c887e2c01103770e2ffd8f27f7", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1399298437, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "32c8d5114c6879842e0d9143b849c0b0a1a03485", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1399081915, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed other test.", 
+    "id": "20e9d9c079e9b330296625dcfa5bfacd376d9ff0", 
+    "files": [
+      "auto_tests/crypto_test.c"
+    ]
+  }, 
+  {
+    "date": 1399081449, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed one test.", 
+    "id": "38ebfc298966c20943a212a83c2cb1bcb0d7765d", 
+    "files": [
+      "auto_tests/messenger_test.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1399060753, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Move the handshake creating code to a function.\n\nFixed another instance where it was not sent.", 
+    "id": "8ae0a79305973ccbd6220cf64a4270f75ac4daf5", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1399058718, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed one case of the handshake not being sent.", 
+    "id": "8b29ac8eae8feea8b2c12e56482dd8845e8c7d35", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1398529829, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed minor issue.\n\nSocket used to find the broadcast ip was not closed when there was\nmore than 16 broadcast interfaces.", 
+    "id": "82873d62c128cb04b4c89fd042042cb7b923e230", 
+    "files": [
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1398461464, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed issue.", 
+    "id": "09aa97f712f6988ba6cdb041a4708045a574b03b", 
+    "files": [
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1398299390, 
+    "committer": {
+      "email": "stal@zodiaclabs.org", 
+      "name": "stal"
+    }, 
+    "message": "Properly deallocate friends' status messages in kill_messenger\n\nLightly tested. I'm not sure whether this creates a double-free\nbug", 
+    "id": "2b283535544aab26840dae6eaa2a1df07f6b60c9", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1398271677, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed the DHT bootstrap daemon.", 
+    "id": "2aa3cdfc6908bd56bc8797017ae1c3a399e73c9f", 
+    "files": [
+      "other/bootstrap_daemon/tox_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1398270564, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Updated some files so that they could build with latest core.\n\nFixed some issues.", 
+    "id": "0559904ea28c026baed4a62ff39b8280cd63e58a", 
+    "files": [
+      "toxcore/DHT.h", 
+      "toxcore/net_crypto.h", 
+      "other/DHT_bootstrap.c", 
+      "toxcore/onion_client.c", 
+      "auto_tests/onion_test.c", 
+      "testing/DHT_test.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1398267340, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Major cleanups.\n\nFixed circular dependency between DHT and net_crypto: DHT no longer\ndepends on net_crypto.\n\nMoved the crypto request packets functions to crypto core and DHT.\n\nCleaned up/added some defines that can be used to get the true maximum\nlength of things like the friends request message.\n\nMAX_DATA_SIZE has been replaced in most places by more appropriate defines.", 
+    "id": "384750af8cf9e339989ded452181e1238ed6e307", 
+    "files": [
+      "toxcore/group_chats.c", 
+      "toxcore/net_crypto.h", 
+      "toxcore/onion.c", 
+      "toxcore/Messenger.h", 
+      "toxcore/DHT.h", 
+      "toxcore/onion_client.c", 
+      "toxcore/DHT.c", 
+      "toxcore/Messenger.c", 
+      "toxcore/net_crypto.c", 
+      "toxcore/onion_client.h", 
+      "toxcore/friend_requests.h", 
+      "toxcore/crypto_core.h", 
+      "toxcore/friend_requests.c", 
+      "toxcore/onion.h", 
+      "toxcore/onion_announce.h", 
+      "toxcore/crypto_core.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1398114592, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test.", 
+    "id": "c46ab5821d0fa8c604de52e15009e2b8da5d9c07", 
+    "files": [
+      "auto_tests/crypto_test.c"
+    ]
+  }, 
+  {
+    "date": 1398113687, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed a test.\n\nRemoved function from Messenger.h", 
+    "id": "496d4fe203a51769be47f42df50b41db94f4358a", 
+    "files": [
+      "auto_tests/messenger_test.c", 
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1397938687, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible buffer overflow in function to send friend requests.", 
+    "id": "235ce5685559e2cd64de96d0d2ac1aeafe86aeb5", 
+    "files": [
+      "toxcore/friend_requests.c"
+    ]
+  }, 
+  {
+    "date": 1397921326, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible pointer issues.", 
+    "id": "39ac20fc2daa6a291da9f1fd85735596d684490c", 
+    "files": [
+      "toxcore/util.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1397782392, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed build issues.", 
+    "id": "47fb2e8067429c3ad142e9375ce2c5469218ad96", 
+    "files": [
+      "toxcore/TCP_server.c", 
+      "toxcore/TCP_client.c"
+    ]
+  }, 
+  {
+    "date": 1397647180, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "DHT_bootstrap.c now has TCP server functionality enabled.\n\nFixed a regression (same type as last commit).", 
+    "id": "6578d930f8b3d4961c33283d1ece981af5c41586", 
+    "files": [
+      "other/DHT_bootstrap.c", 
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1397603795, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed regression, announce responses can contain 0 nodes.", 
+    "id": "be413de39624c6137e577e3bff14928d2cb873d3", 
+    "files": [
+      "toxcore/onion_announce.c", 
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1396900352, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Bug fix", 
+    "id": "6e1a3b5af761edc4bbd9bcf8dcc6fc221e66c497", 
+    "files": [
+      "auto_tests/toxav_basic_test.c", 
+      "toxav/toxav.c"
+    ]
+  }, 
+  {
+    "date": 1396384593, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug where TOX_FAERR_SETNEWNOSPAM would be returned instead of\nTOX_FAERR_ALREADYSENT when re adding a confirmed friend.", 
+    "id": "ce412b2c3624894eaf38940044c62f62abc90d1d", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1395362926, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed other api inconsistency.", 
+    "id": "d2d896547048252dbf92727546546e788f20b252", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1395361957, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed an api inconsistency.", 
+    "id": "2e48b31e47ab73919ddfbcd5512799affdbdedb8", 
+    "files": [
+      "toxcore/tox.c", 
+      "auto_tests/tox_test.c", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1395190240, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed issue where other could send a bad userstatus.", 
+    "id": "91838f8c2d3f3bb30f23d20aeba4691ce797fb45", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1395189045, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "e2b235e296119dfc00410e2aca9dd4e7aa4bbc37", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1394737859, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug, unconfirmed friends now load correctly.", 
+    "id": "cb9b8fc7cdb03b7f6fa3b4b57818af8cf3203da5", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1394580169, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Removed logging to stderr and fixed timeout handling", 
+    "id": "9ba7cb7e76935e8e8c1ae0d5614cae2d248b22ae", 
+    "files": [
+      "toxav/media.c", 
+      "toxav/msi.c", 
+      "toxav/rtp.c"
+    ]
+  }, 
+  {
+    "date": 1394228844, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed clients not connecting when there is only 2 people on the network.", 
+    "id": "0e97836e016589805af4cd208bae64d97d244618", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1394226308, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some possible ways connections could linger indefinitely without being killed.", 
+    "id": "d058a59ccf7179a883813a5acba14569be20bf12", 
+    "files": [
+      "toxcore/Messenger.c", 
+      "toxcore/Lossless_UDP.c", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1394158384, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed several bugs and added some features", 
+    "id": "6a78e2e71c1471b89646a71a1adeb0529cfb73d4", 
+    "files": [
+      "toxav/msi.c", 
+      "toxav/phone.c", 
+      "libtoxav.pc", 
+      "toxav/msi.h", 
+      "toxav/toxav.h", 
+      "toxav/media.c", 
+      "configure.ac", 
+      "toxav/rtp.c", 
+      "toxav/toxav.c", 
+      "toxav/media.h", 
+      "toxav/rtp.h"
+    ]
+  }, 
+  {
+    "date": 1393538357, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed onion test.", 
+    "id": "d0d9f95b347b8d7d92d487c256dd8e105d2caa2a", 
+    "files": [
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1393436771, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed/updated tests.", 
+    "id": "1c676147a2fb50e1513fa6f7a1bb5d61b75fb98f", 
+    "files": [
+      "auto_tests/tox_test.c", 
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1393087966, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "fixed build.", 
+    "id": "50d2b45541923ecd6c911a2acb6288c7632cc8e7", 
+    "files": [
+      "auto_tests/messenger_test.c"
+    ]
+  }, 
+  {
+    "date": 1393046808, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed the size function for self status message", 
+    "id": "298f832feb3ae973191a0674654ac382e3d89cbf", 
+    "files": [
+      "toxcore/tox.c"
+    ]
+  }, 
+  {
+    "date": 1392831089, 
+    "committer": {
+      "email": "jman012guy@gmail.com", 
+      "name": "Jman012"
+    }, 
+    "message": "Fixed the groupchat bug in a smarter way.", 
+    "id": "7838973ef3fd9c04459efd038ffbe969f491a574", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1392829330, 
+    "committer": {
+      "email": "jman012guy@gmail.com", 
+      "name": "Jman012"
+    }, 
+    "message": "Groupchat crashing bug fixed.", 
+    "id": "fdf1b6932ba8fd5fbd1bd237a471aa99c79e4744", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1392815335, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added better documentation to the api, move some defines, fixed a possible issue.", 
+    "id": "354a392d696763b95ff35747989ab8821bd12934", 
+    "files": [
+      "toxav/toxav.c", 
+      "toxav/toxav.h", 
+      "toxav/rtp.c"
+    ]
+  }, 
+  {
+    "date": 1392812077, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug in DHT.", 
+    "id": "80d5aaa98e49aa0245cd4681acbfae80c7a01dc2", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1392683311, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test issue.", 
+    "id": "4b4507b44fe6cc73dea377c1d8a48b00a48be296", 
+    "files": [
+      "auto_tests/network_test.c"
+    ]
+  }, 
+  {
+    "date": 1392597700, 
+    "committer": {
+      "email": "jman012guy@gmail.com", 
+      "name": "Jman012"
+    }, 
+    "message": "Fixed user typing bug where it'd alway return an error.", 
+    "id": "00d44597f0fe0dbbca93782c9ec90f9b08910989", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1392595915, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed _all_ the issues", 
+    "id": "b30b98aa0bbeef7628f248d3cfcc145d5efff031", 
+    "files": [
+      "toxav/toxmsi.c", 
+      "toxav/phone.c", 
+      "toxav/toxrtp.h", 
+      "toxav/toxrtp.c", 
+      "toxav/toxmedia.c", 
+      "toxcore/event.c"
+    ]
+  }, 
+  {
+    "date": 1392595915, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed bug", 
+    "id": "82a9d1ddd028dba55c99740e5d8e19a297dbcc1e", 
+    "files": [
+      "toxav/toxmedia.c"
+    ]
+  }, 
+  {
+    "date": 1392595915, 
+    "committer": {
+      "email": "eniz_vukovic@hotmail.com", 
+      "name": "mannol"
+    }, 
+    "message": "Fixed audio bug and added reason when terminating call", 
+    "id": "faaaa052065ad3ec283d8402d4acc0781cee9b50", 
+    "files": [
+      "toxav/toxmedia.c", 
+      "toxav/toxmedia.h", 
+      "toxav/phone.c", 
+      "toxav/toxmsi.h", 
+      "toxav/toxmsi.c"
+    ]
+  }, 
+  {
+    "date": 1392568820, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Adjusted some delays.\n\nDecreased LAN discovery packet sending interval.\n\nAttempted fix of the everyone is unknown bug in group chats.", 
+    "id": "fd3dc22ef3bd77beb78faf24cd43e9d2b9706f5d", 
+    "files": [
+      "toxcore/group_chats.c", 
+      "toxcore/LAN_discovery.h"
+    ]
+  }, 
+  {
+    "date": 1392553510, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possibly fixed the issue that group chats would sometimes DOS themselves.", 
+    "id": "1ef5d409355f433e2b067f0f7dd57ec9382e701a", 
+    "files": [
+      "toxcore/group_chats.c", 
+      "toxcore/group_chats.h"
+    ]
+  }, 
+  {
+    "date": 1392516204, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some possible issues.", 
+    "id": "9b61edbb075feed80b19cc82a8d481dd5fa45aee", 
+    "files": [
+      "toxcore/onion_client.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1392486297, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed issue.", 
+    "id": "c44f95eb78f6e2f21146f85c03292d9e6f52a2ac", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1392429088, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small bug in DHT.", 
+    "id": "707ba40b083cc1575be826c7c32447c990be13d2", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1392032685, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible memory leak.", 
+    "id": "80f001e03bed48c5ec0029255354fc00f2904222", 
+    "files": [
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1391934144, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed build", 
+    "id": "3782213b6e2731a29110e940546aa8981efad08b", 
+    "files": [
+      "testing/misc_tools.c"
+    ]
+  }, 
+  {
+    "date": 1391929264, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed memory leaks and removed repeated code", 
+    "id": "ecbceac3414bf851d166e8ce7dceaf1dae12bb08", 
+    "files": [
+      "testing/DHT_test.c", 
+      "auto_tests/messenger_test.c", 
+      "testing/Messenger_test.c", 
+      "testing/experiment/group_chats_test1.c", 
+      "other/fun/sign.c", 
+      "other/bootstrap_serverdaemon/tox_bootstrap_daemon.c", 
+      "testing/tox_sync.c"
+    ]
+  }, 
+  {
+    "date": 1391732564, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bandwidth issue.", 
+    "id": "9c022832db229e612a0cd5198630b025584297c3", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1391470546, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "c7b8d49c8c0665bee8e9e599c6b196978c0cb762", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1391388279, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "dbe256cc8291c1c3867dff959cf0660fac58973c", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1391217946, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed error in last commit.\n\nThe tests actually work.", 
+    "id": "d5c005f02462b996c067d7ed4f1ef71bbd4e5dd2", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1391115405, 
+    "committer": {
+      "email": "tom@tombartelt.com", 
+      "name": "tawm"
+    }, 
+    "message": "Fixed PID forgetfulness.", 
+    "id": "04580cf122f4b85bd9f49a7d2c7f4df7299ed9d7", 
+    "files": [
+      "other/bootstrap_serverdaemon/tox_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1391109799, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug with client_ping_nodes() not pinging any nodes.", 
+    "id": "1505d489f43c649cd7263fdbeffae25d218fbde5", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1390674819, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible anonimity leak with the onion routing.", 
+    "id": "0d53abebcdea36adc509ee46e2bfdacea41ac5e4", 
+    "files": [
+      "toxcore/onion_client.c", 
+      "toxcore/onion.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1390320856, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "random_nodes_path should return slightly better paths.\n\nFixed test in network_test failing on some machines because of localhost\nipv6 issues.", 
+    "id": "00100ea335fe2d65e6c42d2e73fe23842b92bd6a", 
+    "files": [
+      "toxcore/DHT.c", 
+      "auto_tests/network_test.c"
+    ]
+  }, 
+  {
+    "date": 1390312223, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "04d13fbbafcf97159f9fe5cd6c33fc1b7748d911", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1390307479, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some portability issues.", 
+    "id": "4e1bc481c5c7e8ded6127841145aa0d7a4d637bc", 
+    "files": [
+      "toxcore/onion_client.c", 
+      "toxcore/onion.c"
+    ]
+  }, 
+  {
+    "date": 1390269716, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Adjusted some timeouts and fixed possible memory leak.", 
+    "id": "bba5176f28dac1e9d528414cb43dec2ae478a8e1", 
+    "files": [
+      "toxcore/onion_client.c", 
+      "toxcore/DHT.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1390244960, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed missing cleanup", 
+    "id": "b67d6bd024de4816843a95c74ee903242af44423", 
+    "files": [
+      "other/bootstrap_serverdaemon/tox_dht_bootstrap_server_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1390163249, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed function conflict", 
+    "id": "d8f2072ab5e1a7e5a8a96db077d40cb28c1a9a24", 
+    "files": [
+      "other/bootstrap_serverdaemon/tox_dht_bootstrap_server_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1390162197, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed spelling", 
+    "id": "718b4415fc243cfb08a51daf15434bcc74e28cc2", 
+    "files": [
+      "other/bootstrap_serverdaemon/tox_dht_bootstrap_server_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1390160489, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed onion_test.", 
+    "id": "81dd4a808390b246ecd99dff9da450e92330cb4b", 
+    "files": [
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1390125466, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed comments and variables' names", 
+    "id": "8a80b5e0ac49a292d13ec0347592b45de976a601", 
+    "files": [
+      "other/bootstrap_serverdaemon/tox_dht_bootstrap_server_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1390080952, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "8d1ef66892f06b2a1f564b9cc95cca6387763762", 
+    "files": [
+      "toxcore/onion_client.c"
+    ]
+  }, 
+  {
+    "date": 1389983740, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Incorporated onion into Tox.\n\nFixed a couple of issues related to that.", 
+    "id": "cd2474a2f6d8a8831fcfb1f9f33e0192fa287842", 
+    "files": [
+      "toxcore/ping.h", 
+      "toxcore/onion.c", 
+      "toxcore/Messenger.h", 
+      "toxcore/DHT.h", 
+      "toxcore/ping.c", 
+      "toxcore/onion_client.c", 
+      "toxcore/DHT.c", 
+      "toxcore/Messenger.c", 
+      "toxcore/net_crypto.c", 
+      "toxcore/onion_client.h", 
+      "auto_tests/tox_test.c", 
+      "toxcore/friend_requests.h", 
+      "toxcore/LAN_discovery.h", 
+      "toxcore/friend_requests.c", 
+      "toxcore/LAN_discovery.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1389230135, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed problem in onion_announce.c\n\nAdded a way to know if a announce response is valid.", 
+    "id": "0fd8e49c386e357487ab9d68f2a9aa1d8a2356e0", 
+    "files": [
+      "toxcore/onion_announce.h", 
+      "docs/Prevent_Tracking.txt", 
+      "auto_tests/onion_test.c", 
+      "toxcore/onion_announce.c"
+    ]
+  }, 
+  {
+    "date": 1389049184, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "onion_announce seems to be working perfectly.\n\nStuff added and fixed.", 
+    "id": "566c9f63bcaa87cbded56e9365b908d2b7e10673", 
+    "files": [
+      "toxcore/onion_announce.h", 
+      "toxcore/onion_announce.c", 
+      "auto_tests/onion_test.c"
+    ]
+  }, 
+  {
+    "date": 1388545533, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small issues in onion.c", 
+    "id": "5341801bf17f9e9ce307a2c4efebf466a42a936d", 
+    "files": [
+      "toxcore/onion.c"
+    ]
+  }, 
+  {
+    "date": 1387474611, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed ntox building on windows.", 
+    "id": "a6d5a54c7957a455bfb16455503abeb1ee41031b", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1387041805, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed comment.", 
+    "id": "e05120f74e52031976bc2d49ca0d37f11aaa1fd7", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1386874189, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed arm bug.", 
+    "id": "cbee548b0ab222852e22e6615277692149148aee", 
+    "files": [
+      "toxcore/Lossless_UDP.h", 
+      "toxcore/Lossless_UDP.c", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1386865579, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed arm bug.", 
+    "id": "08890a2004aad06fef3f2ad31a141492141572d9", 
+    "files": [
+      "toxcore/network.c", 
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1386599435, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "563664d1a5d178c6e9ea2328a6683c42aa553a66", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1386550098, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Cleaned up and fixed various things.", 
+    "id": "d5092e7cf8d18281641b5e6ecc51847883365e8a", 
+    "files": [
+      "toxcore/ping.c", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1386106562, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "get_close_nodes(): make use of assoc to find some really close nodes\n\nDHT.c:\n- get_close_nodes(): use assoc to find nodes for the requested reference id\n- handle_sendnodes*(): set a proper timestamp for \"heard\" nodes\n\nassoc.*:\n- expand Assoc_close_entries by flags for additional restrictions for search\n- Assoc_get_close_entries(): honor the new flags\n- new_Assoc() prime handling: min. prime is now 5 instead of 3, and up to 25 is handled directly\n- Assoc_status(): added address family for seen/heard, print of hash is now fixed width", 
+    "id": "110a8e889c96fa5caacc26ab2bab4f44e0ae62fc", 
+    "files": [
+      "toxcore/assoc.h", 
+      "toxcore/assoc.c", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1386006116, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug with hole punching.", 
+    "id": "d87a13ce9441a759d0708f5c6220f76c9e1242bd", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1385737385, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "6e691a3c34ba41f38cf69fb9c9e1daea2762ebd1", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1385588467, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed ghost peer problem.", 
+    "id": "82c60d6f34af7c5d30430147a9c850c43d91bada", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1385324770, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible build problem.", 
+    "id": "6374093254041f0f0581b6581890c368f874d474", 
+    "files": [
+      "toxcore/assoc.c"
+    ]
+  }, 
+  {
+    "date": 1385321747, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug with group chats.", 
+    "id": "0a84c61c39da51a5f141b7b974250a06c96735bb", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1384908349, 
+    "committer": {
+      "email": "jman012guy@gmail.com", 
+      "name": "Jman012"
+    }, 
+    "message": "Fixed a cuple stylistic bugs. Behaviour should be the same but the code is now proper. Also fixed tox_copy_friendlist.", 
+    "id": "ace8c2289ebacf32b0999381f937c0180ae1294e", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1384877910, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "64aff6bb8582462f4267265ed2462470d288931d", 
+    "files": [
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1384834207, 
+    "committer": {
+      "email": "jman012guy@gmail.com", 
+      "name": "Jman012"
+    }, 
+    "message": "Fixed a few typos.", 
+    "id": "21e514572cb2f93b141f60a2876e083c651f4f39", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.h", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1384723408, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "067cc9630afe9265ce38d59f6c756b8983ae73b3", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1384654892, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed build error on windows.", 
+    "id": "a82ad576a286e2908c366d5de07f2d82e364d2c8", 
+    "files": [
+      "toxcore/network.h", 
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1384195329, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible segfault.", 
+    "id": "18c98eb87d43beac9191d80f8fa0657398ecee4b", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1384130724, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test.", 
+    "id": "0a3f1f3aee8a625596bfc93f9b7203d1b1d384f2", 
+    "files": [
+      "auto_tests/messenger_test.c"
+    ]
+  }, 
+  {
+    "date": 1384124244, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small issues.\n\nDHT_test now only prints non zero entries.", 
+    "id": "49430547422f82c85792bf4cb0bd3b2597fa7f43", 
+    "files": [
+      "toxcore/Messenger.c", 
+      "testing/DHT_test.c", 
+      "toxcore/DHT.c", 
+      "toxcore/DHT.h"
+    ]
+  }, 
+  {
+    "date": 1384113336, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added more printing to DHT_test, fixed typo.", 
+    "id": "ce29937b8dda03f7b45d3ac2dbc9ee90bdaaa921", 
+    "files": [
+      "testing/DHT_test.c", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1384106777, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "Started as a simple bugfix for wrap(), expanded to more detailed help.\n\nnTox.c:\n- flag[]: additional flag for special wrapping\n- help expanded and split (to keep below 256 chars)\n- new_lines_mark(): stores flag for special wrapping\n- print_friendlist():\n.  - extracted pattern for output\n.  - added length of id string allocation\n.  - replaced '\\t' with '+ ', wrappers don't account for '\\t'\n- line_eval():\n.  - removed a few do_refresh() directly after a new_lines() (calls do_refresh() at its end)\n.  - 'h' (help): parsing of an additional character for f(riend) or g(roup)\n- wrap():\n.  - the major bugfix:\n.    - no more endless looping if the input had a substring with no spaces\n.      for more than line_width (e.g. ID of 78 and window smaller than 78)\n- wrap_bars(): wrap() for \"rich\" messages, honors embedded '\\n', breaks preferable at '|'\n- print_help(): listed all options and added explanations\n- print_invite(): fixed minuscule typo\n- main(): made print_help() reachable again\n\nnTox.h:\n- majorly cut down to what is really needed", 
+    "id": "4993928888ccec0b2c894d695e9f4736b63d6a80", 
+    "files": [
+      "testing/nTox.h", 
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1383448496, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issue.", 
+    "id": "41e083c173f53fb760ab9a5b4bea5e5109d2fe0c", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1382919931, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Cleaned up some code/fixed some warnings.\n\nI'm sure nobody has any of the old save files anymore so I removed the\nfunctions.", 
+    "id": "d2ab13c61121fd14bbb2edc4406eaf807bbab3ec", 
+    "files": [
+      "toxcore/tox.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1382554199, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Code cleanups.\n\nFixed some tests.", 
+    "id": "55dececf90fc9c221a0e4b8692784a60e61c2abd", 
+    "files": [
+      "auto_tests/messenger_test.c", 
+      "testing/Messenger_test.c"
+    ]
+  }, 
+  {
+    "date": 1382299230, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "be068885177f61485567dff38ec1631e5306d94d", 
+    "files": [
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1382236188, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed connection sometimes being too slow and some other possible problems.", 
+    "id": "147d820ad2439b14394ae863466458d0736f6406", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1382206443, 
+    "committer": {
+      "email": "antonio_montes@outlook.com", 
+      "name": "Antonio Montes"
+    }, 
+    "message": "fixed build errors on windows", 
+    "id": "3df81b07f36a50c55c3c9f58518d6fbfe6e40f1a", 
+    "files": [
+      "toxcore/network.c", 
+      "testing/crypto_speed_test.c"
+    ]
+  }, 
+  {
+    "date": 1382012744, 
+    "committer": {
+      "email": "philip_hq@hotmail.com", 
+      "name": "Bahkuh"
+    }, 
+    "message": "Fixed minor typo.", 
+    "id": "ff11e7398bd27e2fa4ab63469bd07c02b1d3e581", 
+    "files": [
+      "toxcore/group_chats.c"
+    ]
+  }, 
+  {
+    "date": 1382011746, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed building on windows.", 
+    "id": "bdbf4a367318d4e6b37975627fe86c7e79449ee4", 
+    "files": [
+      "toxmsi/phone.c", 
+      "toxrtp/toxrtp.h", 
+      "toxrtp/toxrtp_helper.c"
+    ]
+  }, 
+  {
+    "date": 1381070222, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "sendqueue_length no longer determines if we check for socket-can-write, but sendpacket() sets a timestamp if it happened\n\nnetwork.*:\n- sendpacket(): checks result and on EAGAIN, stores time of this event\n- networking_wait_prepare(): uses the time if set to check up to 500ms later for the socket to be writeable again\n- networking_wait_cleanup(): clears the time if the socket was writeable\n- fixed some accidental tabs\n\nMessenger.*, tox.*:\n- pass-through functions to reach networking_wait_cleanup()\n- fixed some accidental tabs", 
+    "id": "355c55f745f507934deb236083db41ea2ee24312", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/util.h", 
+      "toxcore/Messenger.h", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.c", 
+      "toxcore/network.c", 
+      "toxcore/network.h"
+    ]
+  }, 
+  {
+    "date": 1380986670, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warnings.", 
+    "id": "97f192969ca1777090ec0adf4d339e3db1b2c503", 
+    "files": [
+      "testing/nTox.c", 
+      "testing/tox_sync.c"
+    ]
+  }, 
+  {
+    "date": 1380984928, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed file sending bug.", 
+    "id": "b2c5e16132686f05c6726cd41e117656f3f1e636", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1380970434, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "Broken *_wait() into *_wait_prepare() and *_wait_execute()\n\nTo allow the actual waiting to run without any locking, split it into preparing the data it uses and the execution of the wait.\nThe caller must provide with the buffer to store whatever data it requires to wait.\nCompletely eliminates any reliance on the existence of anything but that data in the actual wait routine.\n\nAlso fixed a few argument type warnings inside LOGGING.", 
+    "id": "1331a32223da0090ab982eabd4e04f3d8e36b6af", 
+    "files": [
+      "toxcore/tox.c", 
+      "toxcore/Messenger.h", 
+      "auto_tests/messenger_test.c", 
+      "toxcore/tox.h", 
+      "toxcore/Messenger.c", 
+      "toxcore/network.c", 
+      "toxcore/network.h"
+    ]
+  }, 
+  {
+    "date": 1380900047, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some possible bugs.", 
+    "id": "edf799133c2e75f697c9e2e4bee9e14bb4532eb3", 
+    "files": [
+      "toxcore/Messenger.c", 
+      "toxcore/net_crypto.h", 
+      "toxcore/Lossless_UDP.h", 
+      "toxcore/Lossless_UDP.c", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1380721348, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "2467e6d592327884d151f5a93c1bd19214744dc5", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1380576035, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Speeded up/fixed NAT hole punching and peer finding.", 
+    "id": "b9bffced7c75dc059ede6187cbefb773a2061e8f", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1380456430, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed connection bug.", 
+    "id": "9f1080f8b4c753d12a04abf91d08092d4ae6ad1a", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1380415854, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible problem.", 
+    "id": "aae9fae257bb3948a1c5d51f939b25516b54c3ff", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1380409409, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Potential DoS fixed.", 
+    "id": "d4e42230bdce38941abad85ba2aaa184f31e2f5f", 
+    "files": [
+      "toxcore/net_crypto.c", 
+      "toxcore/net_crypto.h"
+    ]
+  }, 
+  {
+    "date": 1380403172, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "8adb34e6a9af2fcc48dca995a644bfff1374c283", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1380384806, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Connection bug fixed.", 
+    "id": "abd4278fc4da11bdcc04778884dc6d755ed53e9a", 
+    "files": [
+      "toxcore/Lossless_UDP.h", 
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1380379185, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small issue.", 
+    "id": "e1bea734e0ecccb1b3026e3cd74aa4cc9ce68883", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1380378445, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Behaviour with LAN ips is now better, also fixed possible bug.", 
+    "id": "2b8d0d045a2a407b519df2f0fdb99683ac43ef26", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1380337833, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible problem.", 
+    "id": "d14ba73bc316211ec3e3e9a1600bda37b2bf2ae4", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1380129559, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possible bug fixed.", 
+    "id": "beff2b6de659a708ed366a9ae925eab8c4ca0ddd", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1380118027, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug where hole punching was attempted even though the\nclients were connected.\n\nIncreased the number of ports tried per interval of time.\n\nAlso astyled the files.", 
+    "id": "3c78aefce07cf83a5236b0fcdb202ff463ff6a60", 
+    "files": [
+      "toxcore/ping.c", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1380109075, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "83c665f2c40928935a26963dbc3689defb332687", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1380060915, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possibly fixed the weird disconnecting/reconnecting bug.", 
+    "id": "4a3bed3e850af7aee70bc37bb75ddc913b7a56c0", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1380031069, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possible bug fixed.", 
+    "id": "1994c3cd890ffed436e3a41bc4a1fb642b056b91", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379958351, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed typo.", 
+    "id": "5d25bc100c5d251d28c5b5faa88917cc9e29ed5a", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379897354, 
+    "committer": {
+      "email": "stal@pyboard.net", 
+      "name": "stal"
+    }, 
+    "message": "Fix bug.\n\nThis makes it build on OS X again...", 
+    "id": "bcba9b957bece3da13ff4e91eefb358cd00e77da", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1379862503, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed the connection bug and cleaned up some stuff.", 
+    "id": "83c6e9dd357a64cb60ebeb33dd96d85256820366", 
+    "files": [
+      "toxcore/Lossless_UDP.c", 
+      "toxcore/net_crypto.h", 
+      "toxcore/net_crypto.c", 
+      "toxcore/Messenger.c", 
+      "testing/Lossless_UDP_testserver.c", 
+      "toxcore/Lossless_UDP.h"
+    ]
+  }, 
+  {
+    "date": 1379832614, 
+    "committer": {
+      "email": "jman012guy@gmail.com", 
+      "name": "Jman012"
+    }, 
+    "message": "Fixed a bug or two.\n\nAdded breaks on the new packet handlers in doFriends for the switch statement, and added a default.", 
+    "id": "bb0cd7da0c86356ac3413045cd3683281b2bded4", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379819740, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fix bug.", 
+    "id": "1cc47101fec6a13a3eb5894cdb029420d3ae0ec4", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379818648, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "05477f77d35465e7cf9573c51f9b005c7d1dddc3", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1379806073, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "e36f6c46d199164b52ee2b818c54a672394e71a9", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379691233, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "20b6900fb181f71eca4577a5f1e1f5f3ecd6a28b", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1379600323, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug in Lossless UDP.", 
+    "id": "7e5da03637aa9fd909179a1ff0a240e21a26506c", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1379598415, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug in Lossless UDP.", 
+    "id": "993554bdf6e45f084f52d0c6f3b6200dc550e11c", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1379517070, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bad code in nTox.", 
+    "id": "1a9ee5c95f1864957a25e32c9198f637f7db2032", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1379372937, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "Tests of state loading/saving lead to two fixes for DHT.c and util.c\n\nutil.c:\n- fix in empty section at the end of the state, showed as bug when having an empty name\n\nDHT.c:\n- fix in saving less data than originally announced, showed as bug when not having reached any clients ever (no clients or only with timestamp of zero)", 
+    "id": "1c57a3a3de376c8e9f127c409032fd94298e5e7b", 
+    "files": [
+      "auto_tests/messenger_test.c", 
+      "toxcore/util.c", 
+      "toxcore/DHT.c", 
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379365358, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "Make test \"endtoend\" pass on 'slow' systems\n\nauto_test/crypto_test.c:\n- test \"endtoend\": increased timeout from default ~5s to 15s, making it pass on slower systems\n- signed/unsiged warning fixed by cast", 
+    "id": "0de40d01cbc7acd96429f75a89e8bdf6b61464a5", 
+    "files": [
+      "auto_tests/crypto_test.c"
+    ]
+  }, 
+  {
+    "date": 1379362715, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed build.", 
+    "id": "67da01fb0616fcdf39db8ffb26bd40c9e4bc9d83", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1379252837, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed portability problems.", 
+    "id": "bbeb6e15cdd4135f1922146741d8c9d709f808eb", 
+    "files": [
+      "toxcore/DHT.c", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1379251887, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed portablity problems.\n\nstruct in6_addr member names can differ per platform.", 
+    "id": "8c41244627528ba35dc122ed166cc664fee8c4de", 
+    "files": [
+      "toxcore/Lossless_UDP.c", 
+      "toxcore/tox.h", 
+      "toxcore/DHT.c", 
+      "toxcore/network.c", 
+      "toxcore/network.h", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1379205528, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "DHT peer finding for new friends should now be slightly faster.\n\nAlso fixed the \"[i] could not send message\" bug in nTox.", 
+    "id": "dde98eb34567a274d444893f8c98868ba9d1fa4b", 
+    "files": [
+      "testing/nTox.c", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1379200526, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warnings.", 
+    "id": "20a8fb8a231d158368b8f2db2aab01e443f81b98", 
+    "files": [
+      "testing/nTox.c", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1379199544, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small problems, updated TODO.", 
+    "id": "04e7b0eb6c31f6650bcef83b4915af259b087227", 
+    "files": [
+      "docs/TODO", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1379177861, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some warnings.", 
+    "id": "46a99a87746fd071948bdbe47019e70f6d99e1c8", 
+    "files": [
+      "toxcore/network.c", 
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1378925415, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "tox.h, DHT.h:\n- tox_bootstrap_ex(), DHT_bootstrap_ex() renamed to tox_bootstrap_from_address(), DHT_bootstrap_from_address()\n- (handle_)sendnodes_ex() renamed to (handle_)sendnodes_ipv6()\n- only sending sendnodes_ipv6() if we're actually IPv6 enabled\n- changed comments to conform better\n\nnTox.c, Messenger_text.c, DHT_test.c, DHT_bootstrap.c:\n- fallout from *_ex() to *_from_address()\n\nDHT_bootstrap.c:\n- corrected a potentially wrong info message\n\nutil.c:\n- fixed logfile name: now (funcptr) => now() (number)\n\nnetwork.c:\n- addead comment about the necessity of bind() to succeed\n\nauto_test/messenger_test.c:\n- defaulting ipv6enabled to TOX_ENABLE_IPV6_DEFAULT\n\nLAN_discovery.c:\n- slight cleanup and comments for clarity", 
+    "id": "513e37815db8319dd015bf03b588380a4e3c61d3", 
+    "files": [
+      "toxcore/tox.c", 
+      "testing/nTox.c", 
+      "toxcore/DHT.h", 
+      "auto_tests/messenger_test.c", 
+      "testing/Messenger_test.c", 
+      "toxcore/tox.h", 
+      "toxcore/DHT.c", 
+      "other/DHT_bootstrap.c", 
+      "toxcore/util.c", 
+      "toxcore/network.c", 
+      "testing/DHT_test.c", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1378847726, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed building with NaCl.", 
+    "id": "55499933be7857642d970d32f359e765ff4a2cab", 
+    "files": [
+      "auto_tests/friends_test.c", 
+      "toxcore/group_chats.c", 
+      "auto_tests/messenger_test.c", 
+      "other/DHT_bootstrap.c", 
+      "auto_tests/crypto_test.c", 
+      "other/bootstrap_serverdaemon/DHT_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1378733525, 
+    "committer": {
+      "email": "Break@Ocean", 
+      "name": "Coren[m]"
+    }, 
+    "message": "network.h:\n- added ipany_ntoa()\n\nnetwork.c:\n- added ipany_ntoa()\n- fixed formatting", 
+    "id": "180322293c245a853612b5f58913a29997e11267", 
+    "files": [
+      "toxcore/network.h", 
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1378475816, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed autotest, increased MAX_STATUSMESSAGE_LENGTH.", 
+    "id": "64570a1b12d308449aa0d688f7f513847d1dc0f7", 
+    "files": [
+      "auto_tests/messenger_test.c", 
+      "toxcore/Messenger.h"
+    ]
+  }, 
+  {
+    "date": 1378322051, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possibly fixed LAN discovery on some configurations.", 
+    "id": "efea6b9e822aa69377727d9dbe75458eb2b8e2d7", 
+    "files": [
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1378293990, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small problem.", 
+    "id": "31f43799e11ea824db79de2458a4ac29e6f22c3d", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1378232894, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possible bugs fixed, all received strings now force NULL terminate.", 
+    "id": "01365342fc9e0b898fafe8b47ad82d3e591594c7", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1378155129, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Removed useless code, possibly fixed something.", 
+    "id": "b73ba8244a1c04503f151c20f2eee8ccf58a0646", 
+    "files": [
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1378154123, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible segfaults from bad input.", 
+    "id": "7e8a34bee90bfb4775d0187bc20237c3f8302a8c", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1378136470, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed missing field initializers warnings", 
+    "id": "7c11070b32e93c4ded135a8509c1064d0d7a0f53", 
+    "files": [
+      "toxcore/network.c", 
+      "toxcore/DHT.c", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1378136466, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some warnings.", 
+    "id": "385772065899f7263b6edee15e6f83f1ecd4245e", 
+    "files": [
+      "toxcore/network.h", 
+      "toxcore/network.c"
+    ]
+  }, 
+  {
+    "date": 1378130137, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Properly fixed signed/unsigned comparisons.", 
+    "id": "52336565612207fdb2d2068989da936b5b83ceeb", 
+    "files": [
+      "toxcore/Messenger.c", 
+      "toxcore/DHT.c", 
+      "toxcore/Lossless_UDP.c", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1378088991, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "a1099d7f95591e125c12ba67917b1b9f9bb72933", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1377967762, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Properly fixed test.", 
+    "id": "871a64197b03d5796b32f0fc5d09fe69dc9a9004", 
+    "files": [
+      "auto_tests/messenger_test.c"
+    ]
+  }, 
+  {
+    "date": 1377966495, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed test.", 
+    "id": "0181fd95ae74d4ec7e55ff517fba5bde9d9b9e54", 
+    "files": [
+      "auto_tests/messenger_test.c"
+    ]
+  }, 
+  {
+    "date": 1377966200, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "9ef4bab51daa8730ff06a2effb97615bbe89ad9b", 
+    "files": [
+      "toxcore/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1377886272, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible crash.", 
+    "id": "52c47a0820001b4025b7ebe4f1f6df0a313cf53b", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1377864994, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warnings and moved hex_string_to_bin to testing/", 
+    "id": "8f0bef5f20e5f9518889010387edce4d3af9b3dc", 
+    "files": [
+      "toxcore/Makefile.inc", 
+      "testing/nTox.c", 
+      "toxcore/misc_tools.h", 
+      "toxcore/Lossless_UDP.c", 
+      "testing/Messenger_test.c", 
+      "other/Makefile.inc", 
+      "toxcore/misc_tools.c", 
+      "toxcore/DHT.c", 
+      "other/DHT_bootstrap.c", 
+      "testing/misc_tools.c", 
+      "testing/DHT_test.c", 
+      "toxcore/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1377847730, 
+    "committer": {
+      "email": "kostyarjcnz@gmail.com", 
+      "name": "Kostya"
+    }, 
+    "message": "Fixed build errors.", 
+    "id": "25563ac07005448706d294dccdabf14fbe01d100", 
+    "files": [
+      "toxcore/util.c", 
+      "testing/Lossless_UDP_testclient.c", 
+      "toxcore/Lossless_UDP.c", 
+      "other/bootstrap_serverdaemon/DHT_bootstrap_daemon.c", 
+      "testing/Messenger_test.c", 
+      "testing/Lossless_UDP_testserver.c", 
+      "toxcore/Messenger.c", 
+      "toxcore/DHT.c", 
+      "other/DHT_bootstrap.c", 
+      "toxcore/ping.c", 
+      "toxcore/friend_requests.c", 
+      "testing/DHT_test.c", 
+      "toxcore/LAN_discovery.c", 
+      "toxcore/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1377777783, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "85940f94b2560f87988da8e793eb8998c5b77ead", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1377737461, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "1033c2d80e53acbe8f1807c11c91983ee8e0402a", 
+    "files": [
+      "toxcore/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1377727474, 
+    "committer": {
+      "email": "noMail@nomail.su", 
+      "name": "Anony Moose"
+    }, 
+    "message": "Fixed another thing in loop; added initialization for tox_array in lossless UDP.", 
+    "id": "31354d80d40270ee415b84e312f91b47bf104afe", 
+    "files": [
+      "testing/misc_tools.h", 
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1377556068, 
+    "committer": {
+      "email": "noMail@nomail.su", 
+      "name": "Anony Moose"
+    }, 
+    "message": "Fixed for loop counter errors.", 
+    "id": "82a3eb9763953d39f7ddafc40fe71b1d4cc13dbf", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1377554681, 
+    "committer": {
+      "email": "noMail@nomail.su", 
+      "name": "Anony Moose"
+    }, 
+    "message": "Fixed several embarrassing errors and potential problems in tox_array.", 
+    "id": "abaaef051cb8984390485baff71c5a616b626a5b", 
+    "files": [
+      "testing/misc_tools.h", 
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1377468414, 
+    "committer": {
+      "email": "noMail@nomail.su", 
+      "name": "Anony Moose"
+    }, 
+    "message": "Removed commented code and fixed broken functions for Lossless_UDP tox_array.", 
+    "id": "c23fbfa9f855d1f9838e8b38fd50af916937a468", 
+    "files": [
+      "toxcore/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1377382908, 
+    "committer": {
+      "email": "petewicken@gmail.com", 
+      "name": "JamoBox"
+    }, 
+    "message": "consistency check\n\nfixed grammar to maintain consistency of output", 
+    "id": "7fa17f9ab40e13f985f62f2b7dd8f2c05d73655c", 
+    "files": [
+      "auto_tests/crypto_test.c"
+    ]
+  }, 
+  {
+    "date": 1377107854, 
+    "committer": {
+      "email": "sanketsparmar@gmail.com", 
+      "name": "Sanket Parmar"
+    }, 
+    "message": "Fixed segfault and added support for single quotes in toxic", 
+    "id": "155823e7ce4309dfaff303777772369b4ea7fcf2", 
+    "files": [
+      "testing/toxic/prompt.c"
+    ]
+  }, 
+  {
+    "date": 1377055949, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "e494785abdc468c412f15fd6dca5eabd17413cc2", 
+    "files": [
+      "core/network.c"
+    ]
+  }, 
+  {
+    "date": 1377040842, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Lossless UDP tests fixed.", 
+    "id": "c7aafcfb4cff44a60fa54fa55cd9e3519b30e720", 
+    "files": [
+      "testing/Lossless_UDP_testclient.c", 
+      "testing/Lossless_UDP_testserver.c"
+    ]
+  }, 
+  {
+    "date": 1377033917, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed DHT_serverdaemon.", 
+    "id": "86b11394b106b89b91c34e0321ef108a65617fbb", 
+    "files": [
+      "other/bootstrap_serverdaemon/DHT_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1377031054, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "DHT_bootstrap fixed.", 
+    "id": "1fde3ce6aa6f763a6b8dc28a31cd5bfb771bb247", 
+    "files": [
+      "other/DHT_bootstrap.c", 
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1377028395, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed DHT_test.c and added some checks.", 
+    "id": "747c290269db58f68ce05e976af974f3904ac3d0", 
+    "files": [
+      "core/Messenger.c", 
+      "testing/DHT_test.c", 
+      "core/DHT.c", 
+      "core/Lossless_UDP.c", 
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1377026896, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "nTox and cmake fixed.", 
+    "id": "2f66b312442f15f24adaf7216f5bc61390fdc016", 
+    "files": [
+      "core/CMakeLists.txt", 
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1376998815, 
+    "committer": {
+      "email": "michael_rose@gmx.de", 
+      "name": "Michael Rose"
+    }, 
+    "message": "fixed space handling in commands (issue #495)", 
+    "id": "7f5591615d9911aa9b9aec022b81b9a1c52ce653", 
+    "files": [
+      "testing/toxic/prompt.c"
+    ]
+  }, 
+  {
+    "date": 1376990957, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed issue 470, crypto_test still forcing libsodium when NaCL is chosen", 
+    "id": "3cd582aeb3b715ac5d0fecbceccd8493b1221e57", 
+    "files": [
+      "auto_tests/crypto_test.c"
+    ]
+  }, 
+  {
+    "date": 1376945964, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "fix tab bar bugs", 
+    "id": "22f766860f8d0a46445b452f29e11ffdfe57dc05", 
+    "files": [
+      "testing/toxic/windows.c"
+    ]
+  }, 
+  {
+    "date": 1376945704, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "fix tab bar bugs", 
+    "id": "2f4f81981ddc050c13e8528bd1c65d2b0d9a91da", 
+    "files": [
+      "testing/toxic/chat.c"
+    ]
+  }, 
+  {
+    "date": 1376911104, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "4b480381ee7e1b5bbf3c253c0c4bf045e43f0a0e", 
+    "files": [
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1376841574, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed stack problem.", 
+    "id": "93104d1203de8cd6a5786dd4982a6576ced7e8c1", 
+    "files": [
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1376838075, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault and removed deprecated code.", 
+    "id": "45fec94452635a3c4441d683727dce06659e4d25", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1376836023, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Properly fixed possible realloc with size zero problem.", 
+    "id": "88ea4659e98d2ecfab7296e334a6a46b53aeb46e", 
+    "files": [
+      "core/Messenger.c", 
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1376829290, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed toxic not running", 
+    "id": "af12267c77c406547f06c75fca4b8c3cbefdec72", 
+    "files": [
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1376810630, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed a core memory leak", 
+    "id": "71bc275284d3d42fe32d3b1919f1075c3104d304", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1376753448, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug.", 
+    "id": "f259ab5fa7a7175869134c05a92f569896fe85a2", 
+    "files": [
+      "core/Messenger.c", 
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1376752568, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added dynamic memory allocation to crypto connections.\n\nAlso fixed some possible bugs in Messenger.c", 
+    "id": "7d092c3467fbbcf3639ed2c698659c56b2509c31", 
+    "files": [
+      "core/Messenger.c", 
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1376614582, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed loading and a small problem with the length of crypto requests.", 
+    "id": "b15230583c31799d650584b05f4cfce8cd726aea", 
+    "files": [
+      "core/Messenger.c", 
+      "core/friend_requests.c", 
+      "core/net_crypto.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1376610303, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed function agruments according to new API", 
+    "id": "d93b5e2cb8c1af1885969448097c7426b27b0b6a", 
+    "files": [
+      "testing/nTox_win32.c", 
+      "testing/nTox_win32.h"
+    ]
+  }, 
+  {
+    "date": 1376510541, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "small bug fixes", 
+    "id": "aa114d2778f87180eaf946f2fd3113c53d2304bc", 
+    "files": [
+      "testing/toxic/chat.c", 
+      "testing/toxic/windows.c", 
+      "testing/toxic/prompt.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1376473110, 
+    "committer": {
+      "email": "michael_rose@gmx.de", 
+      "name": "Michael Rose"
+    }, 
+    "message": "fixed calculation of messenger size (no spam was not accounted for)", 
+    "id": "08735b142fd43e77b3bdd55da8243b157445481d", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1376400751, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed spam problem. (I broke the API so this will not build)\n\nThe friend address is what the byte string that you give away for people\nto add you will be called.\n\n1. Every friend address now contains a number set by the friend. This is\nto prevent someone from randomly spamming people in the DHT with friend\nrequests and makes it so you need the person to actually give you the\naddress in some way to send the friend request. This number is expected\nto be encrypted with the friend request. All requests that do not\ncontain this number will be rejected. This means the spammer can no\nlonger use the DHT to collect lists of valid addresses to spam. It also\nenables users to quickly change the number in case a spammer gets hold\nof the address and starts spamming it.\n\n2. A 2 byte checksum will be added (not implemented yet) to prevent\npeople from accidentally adding random strings as friends. (NOTE that\nthis has nothing to do with the spam problem I just decided to add a\nplaceholder for it now.)", 
+    "id": "97f449a2f1aa3e4fbe7f2d853efa0c7935ded967", 
+    "files": [
+      "testing/toxic/chat.c", 
+      "core/friend_requests.c", 
+      "core/friend_requests.h", 
+      "testing/toxic/prompt.c", 
+      "core/Messenger.h", 
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1376351450, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "minor improvements and bug fixes", 
+    "id": "565a348ceb0babda481d78f8f2700cf7d841e4c2", 
+    "files": [
+      "testing/toxic/chat.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1376254562, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed a mistake", 
+    "id": "e427197580f8f6eae080d3d629f92492126c9dfe", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1376245022, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed warnings on Windows", 
+    "id": "440871bda1ee0eb7ee7c6abd31c62340242a5fd0", 
+    "files": [
+      "testing/crypto_speed_test.c", 
+      "core/network.h"
+    ]
+  }, 
+  {
+    "date": 1376223307, 
+    "committer": {
+      "email": "me@danielparnell.com", 
+      "name": "Daniel Parnell"
+    }, 
+    "message": "Fixed m_sendmessage to return the ID of the message sent", 
+    "id": "6c0db66a01eb13c574712d8ae9abc9de2c64b7fe", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1376094771, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible bug.", 
+    "id": "341de59bb627600c27ef29b113fa71bac120350f", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1376093010, 
+    "committer": {
+      "email": "slvr@unsafeio.com", 
+      "name": "slvr"
+    }, 
+    "message": "fixed typo: handle_ping_request -> handle_ping_response", 
+    "id": "75c2dd4cb9ffe2c5413bcdd2c64e7737a4bc4e42", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1376022345, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "fixed chat window text wrapping", 
+    "id": "9910115b4e26f0280e446224b121e72602ed8e09", 
+    "files": [
+      "testing/toxic/chat.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1376012953, 
+    "committer": {
+      "email": "kostyakow42@gmail.com", 
+      "name": "Konstantin Kowalski"
+    }, 
+    "message": "Fixed a printf argument.", 
+    "id": "7bd9c8399c669738acb7148bf004375adb25b8a9", 
+    "files": [
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1375983747, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed a silly code ordering mistake", 
+    "id": "23f55c101d3811409171991bd4dbdd4c8f0b9694", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1375978409, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed dynamic memory allocation.", 
+    "id": "1fb2085c6716dcedc0a3547bf78584bdf20a7b40", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1375973962, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Moved a define and fixed another.", 
+    "id": "a3a0fb57cb8804d619e04cfc22f8154db067fa25", 
+    "files": [
+      "core/DHT.h", 
+      "testing/toxic/main.c", 
+      "core/network.h"
+    ]
+  }, 
+  {
+    "date": 1375922254, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed auto tests", 
+    "id": "338da1fde705a6e52242eaf81cd0b4face01fac4", 
+    "files": [
+      "auto_tests/friends_test.c", 
+      "auto_tests/messenger_test.c"
+    ]
+  }, 
+  {
+    "date": 1375895167, 
+    "committer": {
+      "email": "stal@pyboard.net", 
+      "name": "Sebastian Stal"
+    }, 
+    "message": "Document functions, and fix bug.", 
+    "id": "c0828667e70fdd92fd01c581ce04dfc451e01860", 
+    "files": [
+      "core/Messenger.c", 
+      "core/Messenger.h"
+    ]
+  }, 
+  {
+    "date": 1375893337, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed it not compiling", 
+    "id": "2b916b96bd46823afe28ff0a798a4995d0e99067", 
+    "files": [
+      "testing/toxic/prompt.c"
+    ]
+  }, 
+  {
+    "date": 1375860381, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed flash killing beep", 
+    "id": "c02e1a095cec0e76d500ec7f22763a928e361d00", 
+    "files": [
+      "testing/toxic/chat.c"
+    ]
+  }, 
+  {
+    "date": 1375857295, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "Fixed two bugs", 
+    "id": "90524356a79d15353c91ad4125cd7f8d8e7a35d3", 
+    "files": [
+      "core/Messenger.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375834273, 
+    "committer": {
+      "email": "nickodell@gmail.com", 
+      "name": "Nick ODell"
+    }, 
+    "message": "Fix bug where file handle wasn't closed on success", 
+    "id": "34f531553a6ec39ba55282dbf5b29e9a401d0880", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375834273, 
+    "committer": {
+      "email": "nickodell@gmail.com", 
+      "name": "Nick ODell"
+    }, 
+    "message": "Fix bug where we could run past the end of the friends list", 
+    "id": "7ddeb2bf6da9e68d8963ff703ec85284f7ed73ba", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1375824332, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Small bug fixed.", 
+    "id": "29773d97fc78b703c96d73b883b83b75fa17198f", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1375819577, 
+    "committer": {
+      "email": "DarkSER@gmx.net", 
+      "name": "DarkSER"
+    }, 
+    "message": "fixed print_statuschange & m_set_userstatus usage in nTox_win32.c", 
+    "id": "14413c472460d6fadfeec98c00ca6d4c96817dc4", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375786210, 
+    "committer": {
+      "email": "thomas.bladon@st-hughs.ox.ac.uk", 
+      "name": "Nominate"
+    }, 
+    "message": "Fixed formatting", 
+    "id": "532f16a377616442ba499f48285b9fff4c138a3c", 
+    "files": [
+      "testing/toxic/prompt.c"
+    ]
+  }, 
+  {
+    "date": 1375749347, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed style and is_pinging().", 
+    "id": "524cf1895413026f528d9c59d16755a066c56f1c", 
+    "files": [
+      "core/ping.c", 
+      "core/util.c"
+    ]
+  }, 
+  {
+    "date": 1375740428, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "bug fix and added wrapping on friends list", 
+    "id": "3f712d2650937c78735375f9695d73a8dbc95a91", 
+    "files": [
+      "testing/toxic/friendlist.c"
+    ]
+  }, 
+  {
+    "date": 1375736093, 
+    "committer": {
+      "email": "nickodell@gmail.com", 
+      "name": "Nick ODell"
+    }, 
+    "message": "Fix bug where friendreq_handlepacket did not do bounds checking", 
+    "id": "84607c893799ebab736336267c58b12d4fd5b037", 
+    "files": [
+      "core/friend_requests.c"
+    ]
+  }, 
+  {
+    "date": 1375735605, 
+    "committer": {
+      "email": "nickodell@gmail.com", 
+      "name": "Nick ODell"
+    }, 
+    "message": "Fix bug where handle_NATping wouldn't perform bounds checking", 
+    "id": "9364db9effb37a44e4de8166c00af00e5320c803", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1375731040, 
+    "committer": {
+      "email": "stal@pyboard.net", 
+      "name": "Sebastian Stal"
+    }, 
+    "message": "Make test clients compatible with userstatus kinds\nNo features were added, just fixed callbacks.", 
+    "id": "5ec3b2330e1b6a9d4cda0eef74aca2408bec5250", 
+    "files": [
+      "testing/toxic/chat.c", 
+      "testing/toxic/prompt.c", 
+      "testing/nTox.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375722884, 
+    "committer": {
+      "email": "joshuaj@member.fsf.org", 
+      "name": "joshuaj"
+    }, 
+    "message": "Fixed toxic friends list flicker", 
+    "id": "bafd996e72a186345003b4267f5172decef4efca", 
+    "files": [
+      "testing/toxic/friendlist.c"
+    ]
+  }, 
+  {
+    "date": 1375652169, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed 2 Null pointer derefrences in both nTox and toxic", 
+    "id": "a8f752130bc98a2b6f2db93520b6038f2180c774", 
+    "files": [
+      "testing/nTox.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375647368, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed a calloc getting freed before being used", 
+    "id": "0fad8e3638bd7fa7ef6f11e46b2636a85907cd2b", 
+    "files": [
+      "testing/toxic/chat.c"
+    ]
+  }, 
+  {
+    "date": 1375612056, 
+    "committer": {
+      "email": "tfy12vbr@student.lu.se", 
+      "name": "plutooo"
+    }, 
+    "message": "toxic: Fixed doMessenger() interval.. Toxic is much faster and responsive now.", 
+    "id": "5300e98288760f9945316ac063af876e436fda7d", 
+    "files": [
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375581557, 
+    "committer": {
+      "email": "charmlesscoin@gmail.com", 
+      "name": "charmlesscoin"
+    }, 
+    "message": "fixed bug that would cause this to always exit", 
+    "id": "b36bca295c296f886872df98de388c8c5c5ad177", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375566412, 
+    "committer": {
+      "email": "jkwon.work@gmail.com", 
+      "name": "Jae Kwon"
+    }, 
+    "message": "various fixes for first time user\n* added linking to libsodium\n* fixed links to docs to point to wiki", 
+    "id": "158751cb2db8d2e11e38cbc926d0a979f8a8350a", 
+    "files": [
+      "INSTALL.md", 
+      "core/CMakeLists.txt", 
+      "core/net_crypto.c", 
+      "core/DHT.h", 
+      "core/Lossless_UDP.c", 
+      "core/DHT.c", 
+      "core/Lossless_UDP.h"
+    ]
+  }, 
+  {
+    "date": 1375538448, 
+    "committer": {
+      "email": "m-kress@m-kress.de", 
+      "name": "Michael Kress"
+    }, 
+    "message": "fixed printing time stamp in toxic", 
+    "id": "28944151c71bae923f8b5cbcdf090cb3190bf098", 
+    "files": [
+      "testing/toxic/chat.c"
+    ]
+  }, 
+  {
+    "date": 1375527567, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed a segfault when recieving text", 
+    "id": "52f1dcd9ffc6116d8f45a5451a23cc99becb0d2e", 
+    "files": [
+      "testing/toxic/chat.c"
+    ]
+  }, 
+  {
+    "date": 1375506870, 
+    "committer": {
+      "email": "charmlesscoin@gmail.com", 
+      "name": "charmlesscoin"
+    }, 
+    "message": "Fixed the printing of a few strings, moved some code around.", 
+    "id": "bb2ea0e5b40012dc722727fe8e5274cd6ec9c563", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375497285, 
+    "committer": {
+      "email": "charmlesscoin@gmail.com", 
+      "name": "charmlesscoin"
+    }, 
+    "message": "changed some formatting, fixed the removal of x and y", 
+    "id": "b9e3bf1fa61aac975abe54586e1928f25767ff0a", 
+    "files": [
+      "testing/nTox.h", 
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375493761, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "cursor done better, fixed for chat windows", 
+    "id": "8fa074db5eb8c9b0ea9497d269725df0ff391321", 
+    "files": [
+      "testing/toxic/chat.c", 
+      "testing/toxic/prompt.c", 
+      "testing/toxic/friendlist.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375489309, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed regression.", 
+    "id": "9e5800ab10c3f006decb6a02f151db18e3bbb763", 
+    "files": [
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1375488887, 
+    "committer": {
+      "email": "stqism@risingstormgames.com", 
+      "name": "Sean Qureshi"
+    }, 
+    "message": "Fixed a bug with the minutes only being 1 character long when less than 10", 
+    "id": "9267ab2fcaaaedb70c68de6daccea1660138312d", 
+    "files": [
+      "testing/toxic/chat.c"
+    ]
+  }, 
+  {
+    "date": 1375477013, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed crashes.", 
+    "id": "f8f24ba48a31f6405f5faa8cf770df6fb924acb9", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375475361, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warnings.", 
+    "id": "61f41474e39e151ce657c17566606227e7155632", 
+    "files": [
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1375472456, 
+    "committer": {
+      "email": "nickodell@gmail.com", 
+      "name": "Nick ODell"
+    }, 
+    "message": "Fix bug where memcpy could overrun buffer", 
+    "id": "8d1f7753f679b12a8e57f8b5c4b529bb627ba6c5", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1375471728, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed problems.", 
+    "id": "346e4b28ca92d82117a0a796eb0344104fc7310e", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1375461639, 
+    "committer": {
+      "email": "ragesalmon@gmail.com", 
+      "name": "ragesalmon"
+    }, 
+    "message": "Fixed a build error due to the removal of getnumfriends()", 
+    "id": "563c2b31576ab746084731c7e47620f312bb6c0f", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375434641, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "fixed cursor", 
+    "id": "7189f4c7b2f7753f4b373af9f1a9f20eef5fba54", 
+    "files": [
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375428991, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "fixed cursor", 
+    "id": "5541008b3b4042fb21d1be833a7290f954700e10", 
+    "files": [
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375395356, 
+    "committer": {
+      "email": "nickodell@gmail.com", 
+      "name": "Nick ODell"
+    }, 
+    "message": "Fix bug where messages from yourself were preceeded by [-1]", 
+    "id": "ff2e04b107587e69096e1523bcf66b2f45cafd7a", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375388928, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "nTox: fixed 2 possible crashes, 3 incorrect packet lengths", 
+    "id": "9fbff0c7589166c185c6885b0d67b2402228e8b6", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375388110, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed stupid copy pasting mistake.", 
+    "id": "79f0a2ccba4ae0b0606991e8a820454858262b6c", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1375386572, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Possible timing problem fixed.", 
+    "id": "ffd69a6525cc706fadbf5ad8d68400fc1d6fd5b4", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1375382691, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible timing problem.", 
+    "id": "633edcf45264203c1c0a2b00aed503e480ab7af4", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1375370576, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed possible issues with the crypto reported by an anonymous person.", 
+    "id": "7a08681af57254b9d6831de8321956f09b77b9fa", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1375321497, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "fixed friend add bugs", 
+    "id": "a604de901702eabcdc73507025e77e34db6a9266", 
+    "files": [
+      "testing/toxic/prompt.c"
+    ]
+  }, 
+  {
+    "date": 1375316042, 
+    "committer": {
+      "email": "softukitu@gmail.com", 
+      "name": "Astonex"
+    }, 
+    "message": "Fixed friends list and deleting friends. Automatically loads name/status from last time.", 
+    "id": "7417dfe21646956aca7861fe79c1b4d207b12443", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375306564, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "partially fixed friend add bug (key length test still broken)", 
+    "id": "0ae9ec1815c82a9b0c0d5b116dcffe386a3ae218", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375306216, 
+    "committer": {
+      "email": "Jfreegman@gmail.com", 
+      "name": "Jfreegman"
+    }, 
+    "message": "partially fixed friend add bug (key length test still broken)", 
+    "id": "8f6e1d8fbf047bf491cbd93dcfcf19d6789c688e", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375241538, 
+    "committer": {
+      "email": "softukitu@gmail.com", 
+      "name": "Astonex"
+    }, 
+    "message": "Fixed cpu usage", 
+    "id": "d848c159129a42b0ca1eef2fccc692d87a297a47", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375213660, 
+    "committer": {
+      "email": "tfy12vbr@student.lu.se", 
+      "name": "plutooo"
+    }, 
+    "message": "Fixed a bunch of bugs in TOXIC, added friendlist and more.", 
+    "id": "026790e181a4dd26a60bcbada3e546a1c5e50888", 
+    "files": [
+      "testing/toxic/CMakeLists.txt", 
+      "testing/toxic/prompt.c", 
+      "testing/toxic/friendlist.c", 
+      "testing/toxic/main.c"
+    ]
+  }, 
+  {
+    "date": 1375209812, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "bd695135dcb9220e6a75e48975dd8473d3d1fcbe", 
+    "files": [
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1375188516, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warning.", 
+    "id": "3f85bdca15d2f0258413039978b6552965385335", 
+    "files": [
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1375172482, 
+    "committer": {
+      "email": "softukitu@gmail.com", 
+      "name": "Astonex"
+    }, 
+    "message": "Fixed the friends listing", 
+    "id": "e920be4c01c3cb5493aab71268b763bea77e5104", 
+    "files": [
+      "core/Messenger.c", 
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375170738, 
+    "committer": {
+      "email": "softukitu@gmail.com", 
+      "name": "Astonex"
+    }, 
+    "message": "Fixed bugs, added friend listing (slightly buggy), and changed the general aesthetics", 
+    "id": "84a0871cf6afad74441087939cec9c0e55d39961", 
+    "files": [
+      "testing/nTox_win32.c"
+    ]
+  }, 
+  {
+    "date": 1375169218, 
+    "committer": {
+      "email": "xorl@xorl.net", 
+      "name": "Ryan Lewon"
+    }, 
+    "message": "Removed unneeded include.\nFixed formatting and cleaned up output.", 
+    "id": "20aad9c73bfad93099a2614d7be1fe8a245665c7", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1375145232, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed function signature", 
+    "id": "261f365e55d4711372f7053667aa368788eabea1", 
+    "files": [
+      "core/network.c", 
+      "core/network.h"
+    ]
+  }, 
+  {
+    "date": 1374973686, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed name related functions.\n\nThey now should give proper lengths and take length into account when\nsending.", 
+    "id": "deb124f5393f8938709ac0bd5ab00082e5cb3723", 
+    "files": [
+      "core/Messenger.c", 
+      "core/Messenger.h"
+    ]
+  }, 
+  {
+    "date": 1374969896, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added friend request accepting to nTox and fixed a bug.\n\nFixed a bug in Lossless UDP that prevented 2 clients from sometimes\nconnecting when they connected at the same time to each other.", 
+    "id": "b83359cd0594fae7789697b1d71a5aeb4c09a1fa", 
+    "files": [
+      "testing/nTox.c", 
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1374941441, 
+    "committer": {
+      "email": "kostyakow42@gmail.com", 
+      "name": "Konstantin Kowalski"
+    }, 
+    "message": "[fixed]created new files misc_tools.(c|h) and moved hex_string_to_bin() there.", 
+    "id": "b3fa1fc8f48aea08da1552d76397e959cd0aa690", 
+    "files": [
+      "testing/nTox.c", 
+      "testing/Messenger_test.c", 
+      ".gitignore", 
+      "other/DHT_bootstrap.c", 
+      "testing/misc_tools.c", 
+      "testing/cmake/Messenger_test.cmake", 
+      "testing/DHT_cryptosendfiletest.c", 
+      "testing/cmake/DHT_test.cmake", 
+      "testing/misc_tools.h", 
+      "testing/DHT_test.c", 
+      "other/cmake/DHT_bootstrap.cmake", 
+      "testing/cmake/DHT_cryptosendfiletest.cmake", 
+      "testing/cmake/nTox.cmake"
+    ]
+  }, 
+  {
+    "date": 1374881461, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Small inconsistency fixed.", 
+    "id": "e6a33fede62f54b8d925a8d4b986581b3afddc0b", 
+    "files": [
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1374877044, 
+    "committer": {
+      "email": "dhubdwhhu@yopmail.com", 
+      "name": "sometwo"
+    }, 
+    "message": "styling\n\nhaven't fixed switch statements because I'm lazy", 
+    "id": "db8d47dccba2fb8a8eb382754d3470c517062328", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1374872763, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed the multiple friends request recieved at the same time problem.", 
+    "id": "056195be410229dde61286c9f316eaec48a7a550", 
+    "files": [
+      "core/friend_requests.c", 
+      "core/LAN_discovery.h", 
+      "core/LAN_discovery.c"
+    ]
+  }, 
+  {
+    "date": 1374575915, 
+    "committer": {
+      "email": "tom@ataullah.(none)", 
+      "name": "Tom Bartelt"
+    }, 
+    "message": "Fixed a tiny bug", 
+    "id": "ea49be0e95afeaad19768b68f49b5d34752b1238", 
+    "files": [
+      "other/bootstrap_serverdaemon/DHT_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1374524770, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small thing in DHT.", 
+    "id": "11d02de9a16dff3a9e3cdb911588f67b650881bb", 
+    "files": [
+      "core/DHT.c", 
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1374522555, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed build.", 
+    "id": "4504011117d74a27a7127f31a62d2e4f7a187afb", 
+    "files": [
+      "other/bootstrap_serverdaemon/DHT_bootstrap_daemon.c"
+    ]
+  }, 
+  {
+    "date": 1374492385, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed warnings.", 
+    "id": "635e921c1489714941e5f4cd1bd4bed15325bfd3", 
+    "files": [
+      "testing/DHT_test.c", 
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1374456735, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed comments", 
+    "id": "2ab2ebe5a5f47b53a026118f144adf932aad1f11", 
+    "files": [
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1374450801, 
+    "committer": {
+      "email": "redwire@riseup.net", 
+      "name": "redwire"
+    }, 
+    "message": "Fixed temp redeclaration", 
+    "id": "b16013b86be5063dfe32a59cf04febebed0a6d35", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1374441024, 
+    "committer": {
+      "email": "redwire@riseup.net", 
+      "name": "Zack"
+    }, 
+    "message": "Fixed an embarassing typo", 
+    "id": "9b634504a647083753f54472151f81906b290f8b", 
+    "files": [
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1374364741, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed segfault.", 
+    "id": "b9b50481be282a5c7fdadac2c79c38a2d4d49d35", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1374335279, 
+    "committer": {
+      "email": "nurupo.contributions@gmail.com", 
+      "name": "Maxim Biro"
+    }, 
+    "message": "Fixed header inclusion for Windows", 
+    "id": "5ec78d75cea94fded1157f901f535b3da72a0e73", 
+    "files": [
+      "other/DHT_bootstrap.c"
+    ]
+  }, 
+  {
+    "date": 1374331145, 
+    "committer": {
+      "email": "AndehMor@gmail.com", 
+      "name": "Andrew"
+    }, 
+    "message": "Fixed comments in other files as per request of jvrv", 
+    "id": "5101ef756a18baf5d7e794d15577fa73ef2a18fa", 
+    "files": [
+      "core/net_crypto.h", 
+      "core/net_crypto.c", 
+      "core/network.c", 
+      "core/network.h"
+    ]
+  }, 
+  {
+    "date": 1374251752, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "The last fix was wrong, this time it's properly fixed.", 
+    "id": "c657778f0ce7c14d37717547037b6b1f46cd9fe6", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1374250180, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed big bug in DHT.", 
+    "id": "2d88476d44216b7032bdddf19cf8eba38b7f6705", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1374245825, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug that sometimes prevented two clients from connecting.", 
+    "id": "d792247dd8c5c4742f3d74fda3442e29da22467a", 
+    "files": [
+      "testing/nTox.c", 
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1374181826, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug in the messenger loading.", 
+    "id": "6291a04ed2939cfc796488b86551c4463d2f6e15", 
+    "files": [
+      "core/Messenger.c"
+    ]
+  }, 
+  {
+    "date": 1374088252, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small mistake (Thank you stal).", 
+    "id": "817ad50d9640b8ccce3636a00f732245ff09d38c", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1374083659, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed bug with deleting friends.", 
+    "id": "f27b5c9296c51d6d7c52fa1a483ac92fb097562f", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1374077239, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Bug fixed, Loading and saving added to core.", 
+    "id": "4864cb9edbe567af6f774bcf6ad90211449a258f", 
+    "files": [
+      "core/Messenger.c", 
+      "testing/Messenger_test.c", 
+      "core/Messenger.h", 
+      "core/net_crypto.c"
+    ]
+  }, 
+  {
+    "date": 1374015764, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some bugs and a regression.", 
+    "id": "bec416a05058ed821e9c16e3dda477abed41ec0d", 
+    "files": [
+      "core/Messenger.c", 
+      "testing/nTox.c", 
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1373984552, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Lossless UDP tests fixed.", 
+    "id": "d62b91f3ac220f7832aa73e20e632c8f34fd1177", 
+    "files": [
+      "testing/Lossless_UDP_testclient.c", 
+      "testing/Lossless_UDP_testserver.c"
+    ]
+  }, 
+  {
+    "date": 1373829769, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed useless inbound connection not timing out.", 
+    "id": "f3dfeb607b31d14d1e93217b993848a1bb789b1d", 
+    "files": [
+      "core/net_crypto.c", 
+      "core/Lossless_UDP.c"
+    ]
+  }, 
+  {
+    "date": 1373771517, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed ncurses problems.", 
+    "id": "71abd15c1b71836d35af5398fcc6b416baad73d3", 
+    "files": [
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1373768905, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed @ appearing in messages.", 
+    "id": "96b8cb1c43a767c586fb1770fdfb70003de186c0", 
+    "files": [
+      "core/Messenger.c", 
+      "other/DHT_bootstrap.c"
+    ]
+  }, 
+  {
+    "date": 1373767029, 
+    "committer": {
+      "email": "oliver.huntuk@gmail.com", 
+      "name": "Oliver Hunt"
+    }, 
+    "message": "fixed the ncurses client i believe", 
+    "id": "9f38ab582c7d37548faf421136c58e128dd824d1", 
+    "files": [
+      "core/Messenger.c", 
+      "testing/nTox.c"
+    ]
+  }, 
+  {
+    "date": 1373754058, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed 2 small mistakes present in the last pull request.", 
+    "id": "11a2bf0878404c8c6d8c01424218da49237b880a", 
+    "files": [
+      "core/Messenger.c", 
+      "core/Messenger.h"
+    ]
+  }, 
+  {
+    "date": 1373661345, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Build fixed?", 
+    "id": "e80ac120e1f5b53e3ac4d337628838a4ea58adc3", 
+    "files": [
+      "core/net_crypto.h", 
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1373301371, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Spelling mistakes fixed.", 
+    "id": "c00cf85078a3d0ba372dc95d9ca1f54007d10ba5", 
+    "files": [
+      "core/net_crypto.h", 
+      "docs/Lossless_UDP.txt", 
+      "testing/DHT_sendfiletest.c", 
+      "testing/Lossless_UDP_testclient.c", 
+      "testing/DHT_test.c", 
+      "core/net_crypto.c", 
+      "docs/IDEAS.txt", 
+      "testing/Lossless_UDP_testserver.c", 
+      "core/DHT.h", 
+      "core/Lossless_UDP.c", 
+      "core/network.c", 
+      "testing/DHT_cryptosendfiletest.c", 
+      "docs/Crypto.txt", 
+      "core/DHT.c", 
+      "core/network.h", 
+      "core/Lossless_UDP.h"
+    ]
+  }, 
+  {
+    "date": 1373212465, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed to be confilcts with the DHT and the messenger part.", 
+    "id": "a632d960f8d8095566530d1d0dc1393f02e1e07f", 
+    "files": [
+      "core/DHT.c", 
+      "testing/DHT_sendfiletest.c", 
+      "core/DHT.h", 
+      "CMakeLists.txt", 
+      "testing/DHT_cryptosendfiletest.c", 
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1372688104, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed small bug. Updated TODO.", 
+    "id": "65a198ffa56503ccd593f46a035f4a2b8f28f8ff", 
+    "files": [
+      "core/Lossless_UDP.c", 
+      "docs/TODO.txt"
+    ]
+  }, 
+  {
+    "date": 1372627155, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added a new test program. Fixed some stuff in Lossless UDP.", 
+    "id": "2e0c3bb5934a8db2be6a07e8f1f0511a36bfd86e", 
+    "files": [
+      "testing/DHT_sendfiletest.c", 
+      "core/Lossless_UDP.c", 
+      "testing/Lossless_UDP_testserver.c", 
+      "README.md"
+    ]
+  }, 
+  {
+    "date": 1372333026, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed something in the DHT, added a milisecond time function.", 
+    "id": "d0ed1639144a5f3358d8bc69ad0885d0c1133877", 
+    "files": [
+      "docs/Lossless_UDP.txt", 
+      "testing/DHT_test.c", 
+      "core/DHT.h", 
+      "core/network.c", 
+      "core/DHT.c", 
+      "core/network.h"
+    ]
+  }, 
+  {
+    "date": 1372197030, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed a line in DHT.c and clarified something in DHT_test.c.", 
+    "id": "5d70f9c119d1ca9ff5ab1b6500cbc62b76936775", 
+    "files": [
+      "core/DHT.c", 
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1372195005, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed one possible bug in the DHT and added a basic TODO list.\n\nFixed a possible segfault which could have been cause by handling an\nempty packet.", 
+    "id": "1837745d96f98827c0fb4f0db920cd29c20260c0", 
+    "files": [
+      "core/DHT.c", 
+      "docs/DHT.txt", 
+      "README.md", 
+      "docs/TODO.txt"
+    ]
+  }, 
+  {
+    "date": 1372188271, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed stuff, things work better now.\n\nClient no longer responds to packets from itself.\n\nDHT_test can now find the ip of one peer based on its client id.\n\nSome stuff fixed.", 
+    "id": "adc9c64fe61db1614ece1164db670af3efbf9073", 
+    "files": [
+      "core/DHT.c", 
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1372168794, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed sendnodes and updated readme.", 
+    "id": "bd37e3ad688a9739de1f82d76fde8b61fcd1e9fb", 
+    "files": [
+      "core/DHT.h", 
+      "core/DHT.c", 
+      "README.md"
+    ]
+  }, 
+  {
+    "date": 1372166341, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "DHT almost done, started testing. Fixed ADDR compiling problem. No more warnings with GCC and clang.", 
+    "id": "c93858110bb17ce35143bae7ba9aa68fac93f46b", 
+    "files": [
+      "core/DHT.h", 
+      "core/DHT.c", 
+      "testing/DHT_test.c", 
+      "testing/rect.py"
+    ]
+  }, 
+  {
+    "date": 1372113443, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed? DHT_test compiling on windows.", 
+    "id": "cc1a3f52eef6194410e1698398ba3dd1c7a1a215", 
+    "files": [
+      "testing/DHT_test.c"
+    ]
+  }, 
+  {
+    "date": 1372098710, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Fixed some mistakes.", 
+    "id": "61e9103076c6780668b3d47df5d7c479dd287167", 
+    "files": [
+      "core/DHT.c"
+    ]
+  }, 
+  {
+    "date": 1372084975, 
+    "committer": {
+      "email": "irungentoo@gmail.com", 
+      "name": "irungentoo"
+    }, 
+    "message": "Added distance function and changed some stuff.\n\nAlso fixed typo in Readme.", 
+    "id": "73a742a2ba10a7807251deea2f8f21d38a6e8646", 
+    "files": [
+      "core/DHT.h", 
+      "core/DHT.c", 
+      "README.md"
+    ]
+  }
+]
