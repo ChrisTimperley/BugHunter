@@ -1,0 +1,1993 @@
+[
+  {
+    "date": 1316612445, 
+    "committer": {
+      "email": "jan.code@jankanis.nl", 
+      "name": "Jan Kanis"
+    }, 
+    "message": "fixed bug where case-insensitive completion of /path\\ with\\ spaces/ doesn't reposition the cursor correctly", 
+    "id": "5105d8d87ef97a520a1076a4cc33ed43956a63d7", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1311817839, 
+    "committer": {
+      "email": "chaos.proton@gmail.com", 
+      "name": "Grissiom"
+    }, 
+    "message": "fix: Fish may hang in Linux virtual console\n\nI find that if I have a config.fish consisting of the following two\nlines\n\nstatus --job-control full\n. empty.fish\n\nwhere empty.fish is just an empty file in ~/.config/fish,  Fish will\nhang when I attempt to log in on a virtual console (e.g. tty1). If I run\nFish within X11 or with either of those lines commented out,\neverything's fine. I think the second line can be any command that cause\nFish to perform a fork().\n\nThe fix is pretty simple and just involves replacing getpid() with\ngetpgrp() in terminal_return_from_job in proc.c. See below for the\ndetailed explanation. I'm certainly no expert so I would appreciate it\nif anyone else can confirm that my fix looks ok.\n\nHere's what causes the bug as far as I can tell:\n\n1. When I login on a virtual console,  /bin/login calls Fish. When Fish\nbegins executing its process group and the process group controlling the\nterminal are both the pid of the /bin/login process.\n\n2. The \". empty.fish\" line causes Fish to fork a new process. The new\nprocess creates a new process group and takes control of the terminal\nunder the name of that process group.\n\n3. When the child process finishes,  the parent prcoess attempts to take\nback control of the terminal by setting its controlling process group id\nto be its pid.\n\n4. Now there is a mismatch between the process group id of the Fish\nshell (= the pid of the /bin/login process) and the process group id\ncontrolling the terminal (= the pid of the Fish shell).\nreader_interactive_init detects the mismatch and it thinks that it\ndoesn't have control of the terminal,  so it hangs as it waits for\ncontrol.\n\nMy fix just solves the problem in step 3 by having the parent process\ncorrectly reassign control of the terminal to its process group.\n\nSigned-off-by: Grissiom <chaos.proton@gmail.com>", 
+    "id": "e9d1a5498317f3d2d7829a9dfb7e25c328e52df3", 
+    "files": [
+      "proc.c"
+    ]
+  }, 
+  {
+    "date": 1290529636, 
+    "committer": {
+      "email": "chaos.proton@gmail.com", 
+      "name": "Grissiom"
+    }, 
+    "message": "exec: Don't format status returned directly from builtin function\n\nThe builtin function returns the raw status, which is not the same as\nthe integer return by waitpid. Therefore, the WIF macros shouldn't be\nused for checking or obtaining the status.\n\nThis bug can be seen by executing (eval false). The builtin eval\nfunction returns 1, but proc_format_status misinterprets it as a signal\nby checking WIFSIGNALED, so adds 128 to the status to return 129.\n\nSigned-off-by: Grissiom <chaos.proton@gmail.com>", 
+    "id": "364d3dbbf8de049ab48220de6322cf004457612b", 
+    "files": [
+      "exec.c"
+    ]
+  }, 
+  {
+    "date": 1286499685, 
+    "committer": {
+      "email": "chaos.proton@gmail.com", 
+      "name": "Grissiom"
+    }, 
+    "message": "fix a memory allocation bug in commit 1e27024d755", 
+    "id": "f47caefdb922ba5e144f46b3c76cdbcf98be62c4", 
+    "files": [
+      "env.c"
+    ]
+  }, 
+  {
+    "date": 1286369893, 
+    "committer": {
+      "email": "chaos.proton@gmail.com", 
+      "name": "Grissiom"
+    }, 
+    "message": "fix null reference when erase TERM env\n\nWay to reproduce:\n\n> set -e TERM\nfish: function contains_internal called with null value for argument a.\nfish: This is a bug. If you can reproduce it,  please send a bug report\nto fish-users@lists.sf.net.\nfish: Backtrace:\n/home/grissiom/sysroot/bin/fish(show_stackframe+0x1a) [0x43519a]\n/home/grissiom/sysroot/bin/fish(contains_internal+0xce) [0x4373ee]\n/home/grissiom/sysroot/bin/fish(reader_write_title+0x59) [0x424179]\n/home/grissiom/sysroot/bin/fish() [0x4242d5]\n/home/grissiom/sysroot/bin/fish(reader_readline+0x54) [0x425974]\n/home/grissiom/sysroot/bin/fish(reader_read+0xba) [0x42742a]\n/home/grissiom/sysroot/bin/fish(main+0x4be) [0x43b19e]\n/lib64/libc.so.6(__libc_start_main+0xfd) [0x7fcbe0dcbb6d]\n/home/grissiom/sysroot/bin/fish() [0x408c29]", 
+    "id": "6654fff377c32086421f2691327646915e403d20", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1270854318, 
+    "committer": {
+      "email": "sunaku@gmail.com", 
+      "name": "Suraj N. Kurapati"
+    }, 
+    "message": "Fixed incompatible pointer warning in env_universal_common.c / iconv() call.", 
+    "id": "006952c5719fc7d0b317324a02111f44c382a3ec", 
+    "files": [
+      "env_universal_common.c"
+    ]
+  }, 
+  {
+    "date": 1235873681, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix interactive job in background busy wait bug, reported by Randall D. Wald\n\ndarcs-hash:20090301021441-ac50b-a9488a9e55f545c3b8bd52aa0fb00b2b967974a8.gz", 
+    "id": "810d5f9548301b0f7297abf68d7a272724250fc8", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1233495454, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Add mimedb infinite loop bug fix from James Reeves\n\ndarcs-hash:20090201133734-ac50b-96fb4735af616094ea57ba02266188f8a7038a0c.gz", 
+    "id": "c6427c5a47196e4ac1b8fe9294b3777017415415", 
+    "files": [
+      "mimedb.c"
+    ]
+  }, 
+  {
+    "date": 1202166545, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug causing flood of error messages in terminal when trying to highlight an invalid command, reported by Denilson F. de Sa.\n\ndarcs-hash:20080204230905-ac50b-0829b69835347e5875656ae735181b724f10de2a.gz", 
+    "id": "d7396ac59f44c061698ef00aa7a0592ffb2e9988", 
+    "files": [
+      "expand.h", 
+      "highlight.c"
+    ]
+  }, 
+  {
+    "date": 1200521258, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix minor bug, PWD was incorrectly set on startup\n\ndarcs-hash:20080116220738-75c98-2b7c886629857540efee8f1cab9da0aa9ed8f76d.gz", 
+    "id": "e10f75483fcbf44a813e9fd446529bccc1e52eee", 
+    "files": [
+      "builtin.c", 
+      "env.c", 
+      "env.h"
+    ]
+  }, 
+  {
+    "date": 1199847696, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix bug in return and block builtins - they where unable to handle functions that do not shadow the calling scope\n\ndarcs-hash:20080109030136-75c98-05f7a48cd991ac24e15d7e8b580caef0396ff59c.gz", 
+    "id": "2229fad41025c32d6c79c9ce141c0ef4456fdae4", 
+    "files": [
+      "builtin.c", 
+      "doc_src/index.hdr.in"
+    ]
+  }, 
+  {
+    "date": 1193562365, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix completion bug - case insensitive competions of command names sometimes got the path prepended to them\n\ndarcs-hash:20071028090605-75c98-b623c6bf3f5a5144cdecaf0c005d4acb980e33f1.gz", 
+    "id": "baa6a40d6f7502787a0af8fe57a69659ea6ceac4", 
+    "files": [
+      "complete.h", 
+      "complete.c", 
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1192454466, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix swallowing of last line on prompt display. Again. How many times have I triggered this bug?\n\ndarcs-hash:20071015132106-75c98-11863d8b1743b84f6ad448b64e5ccdeb5aaa5a2f.gz", 
+    "id": "0c1b40e3b3dfd281350b7ca639979860d4c20201", 
+    "files": [
+      "screen.c"
+    ]
+  }, 
+  {
+    "date": 1192454406, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Minor bug fix - the parse_util_set_argv function can trigger an event, hence signals have to be unblocked when it is called.\n\ndarcs-hash:20071015132006-75c98-4ec10e4e26ea63c86c57f7e1f24f3d0fc60995b5.gz", 
+    "id": "e54ce9a1473152a399cd47a93b6f04b0c71bc2bf", 
+    "files": [
+      "exec.c"
+    ]
+  }, 
+  {
+    "date": 1192360600, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix bug in pager causing some keybindings to be ignoerd because other are undefined\n\ndarcs-hash:20071014111640-75c98-c4d271f9b033a4f644e1b58cdb2e8842aff198d2.gz", 
+    "id": "25305c6b24b990949676baf7b2009f0b7df7e684", 
+    "files": [
+      "fish_pager.c"
+    ]
+  }, 
+  {
+    "date": 1191192834, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Remove readline legacy input function 'winch' and replace its functionality with an event handler function. Once again make the null keybinding do nothing. There are various sitauations where you want to perform a repaint at just the right time, and more or less by luck it worked very well to do this on null, but this really shouldn't happen and no longer does. Hopefully if new repainting issues turn up, they can be fixed at the root instead of once again reapplying this broken bandaid.\n\ndarcs-hash:20070930225354-75c98-8e2b518aa0ef694cee889c1c599ff4f158d9eb7f.gz", 
+    "id": "4b85eb32d7fa2131e2fc0a1f18a1c3f59b7161ba", 
+    "files": [
+      "input.h", 
+      "input.c", 
+      "share/functions/__fish_config_interactive.fish", 
+      "screen.c", 
+      "reader.c", 
+      "screen.h"
+    ]
+  }, 
+  {
+    "date": 1190797319, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix bug in exit code that made the exit builtin exit even if there where running jobs if called directly from the commandline\n\ndarcs-hash:20070926090159-75c98-2760c6c24e21fd14711c9ce3bef1b0890b495d65.gz", 
+    "id": "093cb71f91744bd4fe2b85ead3216a54f255e09c", 
+    "files": [
+      "share/functions/delete-or-exit.fish", 
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1190621581, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Make sure that ouput with no trailing newline is not eaten. This is a regression bug fix.\n\ndarcs-hash:20070924081301-75c98-86bd87a9323044807e78b8eb904bd6c5830ee23f.gz", 
+    "id": "0b7b20f0135f7a5aa4929f8dad7112f48e5f2d16", 
+    "files": [
+      "reader.c", 
+      "screen.c", 
+      "screen.h"
+    ]
+  }, 
+  {
+    "date": 1190559355, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix bug caused by new escap beutification code. Some strings containing a single quote where incorrectly escaped.\n\ndarcs-hash:20070923145555-75c98-1125e148af36cb1bbe2f2029c3f1d118308721a6.gz", 
+    "id": "737935ebe4a88244462025d31ffd24a05f2e3878", 
+    "files": [
+      "common.c"
+    ]
+  }, 
+  {
+    "date": 1190384581, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Minor bug correction in new cursor movement code.\n\ndarcs-hash:20070921142301-75c98-7fc9bbdf1591e0fc24a562e69bf483845a160df5.gz", 
+    "id": "624878d35fa8a4cdc0ee44cdeb6057e1c8bcbefb", 
+    "files": [
+      "parse_util.c", 
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1189346676, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Add better debbuging information when writembs is called with null value.\n\ndarcs-hash:20070909140436-75c98-b6c925c441ebaa349f998b95314295296fb36252.gz", 
+    "id": "76bb8e79b23556360881f3a8037542265b41a135", 
+    "files": [
+      "output.h", 
+      "input.c", 
+      "fish_pager.c", 
+      "output.c"
+    ]
+  }, 
+  {
+    "date": 1189346254, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix bug in the count builtin, causing it to exit with status 0 even if no arguments where given\n\ndarcs-hash:20070909135734-75c98-2d0495a15440e50fb6521bffef85147832771c80.gz", 
+    "id": "370aeec44d2230ba8ee86abaeb81f14e543e0375", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1186008861, 
+    "committer": {
+      "email": "liljencrantz@gmail.com", 
+      "name": "liljencrantz"
+    }, 
+    "message": "Fix duplicate switch antry in builtin_status. Don't know if this was caused by patch bug or typo.\n\ndarcs-hash:20070801225421-75c98-8c91f5fb00ccc05ac40ef12ffbfc68fec5e64dd0.gz", 
+    "id": "0a0870180d79749aa1ffd9ea5679f3ff3d8c0cc3", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1179988648, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Update regexps in mimedb to work on NetBSD. (NetBSD does not support having empty subexpressions. This bug was reported and diagnosed by Claes N\u00e4st\u00e9n.\n\ndarcs-hash:20070524063728-ac50b-9377f6d2ba709e997c00d716e766a912cc1ee23e.gz", 
+    "id": "c40eb8a716249d88d3665a2b8fb04d7d9f8db297", 
+    "files": [
+      "mimedb.c"
+    ]
+  }, 
+  {
+    "date": 1177525802, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Make sure that io redirections are respected by the '.' builtin. This was not the case earlier, which caused various bugs, especially after eval was made into a function that internally used '.'\n\ndarcs-hash:20070425183002-ac50b-d7d93e3b74e7274fe3e0aad98e95dd608bb903ae.gz", 
+    "id": "d0585befb341939ee1925d6dc253eb3888982f5c", 
+    "files": [
+      "reader.c", 
+      "exec.c", 
+      "builtin.h", 
+      "reader.h", 
+      "builtin.c", 
+      "main.c"
+    ]
+  }, 
+  {
+    "date": 1177394780, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in stack trace printing code\n\ndarcs-hash:20070424060620-ac50b-174e68e78bc2b1d6e5e3f5787e4a252cad95911c.gz", 
+    "id": "c00e1fcf269ac5e155cc23bd00855a7cfdaf24f3", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1177235327, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in parser, on incomplete blocks. This bug was handled correctly by the error handler, so it was non-critical.\n\ndarcs-hash:20070422094847-ac50b-f8aff4c2939725e256b2f6d020f98240d2658d50.gz", 
+    "id": "e9790db64a642bedb7c359c634e84980e523e627", 
+    "files": [
+      "parser.c"
+    ]
+  }, 
+  {
+    "date": 1177097670, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix minor bug - the description would occasionally get appended to command specific tab completions in case insensitive mode\n\ndarcs-hash:20070420193430-ac50b-13e34ac41cf1662a74f0af329fb41d872df5d691.gz", 
+    "id": "4d5c50cbb32506db8c4aa53ba804faf32e5015a5", 
+    "files": [
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1176791372, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix URL character encoding bug in mimedb\n\ndarcs-hash:20070417062932-ac50b-7816e307ab180be02fc247f6c4796e7fa774862d.gz", 
+    "id": "90c5cea43d2631d7417c951fe74c925e24de2dc7", 
+    "files": [
+      "mimedb.c"
+    ]
+  }, 
+  {
+    "date": 1176757565, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where case insensitive completions would miss the leading slash in file completions. This bug was reported by Claes N\u00e4st\u00e9n.\n\ndarcs-hash:20070416210605-ac50b-eb1bc315ec360f8ccd5f37194c274796be97c607.gz", 
+    "id": "87223c68f4df8aa4de7256be398569bc957fed2f", 
+    "files": [
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1176297503, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where fish would refuse to start if $HOME has an invalid value. Thanks to James Vega for the report.\n\ndarcs-hash:20070411131823-ac50b-2760c09e8939179a6c771a44220aa355381f4f0b.gz", 
+    "id": "5a670e2a960987a8b1962fbde0c038f743041261", 
+    "files": [
+      "main.c"
+    ]
+  }, 
+  {
+    "date": 1174889587, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug in recursive completion (e.g. 'which ls'). This bug was reported by Philip Ganchev\n\ndarcs-hash:20070326061307-ac50b-a89d4427b3f416f31e214bd833c4c76c6ebe3580.gz", 
+    "id": "edf896f7cd9039730d6a6004d8aa4068eb88ba97", 
+    "files": [
+      "builtin_complete.c"
+    ]
+  }, 
+  {
+    "date": 1174775670, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix a bug where io redirection of builtins would not truncate files if the builtin did not produce any output\n\ndarcs-hash:20070324223430-ac50b-3f3d6fd35f5b82c59ecaa06b459fe2b61dc8f387.gz", 
+    "id": "e128fa1a8ef24441602b98cc87d52ac6bb87f4c5", 
+    "files": [
+      "exec.c"
+    ]
+  }, 
+  {
+    "date": 1174763258, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where case insensitive file completions would get directory components removed\n\ndarcs-hash:20070324190738-ac50b-2f94de910083eae1fe563284b9953071df706072.gz", 
+    "id": "3f4b47b4afaef9654c5e89de17072ac9d441d43a", 
+    "files": [
+      "complete.c", 
+      "reader.c", 
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1174763063, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Add missing sentinel value in function call - potential crash bug\n\ndarcs-hash:20070324190423-ac50b-e32dddfd98131c542133b98a8c49bc3d9c345fec.gz", 
+    "id": "f6b3fcb4f5b252083aa9f5023457ea78fe6d153a", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1174173383, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix occasional shoowing of the same completion twice. Than ks to Tassilo Horn for the bug report.\n\ndarcs-hash:20070317231623-ac50b-a9447aa60d0ca654713a5391a3f6137d29d98916.gz", 
+    "id": "1e524fbc7a956ee94c1a75165f27dc72d7818fcd", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1174172171, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix performance bug in command description lookup - it was performed once for every element in PATH. Thanks to Tassilo Horn for the bug report.\n\ndarcs-hash:20070317225611-ac50b-5df5227ddd88747781c981ed34a80844391573d1.gz", 
+    "id": "3e1b0e587e90ea579eae71ec8115aeec1504757f", 
+    "files": [
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1172399835, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Second round of bug fixes and minor code improvements after the completions struct update. Fix space insertion issues on command specific completions.\n\ndarcs-hash:20070225103715-ac50b-5aaaa1c1c6ed1084ba68841fb70cc23c84f19806.gz", 
+    "id": "7c96cb2ff869ca3c5b3df9176e649a8acefc8062", 
+    "files": [
+      "complete.h", 
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1172394324, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Round of bug fixes and minor code improvements after the completions struct update. Moves the file description code to wildcard.c, where it was actually used. Simplifies the memory allocations in that code significantly. Makes sure directoriy names don't get a space inserted after the completion.\n\ndarcs-hash:20070225090524-ac50b-4d095bf8da7c788a7828e707556edbdc0bbf5000.gz", 
+    "id": "a3c5718eb9d34e86b348ce770df0b71906ac64c8", 
+    "files": [
+      "complete.h", 
+      "complete.c", 
+      "wildcard.c", 
+      "wildcard.h"
+    ]
+  }, 
+  {
+    "date": 1171013557, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where fish would randomly assume completions are authorative\n\ndarcs-hash:20070209093237-ac50b-d6ccbddf652a8307c8fd43406fc0ad059a2ba834.gz", 
+    "id": "31ca1218d406b0f0450581c2144275068d9d3d27", 
+    "files": [
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1170289253, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in read builtin - signal handlers where not correctly set, causiong ^C not to work\n\ndarcs-hash:20070201002053-ac50b-b73e22cbeecaeb364974cd2c512efbd517bb90d3.gz", 
+    "id": "766482d90e343ab634855e8b6f9b67681cfefb58", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1170287890, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where pressing ^C while in the read builtin would mess up the block execution bit\n\ndarcs-hash:20070131235810-ac50b-23dde9d0e13cc028b744307073c1daf989258b54.gz", 
+    "id": "15e0a44fc7e5e2a0061db11eaac9edd947d131f3", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1170092701, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where quiting from the read builtin could cause the prompt not to repaint\n\ndarcs-hash:20070129174501-ac50b-7e7f62ab8a1864617291208919551505bae6e156.gz", 
+    "id": "7953863b381fc80fc0a246674d15f342d79d19b7", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1170088087, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix repaint bug for read - screen needed repainting after call to read\n\ndarcs-hash:20070129162807-ac50b-c037ecfc0670a1f2795982337760f76036d6cdc5.gz", 
+    "id": "da9f7227f5ce40f0c9a09e7f718dd1bb53e36592", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1169991659, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Make parsing of --authorative switch for complete builtin more logical. Fix bug with previous approach causing some completions to be ignored.\n\ndarcs-hash:20070128134059-ac50b-de53eb223939fbdf0d247dfbe343c62fc31cce11.gz", 
+    "id": "37a95a3096e2472c0607420a8208d1cac1730369", 
+    "files": [
+      "complete.h", 
+      "builtin_complete.c", 
+      "complete.c", 
+      "doc_src/complete.txt"
+    ]
+  }, 
+  {
+    "date": 1169391821, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Print stack trace when execting due to fatal problem or bug\n\ndarcs-hash:20070121150341-ac50b-66b86014963568bf402a76d5beb7c1d4e188c5f7.gz", 
+    "id": "98a6c491b1ab5d533c7410552309cdefe3687397", 
+    "files": [
+      "exec.c", 
+      "parser.c", 
+      "common.h", 
+      "common.c", 
+      "signal.c"
+    ]
+  }, 
+  {
+    "date": 1169136166, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in code for unescapiong strings - when not in unescape_special mode, quotes would not get properly removed. This patch also adds the ability to check that quotes match up when unescaping. This functionality is on by default and can be disabled using a special flag.\n\ndarcs-hash:20070118160246-ac50b-b230c3fcd8440025b5243d76de2a9fd400f7ea32.gz", 
+    "id": "9e7094adfcbb2cfb63f1ea6ac587354dd3463e48", 
+    "files": [
+      "common.h", 
+      "common.c"
+    ]
+  }, 
+  {
+    "date": 1168912778, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix completion bug where fish would refuse to provide completion strings for '--'\n\ndarcs-hash:20070116015938-ac50b-353566d9fd8984cabd56127a9088d57695e2b7ba.gz", 
+    "id": "461ef2a5085388bba2538cde5269338fc9c15d62", 
+    "files": [
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1168614017, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Clean up the 'ulimit' builtin. There was a bug making it impossible to set the stack size, the switch '-p' was erroneously accepted, and the multiplier was not always correctly used, e.g. when reporting limits.\n\ndarcs-hash:20070112150017-ac50b-aff8db509f1bc8bb9803aa66bfad70ebc85d27b2.gz", 
+    "id": "b2fa41307cedfa90d77f5794c37e2a805f38bdf0", 
+    "files": [
+      "builtin_ulimit.c"
+    ]
+  }, 
+  {
+    "date": 1168178806, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in IO redirection making is possible for the IO redirections to fail in cases where there are multiple pipes and buffers using file descriptors above 2.\n\ndarcs-hash:20070107140646-ac50b-dee4f380320ef2743635e77401a789c28d45f805.gz", 
+    "id": "42d02834892c7c7ac165d46c08d55ecfe9e8b643", 
+    "files": [
+      "exec.c"
+    ]
+  }, 
+  {
+    "date": 1168178650, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix potential crash bug when pasting large amounts of text into the shell\n\ndarcs-hash:20070107140410-ac50b-c7b680b05f3aaf7f10e6e06a0fdc232d30c3e1b1.gz", 
+    "id": "3fbd8036f4b7b535aa60569b28ce9a3a2eee45d0", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1167829022, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in completion pager where non-ascii characters where escaped because the locale was set after the completion strings where read in. Thanks to mikeX for the report.\n\ndarcs-hash:20070103125702-ac50b-752f6e1182dba4356e068191b52fdb05d3cb5649.gz", 
+    "id": "9c23d50e923400ffd8e8efdc54d81352acf415d3", 
+    "files": [
+      "fish_pager.c"
+    ]
+  }, 
+  {
+    "date": 1165584696, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix off-by-one error making it impossible to edit the first element of an array using array slicing. Thanks to useer for reporting this bug.\n\ndarcs-hash:20061208133136-ac50b-3c8085ec61fcc3987356ee412133dba6c7f32d1f.gz", 
+    "id": "b156f083becf986a3f2ddac44ea28fb5cb91ce25", 
+    "files": [
+      "builtin_set.c"
+    ]
+  }, 
+  {
+    "date": 1164278423, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where tab completions for implicit 'cd' would ignore symbolic links to directories\n\ndarcs-hash:20061123104023-ac50b-7245f70e0f6fbbc97358e32c6dc7ca5258f24a53.gz", 
+    "id": "cab80b452bb3dbd65d5e8a1eeb869d84a7a94742", 
+    "files": [
+      "complete.c", 
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1163775505, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Add a bugreport function for writing out a message about how to file bug reports\n\ndarcs-hash:20061117145825-ac50b-0480300cce24657aae9572b79f145d956db93593.gz", 
+    "id": "54244fd33dc172d6d7aa15eefa06f8685e3fef49", 
+    "files": [
+      "parser.c", 
+      "builtin.c", 
+      "common.h", 
+      "common.c"
+    ]
+  }, 
+  {
+    "date": 1163681883, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Drop search highlighting when exiting search mode. Thanks to Philip Ganchev and Martin B\u00e4hr for the bug reports.\n\ndarcs-hash:20061116125803-ac50b-6eb95d76c3679a32db940a698466381ef7822b9e.gz", 
+    "id": "cfa9ecbfd279d83ddd3849a34b2f71a93bbdc6a5", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1163095084, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "fix bug where off_t was assumed to be long long, causing display errors on systems with no large file support\n\ndarcs-hash:20061109175804-ac50b-b05ec0aa9ae6f7dd23b7432c321eff44b446397d.gz", 
+    "id": "08787c7674ad6e6f376d108e685bb43e9537d31e", 
+    "files": [
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1162514097, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bugs causing all unmapped inputs below 31 to be interpreted as newlines. Thanks to Reuben Thomas for the report.\n\ndarcs-hash:20061103003457-ac50b-5f3fee63e211b12014e40dc3d8d8c94eaa22f24d.gz", 
+    "id": "136e99de62a1a7142e1cdc6e01b66a571002ab09", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1161771242, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where in rare cases calling the exit builtin would cause jobs to not execute even though the call to exit was blocked by running jobs\n\ndarcs-hash:20061025101402-ac50b-36456915671513f376a90c4455d1c9256f4a9030.gz", 
+    "id": "6d413c8dc39d0d3793bf8804a5ad7ba520610b68", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1161426635, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug in new history code - fish would segfauls in non-interactive mode on exit\n\ndarcs-hash:20061021103035-ac50b-a2a8d96416ff217cc5640f8f27db8dbac2c39b82.gz", 
+    "id": "ed36f30eae9efbc0137380ea3c368b9a5d0cf409", 
+    "files": [
+      "history.c"
+    ]
+  }, 
+  {
+    "date": 1161272163, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix a number of bugs found using the warnings generated by earlier patch\n\ndarcs-hash:20061019153603-ac50b-4efb1ad1fe2cbe693a921648a0616a3d258d7933.gz", 
+    "id": "4683f4c989e90bf49fc8199d7f22c925aee836cd", 
+    "files": [
+      "parser.c", 
+      "input.c", 
+      "exec.c", 
+      "complete.c", 
+      "parse_util.c", 
+      "history.c", 
+      "expand.c", 
+      "kill.c"
+    ]
+  }, 
+  {
+    "date": 1161212508, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix exceptaionally rare crash bug in hash tables (happens once in every 2^32 hash lookups\n\ndarcs-hash:20061018230148-ac50b-4e67ecf1f9aeae8239c40101ae2ad6aa164c31bb.gz", 
+    "id": "c7bc31fe505bcc762afccf16ca77653161d0ed3b", 
+    "files": [
+      "util.c"
+    ]
+  }, 
+  {
+    "date": 1161189878, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix yet another universal variable issue with initialization of the read buffer. This may fix fishd bugs reported by Philip Ganchev and Martin B\u00e4hr\n\ndarcs-hash:20061018164438-ac50b-c586b1ad36249853d613d0137b505377fe890d37.gz", 
+    "id": "bab168f1d1c0db1b1a9aba208a87380616ac0850", 
+    "files": [
+      "fishd.c", 
+      "env_universal.c", 
+      "env_universal_common.c", 
+      "env.c", 
+      "env_universal_common.h"
+    ]
+  }, 
+  {
+    "date": 1161186659, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in command description lookup code causing missing descriptions when command is given with a path\n\ndarcs-hash:20061018155059-ac50b-40936e573c07deb6b159a16d843f02ed60e79b49.gz", 
+    "id": "b32bbb24b9b5e1a14c3f7186a2ea04aeffc1b64c", 
+    "files": [
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1161010817, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix hang bug when appending to killring\n\ndarcs-hash:20061016150017-ac50b-c1f789d9913949ebc44cd9d02af5c3555bdf51bf.gz", 
+    "id": "91009ac9aab8ce283eadfd6b14d65a7f4a4e3c54", 
+    "files": [
+      "kill.c"
+    ]
+  }, 
+  {
+    "date": 1161009552, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Avoid reading before begining of buffer when moving/erasing word, fixes crash bug reported by Martin B\u00e4hr and further described by Philip Ganchev.\n\ndarcs-hash:20061016143912-ac50b-1deacc00f6c0438e6d760568ef5b1e47e3fe08c4.gz", 
+    "id": "49bff533704bc6a0aa83e7e6a5429216d8cfb8db", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1160692320, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Minor bugfix in the kill-ring code\n\ndarcs-hash:20061012223200-ac50b-6a046a89295f01937a38000ef6d016b7be5c19f1.gz", 
+    "id": "afcab9f1b3f02dba8d59023007289fff76eb9d84", 
+    "files": [
+      "kill.c"
+    ]
+  }, 
+  {
+    "date": 1160518873, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in the input buffering of messages to/from fishd causing garbled messages\n\ndarcs-hash:20061010222113-ac50b-1b6b01ab781ecbadf11a99b501f19a526ae7a7cf.gz", 
+    "id": "f5916358e5ddf17dbed979edc824afaebe3091cc", 
+    "files": [
+      "fishd.c", 
+      "env_universal.c", 
+      "env_universal_common.c", 
+      "fish_pager.c"
+    ]
+  }, 
+  {
+    "date": 1160407153, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Do not use INTERNAL_SEPARATOR tokens to separate different parts of an unescaped string when unescape_special is false. This fixes a bug where weird characters would sometimes be printed in completion descriptions\n\ndarcs-hash:20061009151913-ac50b-47a9d3274b2399cef6fd0e12a908a606da2c4903.gz", 
+    "id": "f85ce201eec611712960fa1886f545bfac6f006a", 
+    "files": [
+      "common.c"
+    ]
+  }, 
+  {
+    "date": 1160255121, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix tokenizer bug causing bad highlighting in multiline mode\n\ndarcs-hash:20061007210521-ac50b-5cdfc808389c928b932b0e41ef14abd71b537633.gz", 
+    "id": "1e739166b3f785955bcdda485774303434b73b48", 
+    "files": [
+      "tokenizer.c"
+    ]
+  }, 
+  {
+    "date": 1159120643, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix occasional off-by-one bug in syntax highlighting causing the character next to the cursor to be unhighlighted instead of the cursor itself\n\ndarcs-hash:20060924175723-ac50b-35757e87eb7076c2ecdecaed11c1bb673c571035.gz", 
+    "id": "b71f5d09b022578484c943bdeec1823a8627ad29", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1158675700, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in for that causes crash on syntax error\n\ndarcs-hash:20060919142140-ac50b-48cbbdfd109e2b420d8e36acd5b13696445c0850.gz", 
+    "id": "81d61c467b2fc42e7e890198fb2bd203b27aff44", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1158675642, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Minor bugfix in the switch parsing for the status builitn\n\ndarcs-hash:20060919142042-ac50b-b532e0308407d101d1f8b328a575a54e8bc46799.gz", 
+    "id": "e91e3b65933d7b47a5f498ee1c956b49aa6426f3", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1158247101, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix a bug in completion insertion code on string with escaped quotes. This bug was reported by David Benbennick.\n\ndarcs-hash:20060914151821-ac50b-c6628fc01a90865e0aec6e93b39b77c3877606fc.gz", 
+    "id": "4399503f4ea490a3c401e81362143d7c6eb41044", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1157724641, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Bugfix in the wdirname function\n\ndarcs-hash:20060908141041-ac50b-8650eea2d071606654cad94553344ed12b4bf609.gz", 
+    "id": "eafa0a7169379b20a014e729265dcedb433b8844", 
+    "files": [
+      "wutil.c", 
+      "wutil.h"
+    ]
+  }, 
+  {
+    "date": 1157660159, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug in cyntax validator when using an illegal command name. Thanks to Martin B\u00e4hr for the report.\n\ndarcs-hash:20060907201559-ac50b-34fa01bbc40eafddcc64a5111bebd88aab75a8d4.gz", 
+    "id": "72d73b7fddadf610b5c26ab65db982e91a0f6595", 
+    "files": [
+      "parser.c"
+    ]
+  }, 
+  {
+    "date": 1157488820, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Clear error buffer before creating new error message to avoid bug causing all previous errors to accumulate\n\ndarcs-hash:20060905204020-ac50b-6ecc9e4c57a6b387431cef32c734ca525f05c26c.gz", 
+    "id": "697d524687d81fc2cd16bc49f7ef0dea85da980a", 
+    "files": [
+      "parser.c"
+    ]
+  }, 
+  {
+    "date": 1157324319, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Skip bug causing autoloader to sometimes use the wrong version of a function. Thanks to Martin B\u00e4hr and Mystilleef for the bug reports.\n\ndarcs-hash:20060903225839-ac50b-5b1f3d5f0b8c54b999836c3384c22c2a31c31bd0.gz", 
+    "id": "a819c863eb81fad579d4e63ba92605f8766d8860", 
+    "files": [
+      "parse_util.c"
+    ]
+  }, 
+  {
+    "date": 1157057600, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where using the return builtin inside an if-block could cause the else-block to get executed\n\ndarcs-hash:20060831205320-ac50b-64ecbaa3ed5e32c1a815ba384a6831a8fd5e1b47.gz", 
+    "id": "827c88e4a1ca2827d0c3f135e4ba1cd8b688ca80", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1157039040, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix minor null pointer bug in the set builtin, fix bug causing the -n switch to be ignored, add missing completions for the -n switch to functions and set builtins, and touch up the documentation for said builtin a bit\n\ndarcs-hash:20060831154400-ac50b-dddbee79481e0e0a8da9fc025e8a15c466460a2f.gz", 
+    "id": "b6e8171f013e9fe1ae48fd16d56fdda4d872b626", 
+    "files": [
+      "doc_src/functions.txt", 
+      "share/completions/set.fish", 
+      "builtin_set.c", 
+      "doc_src/set.txt", 
+      "share/completions/functions.fish"
+    ]
+  }, 
+  {
+    "date": 1156782454, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix concurrency bug in autoloader causing memory leak\n\ndarcs-hash:20060828162734-ac50b-76c88ba8cc164646dcff16cb899633f1e10392e2.gz", 
+    "id": "7df536023b264be8bc88251656eb5dc4d789a9f6", 
+    "files": [
+      "parse_util.c"
+    ]
+  }, 
+  {
+    "date": 1156639972, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug reportad by Martin B\u00e4hr that causes fish fail when using blocks in pipelines in interactive mode.\n\ndarcs-hash:20060827005252-ac50b-09c98537b9de72f0d4a2e5a28490b2e38fe321c8.gz", 
+    "id": "1c86395ed8d2fff840293ba7c8332ef73a935032", 
+    "files": [
+      "exec.c"
+    ]
+  }, 
+  {
+    "date": 1156556242, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in completion code reported by Martin B\u00e4hr, as well as other bug evident in his bug report.\n\ndarcs-hash:20060826013722-ac50b-08de084a40af8ba5d708a7cd162087b7afbb7648.gz", 
+    "id": "69537430ea70da67dc5944b78145592badcfe0c1", 
+    "files": [
+      "complete.c", 
+      "builtin_set.c"
+    ]
+  }, 
+  {
+    "date": 1156415414, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix use og uncasted 0 as null pointer in vararg function. Potential crash bug on 64 bit systems.\n\ndarcs-hash:20060824103014-ac50b-3fb830f548d383b8cef7a37b737c90f3ad30c4bd.gz", 
+    "id": "2fd48bce1123dedae46d574411cfe2d33b619289", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1156255095, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Minor tweaks to previous fish_pager patch to fix two bugs\n\ndarcs-hash:20060822135815-ac50b-35d9f643385ec29f9d8f93ca83d01e060de93cc7.gz", 
+    "id": "480a29594e62cd11c2c19abb42008472fcd9fa10", 
+    "files": [
+      "exec.c", 
+      "complete.h", 
+      "fish_pager.c", 
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1155288399, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Do not call closedir on directories that failed to open. Avoids crash bug. Thanks to Netocrat.\n\ndarcs-hash:20060811092639-ac50b-6615f51aad8c2a81917db08e2dc8f4da3d7db2ef.gz", 
+    "id": "7fadf6c0833a8745a4f23bf8a9fc486897953524", 
+    "files": [
+      "highlight.c"
+    ]
+  }, 
+  {
+    "date": 1154364496, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug when using same array index more than once in a single array expansion, e.g. $PATH[1 1 1]\n\ndarcs-hash:20060731164816-ac50b-d3fc56b425035a4cbcf93a91435f9df9ca5997ac.gz", 
+    "id": "bd0c1573df2a0865f03918e4e3027bbb9919af38", 
+    "files": [
+      "expand.c"
+    ]
+  }, 
+  {
+    "date": 1154094723, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix minor bug causing spurious warnings on commandline. Thanks to Netocrat for the bugreport.\n\ndarcs-hash:20060728135203-ac50b-07471a032a389a26789ee871bf0dc25c6a91bd7a.gz", 
+    "id": "aa895c67409acf6ee328d846a5799a1a4100ce04", 
+    "files": [
+      "highlight.c"
+    ]
+  }, 
+  {
+    "date": 1153745189, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix rare crash bug in highlighting code\n\ndarcs-hash:20060724124629-ac50b-114944bc776f9451feeb967f4af68919d3ac404c.gz", 
+    "id": "787e99d9013ec30f07bca57d3a397bcb22d7c1c9", 
+    "files": [
+      "parse_util.c"
+    ]
+  }, 
+  {
+    "date": 1153243622, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug in fish_tests when fishd is unavailable\n\ndarcs-hash:20060718172702-ac50b-72805efd3c9c7927a9fe37b6c80ef0dd276cde5f.gz", 
+    "id": "fd4e5e6777703f99cfc3e5d8271e01e138c08084", 
+    "files": [
+      "fish_tests.c"
+    ]
+  }, 
+  {
+    "date": 1153240915, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Initialize etc/fish and share/fish from the Makefile, not automatically by Autoconf. That way we get correct expansion of ${prefix} and friends to their install-time value. This fixes a bug reported by James Vega.\n\ndarcs-hash:20060718164155-ac50b-8ec6c63d9c4e52db2c1884fcffeab78333367773.gz", 
+    "id": "57b3965518582bb3891d926e8615908f1ccba33c", 
+    "files": [
+      "Makefile.in", 
+      "etc/fish.in", 
+      "configure.ac", 
+      "main.c", 
+      "share/fish.in"
+    ]
+  }, 
+  {
+    "date": 1152286598, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where fish refuses to complete inside som command substitutions\n\ndarcs-hash:20060707153638-ac50b-7a50df000b5af04004fcaf0069e658de5e67b9ea.gz", 
+    "id": "942dcd7d54b70f9c64da28b93d62e5403d6a5c44", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1151923607, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix two crash bugs in highlighter/parser for malformed lines (Thanks to Netocrat for the bug report)\n\ndarcs-hash:20060703104647-ac50b-9eb649322611a3e7fd95ef5f80acdc25ce09d11a.gz", 
+    "id": "7bb070d8175c23111ac533cef6a4322881324900", 
+    "files": [
+      "parser.c", 
+      "parse_util.c", 
+      "highlight.c", 
+      "parse_util.h"
+    ]
+  }, 
+  {
+    "date": 1150549628, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Documentation updates. Fixes a few formating bugs, adds various minor missing api documentation, fixes a few typos. Also fixes a few tiny code issues, mostly missing consts, etc\n\ndarcs-hash:20060617130708-ac50b-cc2ec5aa3e4bfb8e28d7b86441bfb4661f1dd7e7.gz", 
+    "id": "07ff8a6c03e9c232a285e8b4ebc22f11ae5963d7", 
+    "files": [
+      "wutil.h", 
+      "doc_src/doc.hdr", 
+      "util.h", 
+      "function.c", 
+      "builtin_set.c", 
+      "common.h", 
+      "builtin_complete.c", 
+      "fish_pager.c", 
+      "complete.c", 
+      "halloc_util.c", 
+      "parser.c", 
+      "builtin_commandline.c", 
+      "builtin.h", 
+      "builtin.c", 
+      "history.c", 
+      "builtin_help.hdr", 
+      "fallback.h", 
+      "complete.h", 
+      "wildcard.h"
+    ]
+  }, 
+  {
+    "date": 1150540888, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bugs in the highlighting code related to detection and display of non-existing paths to the cd builtin\n\ndarcs-hash:20060617104128-ac50b-c9adecc8b95ab460f0c98c860e7640cdb91b4bae.gz", 
+    "id": "9f10dd377ee08f9142fb52db1506392610606250", 
+    "files": [
+      "highlight.c"
+    ]
+  }, 
+  {
+    "date": 1149514293, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Updates, bugfixing and minor edits on the test suite\n\ndarcs-hash:20060605133133-ac50b-e2ee5868f9f3ede147c7059d90c0f520ed905a5f.gz", 
+    "id": "20e5d298a064ceed0dadb25d8241cec55e95f34a", 
+    "files": [
+      "tests/test3.out", 
+      "tests/test4.in", 
+      "fish_tests.c", 
+      "tests/test3.in", 
+      "tests/test4.out"
+    ]
+  }, 
+  {
+    "date": 1148642374, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Bugfix for previous patch to simplify configuration checks for ulimit builtin\n\ndarcs-hash:20060526111934-ac50b-ae9e85cd3e18994d2c56c2f6c69df6a1d93f9ea6.gz", 
+    "id": "18a59291eda5636023eeeab16c0998e6c4e197dc", 
+    "files": [
+      "builtin_ulimit.c"
+    ]
+  }, 
+  {
+    "date": 1147645745, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug that caused block level io redirection to break on while loops\n\ndarcs-hash:20060514222905-ac50b-7dec0ed716f5fe6af9069b597eee464829a8d820.gz", 
+    "id": "5a7a264b961210579222febe680e09cf0f39a08b", 
+    "files": [
+      "exec.c", 
+      "builtin.c", 
+      "io.h", 
+      "parser.c", 
+      "io.c"
+    ]
+  }, 
+  {
+    "date": 1147601783, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix the longstanding hang-on-exit bug in eterm, as well as making sure the history is saved when the terminal emulator exits\n\ndarcs-hash:20060514101623-ac50b-f8ce693ec111e3c158640ef8de309bf7e5484c5b.gz", 
+    "id": "9ebdc16be6bf347dbd0b892f73f4e8329e970916", 
+    "files": [
+      "input.h", 
+      "input_common.h", 
+      "reader.c", 
+      "input.c", 
+      "input_common.c", 
+      "util.c", 
+      "signal.c", 
+      "event.c", 
+      "reader.h", 
+      "builtin.c", 
+      "main.c", 
+      "event.h"
+    ]
+  }, 
+  {
+    "date": 1147262071, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Add a few NULL checks to the codebase to avoid crashes on minor bugs\n\ndarcs-hash:20060510115431-ac50b-f6b50fb29b95ff88e7504355aaffef1edcb6739d.gz", 
+    "id": "4932538c7461bf9d18cb8bf5dab21ac603dad107", 
+    "files": [
+      "parser.c", 
+      "tokenizer.c"
+    ]
+  }, 
+  {
+    "date": 1147193527, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fixed use of improper storage type for variable\n\ndarcs-hash:20060509165207-ac50b-48561332ab938fe7972bbf07f32ac1f92322d316.gz", 
+    "id": "48d9c38d1e976b4775e41166a803cb8a082059b2", 
+    "files": [
+      "common.c"
+    ]
+  }, 
+  {
+    "date": 1145892874, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix two bugs in the jobs builtin, causing freezes and other incorrect behaviours\n\ndarcs-hash:20060424153434-ac50b-2434329395cbd4a258d6fb9f15e166065b2eb164.gz", 
+    "id": "445f6539cf3d2cfcc0ff36db24ede8bb5415c5ed", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1145490131, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Earlier history in non-interactive mode bugfix contained a new bug causing fish to crash if read is not used in non-interactive mode\n\ndarcs-hash:20060419234211-ac50b-886a33e96cb3f95e9b2c632f03eb3b2b20a560fd.gz", 
+    "id": "9d770af5f4797d28cc2d44559f2ed77a11c602de", 
+    "files": [
+      "history.c", 
+      "main.c"
+    ]
+  }, 
+  {
+    "date": 1143569356, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix wildcarding bug where ? at end of wildcard could match 0 characters\n\ndarcs-hash:20060328180916-ac50b-6f77d936a1e46e411a12ca96fd9ad3bb844d321b.gz", 
+    "id": "749dad1309583b49cd871173678f6fa3d6283496", 
+    "files": [
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1142986632, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix completion describtion bug causing filesizes below 1024 bytes to be reported as 0 bytes on big-endian systems\n\ndarcs-hash:20060322001712-ac50b-1a42b3dcb868161f13d45d80d16aeb119f6ec9cd.gz", 
+    "id": "50fa7234ea130551ffa6a2ddd1cb74c6ff89d586", 
+    "files": [
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1141997889, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug that causing terminal corruption if a job is put under job control before running in interactive mode. This is fixed by doing more inits at startup (but only slightly more)\n\ndarcs-hash:20060310133809-ac50b-d31cd7bab1a3a58de2833f73735817a3d0b3ed7d.gz", 
+    "id": "32b531667aa1e7f085b8316ffd5c8df7f6b3987c", 
+    "files": [
+      "input.h", 
+      "reader.c", 
+      "input.c", 
+      "input_common.c", 
+      "proc.c", 
+      "builtin.c", 
+      "main.c"
+    ]
+  }, 
+  {
+    "date": 1141299194, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Remove warning for missing history value - it is not a bug\n\ndarcs-hash:20060302113314-ac50b-65bd93a0e31e5ac69167ecc84346fa44d55dec71.gz", 
+    "id": "930bb9c6d19565d809aec5b6fb070a58c9acf8dc", 
+    "files": [
+      "env.c"
+    ]
+  }, 
+  {
+    "date": 1140806450, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug on invalid input to fish_pager\n\ndarcs-hash:20060224184050-ac50b-da122d893fa0e2aabbd48058c696e2815c4657ca.gz", 
+    "id": "d2e11ea61d23e8c12f2601c48781617f07d4b46e", 
+    "files": [
+      "output.c"
+    ]
+  }, 
+  {
+    "date": 1140311822, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug causing fish to occasionally reset line number for error reporting\n\ndarcs-hash:20060219011702-ac50b-c72b1f5ae56d3757c3fbfca002f1bc33c36a7660.gz", 
+    "id": "c4e7a7992fb7a757c0e5a093c4a2224da1c8ca4c", 
+    "files": [
+      "parser.c"
+    ]
+  }, 
+  {
+    "date": 1140096992, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug in fish causing occasionally incorrect signal handlers\n\ndarcs-hash:20060216133632-ac50b-f24c049830f9c6deca50aca640189ad3f87b630a.gz", 
+    "id": "cc69afc4fec7d5d2918a6ee086cef8e3f03324aa", 
+    "files": [
+      "proc.h", 
+      "parser.c", 
+      "complete.c", 
+      "signal.c", 
+      "event.c", 
+      "proc.c", 
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1139970148, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Remove the rather stupid -y option for complete, which loads another commands completions. Mostly the same results can be had with fewer bugs and corner cases vy using the new dynamically loaded functions.\n\ndarcs-hash:20060215022228-ac50b-85614ed684f73460d43543a579ff2c7e7914efeb.gz", 
+    "id": "c94b9e504d0db7ebd2a2b87fce997ca3c9851b8b", 
+    "files": [
+      "init/functions/__fish_complete_ls.fish", 
+      "init/completions/btdownloadcurses.py.fish", 
+      "init/completions/mount.fish", 
+      "init/completions/elatex.fish", 
+      "init/completions/la.fish", 
+      "init/completions/ls.fish", 
+      "init/completions/umount.fish", 
+      "init/completions/yum.fish", 
+      "init/completions/tex.fish", 
+      "builtin_complete.c", 
+      "init/completions/pdftex.fish", 
+      "init/functions/__fish_complete_tex.fish", 
+      "init/completions/df.fish", 
+      "init/functions/la.fish", 
+      "init/completions/pdfelatex.fish", 
+      "init/completions/scp.fish", 
+      "init/completions/set.fish", 
+      "init/completions/etex.fish", 
+      "init/functions/__fish_complete_ssh.fish", 
+      "init/functions/__fish_complete_bittorrent.fish", 
+      "init/completions/omega.fish", 
+      "init/completions/whatis.fish", 
+      "init/completions/ssh.fish", 
+      "init/completions/latex.fish", 
+      "init/completions/ll.fish", 
+      "init/completions/btdownloadheadless.py.fish", 
+      "init/completions/pdflatex.fish", 
+      "init/functions/__fish_print_filesystems.fish", 
+      "builtin.c", 
+      "init/functions/__fish_complete_man.fish", 
+      "init/completions/pdfetex.fish"
+    ]
+  }, 
+  {
+    "date": 1139946917, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix timestap checking bug when autoloading scripts\n\ndarcs-hash:20060214195517-ac50b-3d084f351c5d1f4f11afb4fc1c706c843de98da1.gz", 
+    "id": "7ac922def63ec365973a447d0b5a40b942e5a502", 
+    "files": [
+      "parse_util.c"
+    ]
+  }, 
+  {
+    "date": 1139916827, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix minor display bugs and a memory leak in fish_pager\n\ndarcs-hash:20060214113347-ac50b-302a7da47f9c07af3acc9a2dcc5c8007127fc3a2.gz", 
+    "id": "8258961c2983ee370f26f775ec12e0ecf921ac38", 
+    "files": [
+      "fish_pager.c"
+    ]
+  }, 
+  {
+    "date": 1139424277, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug where recursive function loading crashed fish\n\ndarcs-hash:20060208184437-ac50b-c6b2001fbab07ac9561ba7aa941fbab0d93d7cd7.gz", 
+    "id": "47373c4f68a9c8386ee70545e731c901491ccfd0", 
+    "files": [
+      "parser.c", 
+      "parse_util.c"
+    ]
+  }, 
+  {
+    "date": 1139413144, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug caused by trying to free halloc:ed memory\n\ndarcs-hash:20060208153904-ac50b-f8b3d2aadb12fa1e6aca0c4ca7a6046a09a0450d.gz", 
+    "id": "7c3700c19036a6d8d20816545e64ee774381c537", 
+    "files": [
+      "parser.c"
+    ]
+  }, 
+  {
+    "date": 1139239215, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug that would accidentally disable interactive mode on OS X when writing the titlebar message on some systems. Found by Nick Pilon\n\ndarcs-hash:20060206152015-ac50b-63d86ca778c240012bbe1e0d28062591a10f3a54.gz", 
+    "id": "4e77ee45164f745992dbf575f2b6c0f3797dabf0", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1138572254, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug that caused shellscript functions in pipelines that don't have any output to never be properly removed\n\ndarcs-hash:20060129220414-ac50b-8c26e83933a73ef146c28bed020a6a2dfeca425f.gz", 
+    "id": "3efb0bf5cf7b799b8df039e4fa3dd593248dc415", 
+    "files": [
+      "exec.c"
+    ]
+  }, 
+  {
+    "date": 1137972600, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug from the modified completion builtin where a completion that specified no switches would be ignored\n\ndarcs-hash:20060122233000-ac50b-779c3bbb08d1bdaaa6c6eae6192413d6b71aff21.gz", 
+    "id": "0ccc657aa6ad410fd047dc88cdb302252edb5ebf", 
+    "files": [
+      "builtin_complete.c"
+    ]
+  }, 
+  {
+    "date": 1137876263, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Bugfix for command completion descriptions, potential crash on strange output from apropos\n\ndarcs-hash:20060121204423-ac50b-b4583611b49f9ec54de7b8529b2652ce93d03980.gz", 
+    "id": "487c27592671134d9e29e1b4516784cb67103050", 
+    "files": [
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1137811926, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix two bugs which together caused descriptions to be interpreted as a part of the completion in some rare cases\n\ndarcs-hash:20060121025206-ac50b-2bda82d8a9acdcdc9298e9986fbd38696514249f.gz", 
+    "id": "f3c93c16909e8cf7f8d23e5612cdb2148021bcbf", 
+    "files": [
+      "complete.c", 
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1137676515, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bugs in fg and bg builtins, and make sure bg doesn't consider background jobs when run without an argument\n\ndarcs-hash:20060119131515-ac50b-d080ffde013419e2a461cf860b4858b88404ff33.gz", 
+    "id": "d2c12e760c97e82be32ff7c6341073ebc155621a", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1137588168, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Change the foregrounf/background code a bit, fixes bug where mulktiple jobs want foreground status. Is this fix enough or are there still corner cases?\n\ndarcs-hash:20060118124248-ac50b-cbbddb8c6dad1f44826050395cda647fa9348f0f.gz", 
+    "id": "05736978bb5621d33d9b34467a278f6cca095940", 
+    "files": [
+      "parser.c", 
+      "reader.c", 
+      "input.c", 
+      "exec.c", 
+      "event.c", 
+      "proc.c", 
+      "proc.h"
+    ]
+  }, 
+  {
+    "date": 1137502110, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix buggy error messages in expand.h and add missing translation commands\n\ndarcs-hash:20060117124830-ac50b-0981a49f5746ec951ddfb1a3097c5009c1eb0385.gz", 
+    "id": "fd78f67d354f5058d9d56f619597784e1f4bc710", 
+    "files": [
+      "expand.c"
+    ]
+  }, 
+  {
+    "date": 1136689016, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Huge upade containing several bugfixes related to i18n, and a huge number of new translatable strings, including almost all description messages for command specific completions\n\ndarcs-hash:20060108025656-ac50b-e2309829a0afa6b3270d13814e9600d0fd372407.gz", 
+    "id": "690648e1b0a04db179d113e2900dde52d0e7f67f", 
+    "files": [
+      "init/completions/atq.fish", 
+      "common.c", 
+      "init/completions/atd.fish", 
+      "init/completions/sed.fish", 
+      "init/completions/ifconfig.fish", 
+      "init/completions/grep.fish", 
+      "init/completions/functions.fish", 
+      "init/completions/cut.fish", 
+      "init/completions/valgrind.fish", 
+      "init/completions/apt-proxy-import.fish", 
+      "init/completions/ping.fish", 
+      "init/completions/apt-rdepends.fish", 
+      "init/completions/apt-cache.fish", 
+      "init/completions/scp.fish", 
+      "init/completions/mv.fish", 
+      "init/completions/gcc.fish", 
+      "init/completions/w.fish", 
+      "init/completions/apt-config.fish", 
+      "init/completions/sort.fish", 
+      "exec.c", 
+      "init/completions/makedepend.fish", 
+      "init/completions/xprop.fish", 
+      "init/completions/du.fish", 
+      "init/completions/apt-spy.fish", 
+      "init/completions/apt-show-versions.fish", 
+      "init/completions/ssh.fish", 
+      "init/completions/zcat.fish", 
+      "init/completions/echo.fish", 
+      "init/completions/gprof.fish", 
+      "init/completions/ps.fish", 
+      "init/completions/zip.fish", 
+      "init/completions/bc.fish", 
+      "init/completions/apt-setup.fish", 
+      "init/completions/apt-get.fish", 
+      "init/completions/apt-file.fish", 
+      "init/completions/mount.fish", 
+      "init/completions/apt-move.fish", 
+      "init/completions/nice.fish", 
+      "init/completions/tar.fish", 
+      "wildcard.c", 
+      "init/completions/screen.fish", 
+      "init/completions/emacs.fish", 
+      "init/completions/yum.fish", 
+      "init/completions/at.fish", 
+      "init/completions/perl.fish", 
+      "init/completions/df.fish", 
+      "init/completions/commandline.fish", 
+      "init/completions/complete.fish", 
+      "translate.c", 
+      "init/completions/trap.fish", 
+      "init/completions/mimedb.fish", 
+      "init/completions/gunzip.fish", 
+      "init/completions/less.fish", 
+      "init/completions/pine.fish", 
+      "init/completions/function.fish", 
+      "po/sv.po", 
+      "init/completions/service.fish", 
+      "init/completions/tex.fish", 
+      "init/completions/fish.fish", 
+      "init/completions/tokenize.fish", 
+      "init/completions/bzcat.fish", 
+      "init/completions/python.fish", 
+      "init/completions/cat.fish", 
+      "init/completions/prevd.fish", 
+      "init/completions/ulimit.fish", 
+      "init/completions/xsel.fish", 
+      "init/completions/rmdir.fish", 
+      "init/completions/touch.fish", 
+      "init/completions/ls.fish", 
+      "init/completions/apt-src.fish", 
+      "init/completions/set_color.fish", 
+      "init/completions/test.fish", 
+      "init/completions/chown.fish", 
+      "init/completions/help.fish", 
+      "complete.c", 
+      "init/completions/set.fish", 
+      "init/completions/bunzip2.fish", 
+      "init/completions/apt-zip-inst.fish", 
+      "init/completions/apropos.fish", 
+      "init/completions/date.fish", 
+      "init/completions/uname.fish", 
+      "init/completions/arp.fish", 
+      "init/completions/rm.fish", 
+      "init/completions/apt-zip-list.fish", 
+      "init/completions/configure.fish", 
+      "init/completions/apt-listchanges.fish", 
+      "init/completions/ruby.fish", 
+      "init/completions/apt-ftparchive.fish", 
+      "init/completions/apt-cdrom.fish", 
+      "init/completions/umount.fish", 
+      "init/completions/apm.fish", 
+      "init/completions/apt-extracttemplates.fish", 
+      "init/completions/apt-listbugs.fish", 
+      "init/completions/darcs.fish", 
+      "Makefile.in", 
+      "init/completions/mplayer.fish", 
+      "init/completions/modprobe.fish", 
+      "init/completions/kill.fish", 
+      "init/completions/rpm.fish", 
+      "init/completions/who.fish", 
+      "init/completions/read.fish", 
+      "init/completions/apt-show-source.fish", 
+      "init/completions/nextd.fish", 
+      "init/completions/su.fish", 
+      "init/completions/apt-key.fish", 
+      "init/completions/chgrp.fish", 
+      "init/completions/top.fish", 
+      "init/completions/make.fish", 
+      "init/completions/man.fish", 
+      "init/completions/jobs.fish", 
+      "init/completions/apt-sortpkgs.fish", 
+      "init/completions/wget.fish", 
+      "init/completions/id.fish", 
+      "init/completions/diff.fish", 
+      "init/completions/bzip2.fish", 
+      "init/completions/uniq.fish", 
+      "init/completions/gzip.fish", 
+      "init/completions/vared.fish", 
+      "init/completions/type.fish", 
+      "init/completions/atrm.fish", 
+      "init/completions/btdownloadheadless.py.fish", 
+      "init/completions/wc.fish", 
+      "init/completions/cvs.fish", 
+      "init/completions/apt-build.fish", 
+      "builtin.c", 
+      "init/completions/renice.fish"
+    ]
+  }, 
+  {
+    "date": 1136468519, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Translate most shellscript output, translate internal completion descriptions, and several translation bugfixes\n\ndarcs-hash:20060105134159-ac50b-0a7805971e079dd1a511c6bca227db4504902ef0.gz", 
+    "id": "e12902fe3cff878371719ab7df490a5e98cfabc9", 
+    "files": [
+      "translate.c", 
+      "Makefile.in", 
+      "init/fish_complete.fish.in", 
+      "fish_pager.c", 
+      "init/fish_interactive.fish.in", 
+      "init/fish_function.fish", 
+      "complete.c", 
+      "wildcard.c", 
+      "po/sv.po"
+    ]
+  }, 
+  {
+    "date": 1134568004, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug from calling eval builtin with no arguments\n\ndarcs-hash:20051214134644-ac50b-5872ff628bf4f5d4f22f912d7ce7e9ed25d48b58.gz", 
+    "id": "418e26c0ac172c6a1c92cd2d5bdb3e4325bca5aa", 
+    "files": [
+      "builtin.c"
+    ]
+  }, 
+  {
+    "date": 1134402664, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug causing inconsistent state and shutdown when the begin command was used in a function definition\n\ndarcs-hash:20051212155104-ac50b-bb942f22d1eaef8cdc07ddf04fb9230bbfb165f6.gz", 
+    "id": "00bdd2cb484e9aa72c557d6d4b9968b79815cb99", 
+    "files": [
+      "parser.c"
+    ]
+  }, 
+  {
+    "date": 1134340050, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Do not call fcntl before fully reading block.Escalates bug severity without any practical benefit.\n\ndarcs-hash:20051211222730-ac50b-bdb2e1dc612ba6a9dd425f514baa2423f8b0d4e5.gz", 
+    "id": "b1c61bcf1f737919f4c1813bee1e8cd2e6acd337", 
+    "files": [
+      "io.c"
+    ]
+  }, 
+  {
+    "date": 1134275417, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug in token search\n\ndarcs-hash:20051211043017-ac50b-137695bd9bb9c523d5b5288a5d4263e4c4242edf.gz", 
+    "id": "2cac04850b950184ea431c9d9b5d1261236d4ed9", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1133661373, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix display bug causing the wrong completion string prefix to be shown in some situations\n\ndarcs-hash:20051204015613-ac50b-3c9feaf11d9657a30272303f9605f8139a0c5923.gz", 
+    "id": "e534a952b77f7c422639f87b932184e67c2a1a81", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1133661242, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug breaking filename completions, introduced by csh wildcard syntax\n\ndarcs-hash:20051204015402-ac50b-911c6188f6c8213a733f4e967fc903f5290f1772.gz", 
+    "id": "754d8d37125609dc67c1f41d9b35f3bfa468317c", 
+    "files": [
+      "expand.c", 
+      "complete.c"
+    ]
+  }, 
+  {
+    "date": 1133274832, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix problem with recursive wildcards not working properly when postfixed with a regular string\n\ndarcs-hash:20051129143352-ac50b-6fec789be36250f29d35458b15dbae423eed195c.gz", 
+    "id": "9993ff07f2a89b249c7b39a017b87945f153e1e8", 
+    "files": [
+      "wildcard.c"
+    ]
+  }, 
+  {
+    "date": 1130426508, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug when pasting long text\n\ndarcs-hash:20051027152148-ac50b-b47b96bc8acae760ce53a2e42d23dc2d07bf2302.gz", 
+    "id": "b78fba810cc0dde84ff68b408c96aa8be502e0d4", 
+    "files": [
+      "expand.c", 
+      "reader.c", 
+      "wutil.c"
+    ]
+  }, 
+  {
+    "date": 1130239367, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Use select instead of poll to avoid MacOS X bugs\n\ndarcs-hash:20051025112247-ac50b-b6c98618716401f39308bdc665401bd34819ce9d.gz", 
+    "id": "a9bf64465cedde1c89c0001e6b649d28fde3ea5a", 
+    "files": [
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1130238232, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix problem bug breaking completion in commands with multiple subshells\n\ndarcs-hash:20051025110352-ac50b-fff319ddcbafb722b9bc3c61aa1b250b290716a5.gz", 
+    "id": "ddcb84aa07607bbd274edb89ddc4371d8d7aa27f", 
+    "files": [
+      "common.h", 
+      "complete.c", 
+      "common.c", 
+      "init/fish_function.fish", 
+      "expand.h", 
+      "env.c", 
+      "highlight.c", 
+      "expand.c", 
+      "reader.c"
+    ]
+  }, 
+  {
+    "date": 1129212689, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix event notification bug that caused read errors\n\ndarcs-hash:20051013141129-ac50b-db6358e297f91ba48a5e2435e12c3e037fb02410.gz", 
+    "id": "f321855c0293ec56c9f61c163bd1ac8927aabd1b", 
+    "files": [
+      "proc.c"
+    ]
+  }, 
+  {
+    "date": 1128730988, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix bug that broke pipe redirection\n\ndarcs-hash:20051008002308-ac50b-2ce030f667607032bb13fc16f62e1b931bfdf77d.gz", 
+    "id": "47b174fa68e12c0b7a72ee1c6c5b4b34f2d8af96", 
+    "files": [
+      "tokenizer.c"
+    ]
+  }, 
+  {
+    "date": 1128632016, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Minor bugfixes for Solaris\n\ndarcs-hash:20051006205336-ac50b-56657ce09a5ebfc1ccb320e985e554883e364573.gz", 
+    "id": "83fad9921698be57ce8f0971c819f0859dc93a6b", 
+    "files": [
+      "fishd.c", 
+      "init/fish_complete.fish"
+    ]
+  }, 
+  {
+    "date": 1127591562, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix crash bug when user presses ^C\n\ndarcs-hash:20050924195242-ac50b-f94edc21751e0202808f44bf732e050173a82fea.gz", 
+    "id": "0085156a05378be50cc2b37654d678a275f743ed", 
+    "files": [
+      "proc.c", 
+      "ChangeLog"
+    ]
+  }, 
+  {
+    "date": 1127590277, 
+    "committer": {
+      "email": "axel@liljencrantz.se", 
+      "name": "axel"
+    }, 
+    "message": "Fix minor bugs in parser\n\ndarcs-hash:20050924193117-ac50b-eb8ecfe4fec3bca6f89356a9079977802eb4a2c8.gz", 
+    "id": "f643a4e2007c547c0e224f35a5e10d2bf46ab489", 
+    "files": [
+      "common.h", 
+      "ChangeLog", 
+      "common.c", 
+      "parser.c", 
+      "proc.c", 
+      "reader.c"
+    ]
+  }
+]
