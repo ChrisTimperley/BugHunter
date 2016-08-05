@@ -57,7 +57,6 @@ class Fix(object):
             self.__name = commit.committer.name
             self.__date = commit.committed_date
             self.__files = None
-            self.__parent = str(commit.parents[0]) if commit.parents else ''
         elif json:
             self.__identifier = jsn['id']
             self.__message = jsn['message']
@@ -65,14 +64,11 @@ class Fix(object):
             self.__name = jsn['committer']['name']
             self.__date = jsn['date']
             self.__files = jsn['files']
-            self.__parent = jsn['parent']
 
     @staticmethod
     def from_json(jsn):
         return Fix(None, jsn=jsn)
 
-    def parent(self):
-        return self.__parent
     def identifier(self):
         return self.__identifier
     def message(self):
@@ -98,18 +94,22 @@ class Fix(object):
                 any(f.endswith('.c') for f in self.files())
 
     #
-    def build_files(self, repo):
+    def preprocess(self, db_dir, repo):
+        # Check if this fix has already been pre-processed
+        fix_file_dir = os.path.join(db_dir, self.identifier())
+        if os.path.exists(fix_file_dir):
+            print "skipping fix (%s) - already preprocessed" % self.identifier()
+            return
+        print "preprocessing fix: %s" % self.identifier()
+
         # revert the repository to this commit in a separate branch
         current_branch_name = repo.active_branch.name
-        fix_file_dir = os.path.join(db.directory(), self.identifier())
         try:
-            print "preprocessing fixed files"
             repo.git.reset('--hard')
             repo.git.checkout(self.__identifier, b='preprocessing')
             preprocess_files(self.source_files(), repo.working_dir,\
                     os.path.join(fix_file_dir, 'fixed'))
 
-            print "preprocessing faulty files"
             repo.git.reset('--hard')
             repo.git.checkout("%s~1" % self.__identifier)
             preprocess_files(self.source_files(), repo.working_dir,\
@@ -117,6 +117,7 @@ class Fix(object):
 
         # destroy the fix files in the event of an error
         except Exception as e:
+            print "failed to preprocess fix: %s" % self.identifier()
             shutil.rmtree(fix_file_dir)
             raise e
 
@@ -126,12 +127,12 @@ class Fix(object):
             repo.git.reset('--hard')
             repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
+        print "finished preprocessing fix: %s" % self.identifier()
 
     # Returns a JSON description of this fix, in the form of a Dict
     def to_json(self):
         return {
             'id': self.identifier(),
-            'parent': self.parent(),
             'message': self.message(),
             'committer': {
                 'email': self.email(),
@@ -156,6 +157,9 @@ class FixDB(object):
         # Otherwise, generate the index file from scratch and save it to disk
         else:
             self.build()
+
+        # Ensure the files are pre-processed
+        self.preprocess()
 
     def fixes(self):
         return self.__fixes
@@ -182,6 +186,14 @@ class FixDB(object):
         # save to disk
         self.save()
 
+    # Pre-processes each of the fixes within this database
+    def preprocess(self):
+        print "Preprocessing fixes..."
+        d = self.directory()
+        for fix in self.__fixes:
+            fix.preprocess(d, self.__repo)
+        print "Finished pre-processing fixes"
+
     # Loads the contents of this fix database from its JSON index file
     def from_json(self):
         print "Loading fix database from index file..."
@@ -205,10 +217,5 @@ if __name__ == "__main__":
         print "Usage: ./bughunter.py [repository]"
     elif len(sys.argv) == 2:
         db = FixDB(sys.argv[1].strip())
-        fix = db.fixes()[0]
-
-
-
-        fix.build_files(db.repository())
     else:
         print "Error: expected a single argument, specifying the path to the repository which should be inspected."
