@@ -67,6 +67,7 @@ class Fix(object):
     #
     def build_files(self, repo):
         # revert the repository to this commit in a separate branch
+        current_branch_name = repo.active_branch.name
         try:
             repo.git.reset('--hard')
             repo.git.checkout(self.__identifier, b='preprocessing')
@@ -96,9 +97,9 @@ class Fix(object):
 
         # destroy the branch and revert back to master
         finally:
-            print "-- switching to master and destroying branch"
+            print "-- reverting to previous branch and destroying preprocessing branch"
             repo.git.reset('--hard')
-            repo.git.checkout('master')
+            repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
 
     # Returns a JSON description of this fix, in the form of a Dict
@@ -122,7 +123,6 @@ class FixDB(object):
     def __init__(self, repoPath):
         self.__name = os.path.basename(repoPath)
         self.__repo = git.Repo(repoPath, odbt=git.GitCmdObjectDB)
-        self.__repo.git.checkout('master')
 
         # Load the fixes from the JSON index file for this repo, if one exists
         if os.path.isfile(self.indexFileName()):
@@ -149,7 +149,7 @@ class FixDB(object):
     def build(self):
         print "Building fix database from scratch..."
         print "Extracting commits from repository..."
-        commits = map(Fix, self.epository().iter_commits())
+        commits = map(Fix, self.repository().iter_commits())
         print "Filtering fixes from list of commits..."
         self.__fixes = filter(Fix.is_fix, commits)
         print "Finished filtering - found %d fixes" % len(self.__fixes)
