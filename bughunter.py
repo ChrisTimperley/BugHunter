@@ -72,12 +72,18 @@ class Fix(object):
             repo.git.reset('--hard')
             repo.git.checkout(self.__identifier, b='preprocessing')
 
+            # clear out any pre-processing artefacts from the repository
+            subprocess.Popen('find . -type f \( -name "*.i" -o -name "*.s" \) -delete',
+                    shell=True,
+                    stdout=FNULL, stderr=subprocess.STDOUT,
+                    cwd=repo.working_dir).wait()
+
             # build the program
             assert subprocess.Popen('./buildconf',
                     shell=True,
                     #stdout=FNULL, stderr=subprocess.STDOUT,
                     cwd=repo.working_dir).wait() == 0, "failed to buildconf"
-            assert subprocess.Popen('./configure "CC=cc -save-temps" "GCC=gcc -save-temps"',
+            assert subprocess.Popen('./configure "CFLAGS=-save-temps"',
                     shell=True,
                     #stdout=FNULL, stderr=subprocess.STDOUT,
                     cwd=repo.working_dir).wait() == 0, "failed to configure"
@@ -87,8 +93,9 @@ class Fix(object):
                     cwd=repo.working_dir).wait() == 0, "failed to make"
 
             # copy preprocessed files to database
+            print "trying to extract preprocessed files from repository"
             cp_to_dir = os.path.join(db.directory(), self.identifier())
-            os.makedirs(os.path.dirname(cp_to))
+            os.makedirs(os.path.dirname(cp_to_dir))
             for fn in self.source_files():
                 fn = fn[:-2] + '.i'
                 cp_from = os.path.join(repo.working_dir, fn)
