@@ -6,6 +6,7 @@ import os
 import os.path
 import subprocess
 import multiprocessing
+import shutil
 
 # Create null file handler for subprocess calls
 FNULL = open(os.devnull, 'w')
@@ -14,6 +15,34 @@ FNULL = open(os.devnull, 'w')
 # commit also contains an anti-marker
 BUG_MARKERS = ['fixed', 'bug']
 BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
+
+def ensure_dir(d):
+    os.path.exists(d) or os.makedirs(d)
+
+def destroy_save_temps_artefacts(d):
+    subprocess.Popen('find . -type f \( -name "*.i" -o -name "*.s" \) -delete',
+        shell=True, cwd=d, stdout=FNULL, stderr=subprocess.STDOUT).wait()
+
+def preprocess_files(files, src_dir, dest_dir):
+    destroy_save_temps_artefacts(src_dir)
+    try:
+        assert subprocess.Popen('./buildconf',
+                shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
+                cwd=src_dir).wait() == 0, "failed to buildconf"
+        assert subprocess.Popen('./configure "CFLAGS=-save-temps"',
+                shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
+                cwd=src_dir).wait() == 0, "failed to configure"
+        assert subprocess.Popen('make clean && make',
+                shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
+                cwd=src_dir).wait() == 0, "failed to make"
+        for fn in files:
+            fn = fn[:-2] + '.i'
+            cp_from = os.path.join(src_dir, os.path.basename(fn))
+            cp_to = os.path.join(dest_dir, fn)
+            ensure_dir(os.path.dirname(cp_to))
+            shutil.copyfile(cp_from, cp_to)
+    finally:
+        destroy_save_temps_artefacts(src_dir)
 
 # Used to store information about a mined bug fix
 class Fix(object):
@@ -28,6 +57,7 @@ class Fix(object):
             self.__name = commit.committer.name
             self.__date = commit.committed_date
             self.__files = None
+            self.__parent = str(commit.parents[0]) if commit.parents else ''
         elif json:
             self.__identifier = jsn['id']
             self.__message = jsn['message']
@@ -35,11 +65,14 @@ class Fix(object):
             self.__name = jsn['committer']['name']
             self.__date = jsn['date']
             self.__files = jsn['files']
+            self.__parent = jsn['parent']
 
     @staticmethod
     def from_json(jsn):
         return Fix(None, jsn=jsn)
 
+    def parent(self):
+        return self.__parent
     def identifier(self):
         return self.__identifier
     def message(self):
@@ -68,43 +101,28 @@ class Fix(object):
     def build_files(self, repo):
         # revert the repository to this commit in a separate branch
         current_branch_name = repo.active_branch.name
+        fix_file_dir = os.path.join(db.directory(), self.identifier())
         try:
+            print "preprocessing fixed files"
             repo.git.reset('--hard')
             repo.git.checkout(self.__identifier, b='preprocessing')
+            preprocess_files(self.source_files(), repo.working_dir,\
+                    os.path.join(fix_file_dir, 'fixed'))
 
-            # clear out any pre-processing artefacts from the repository
-            subprocess.Popen('find . -type f \( -name "*.i" -o -name "*.s" \) -delete',
-                    shell=True,
-                    stdout=FNULL, stderr=subprocess.STDOUT,
-                    cwd=repo.working_dir).wait()
+            print "preprocessing faulty files"
+            repo.git.reset('--hard')
+            repo.git.checkout("%s~1" % self.__identifier)
+            preprocess_files(self.source_files(), repo.working_dir,\
+                    os.path.join(fix_file_dir, 'faulty'))
 
-            # build the program
-            assert subprocess.Popen('./buildconf',
-                    shell=True,
-                    #stdout=FNULL, stderr=subprocess.STDOUT,
-                    cwd=repo.working_dir).wait() == 0, "failed to buildconf"
-            assert subprocess.Popen('./configure "CFLAGS=-save-temps"',
-                    shell=True,
-                    #stdout=FNULL, stderr=subprocess.STDOUT,
-                    cwd=repo.working_dir).wait() == 0, "failed to configure"
-            assert subprocess.Popen('make clean && make',
-                    shell=True,
-                    #stdout=FNULL, stderr=subprocess.STDOUT,
-                    cwd=repo.working_dir).wait() == 0, "failed to make"
+        # destroy the fix files in the event of an error
+        except Exception as e:
+            shutil.rmtree(fix_file_dir)
+            raise e
 
-            # copy preprocessed files to database
-            print "trying to extract preprocessed files from repository"
-            cp_to_dir = os.path.join(db.directory(), self.identifier())
-            os.makedirs(os.path.dirname(cp_to_dir))
-            for fn in self.source_files():
-                fn = fn[:-2] + '.i'
-                cp_from = os.path.join(repo.working_dir, fn)
-                cp_to = os.path.join(cp_to_dir, fn)
-                shutil.copyfile(cp_from, cp_to)
-
-        # destroy the branch and revert back to master
+        # destroy the temporary branch and revert back to the previous one
         finally:
-            print "-- reverting to previous branch and destroying preprocessing branch"
+            #print "-- reverting to previous branch and destroying preprocessing branch"
             repo.git.reset('--hard')
             repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
@@ -113,6 +131,7 @@ class Fix(object):
     def to_json(self):
         return {
             'id': self.identifier(),
+            'parent': self.parent(),
             'message': self.message(),
             'committer': {
                 'email': self.email(),
@@ -176,10 +195,7 @@ class FixDB(object):
         indexFileDir = os.path.dirname(indexFileName)
         print "Saving fix database to index file: %s" % indexFileName
 
-        # ensure a directory exists for this repository
-        if not os.path.exists(indexFileDir):
-            os.makedirs(indexFileDir)
-
+        ensure_dir(indexFileDir)
         with open(self.indexFileName(), 'w') as f:
             json.dump(map(Fix.to_json, self.__fixes), f, indent=2)
         print "Saved fix database to index file"
