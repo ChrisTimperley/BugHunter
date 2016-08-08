@@ -23,23 +23,43 @@ def destroy_save_temps_artefacts(d):
     subprocess.Popen('find . -type f \( -name "*.i" -o -name "*.s" \) -delete',
         shell=True, cwd=d, stdout=FNULL, stderr=subprocess.STDOUT).wait()
 
+def exec_from_dir(cmd, cmd_dir):
+     return subprocess.Popen(cmd, shell=True, stdout=FNULL,
+                stderr=subprocess.STDOUT, cwd=cmd_dir).wait() == 0
+
+def compile_source(src_dir):
+    # attempt to configure
+    configured = False
+    if os.path.exists(os.path.join(src_dir, 'autogen.sh')):
+        assert exec_from_dir('./autogen.sh', src_dir), "failed autogen"
+    if os.path.exists(os.path.join(src_dir, 'buildconf.sh')):
+        assert exec_from_dir('./buildconf.sh', src_dir), "failed buildconf"
+    if os.path.exists(os.path.join(src_dir, 'configure')):
+        configured = True
+        assert exec_from_dir('./configure "CFLAGS=-save-temps"', src_dir), "failed configure"
+   
+    # attempt to make; ensure Makefile exists
+    if not os.path.exists(os.path.join(src_dir, 'Makefile')):
+        raise 'No Makefile found within source directory' 
+    make_cmd = "make" if configured else "make 'CFLAGS=-save-temps'"
+    assert exec_from_dir('make clean && %s' % make_cmd, src_dir), "failed to make"
+
 def preprocess_files(files, src_dir, dest_dir):
     destroy_save_temps_artefacts(src_dir)
     try:
-        assert subprocess.Popen('./buildconf',
-                shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
-                cwd=src_dir).wait() == 0, "failed to buildconf"
-        assert subprocess.Popen('./configure "CFLAGS=-save-temps"',
-                shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
-                cwd=src_dir).wait() == 0, "failed to configure"
-        assert subprocess.Popen('make clean && make',
-                shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
-                cwd=src_dir).wait() == 0, "failed to make"
+        compile_source(src_dir)
         for fn in files:
-            base_fn = os.path.basename(fn)
-            cp_from = os.path.join(src_dir, base_fn[:-2] + '.i')
+            pp_fn = fn[:-2] + '.i'
             cp_to = os.path.join(dest_dir, fn)
-            if os.path.exists(cp_from):
+
+            # Find the pre-processed file, if there is one, and copy it into
+            # the database
+            if os.path.exists(os.path.join(src_dir, pp_fn)):
+                cp_from = os.path.join(src_dir, pp_fn)
+            elif os.path.exists(os.path.join(src_dir, os.path.basename(pp_fn))):
+                cp_from = os.path.basename(pp_fn)
+
+            if cp_from:
                 ensure_dir(os.path.dirname(cp_to))
                 shutil.copyfile(cp_from, cp_to)
     finally:
@@ -94,12 +114,11 @@ class Fix(object):
                 (not (any (s in msg for s in BUG_ANTI_MARKERS))) and \
                 any(f.endswith('.c') for f in self.files())
 
-    #
     def preprocess(self, db_dir, repo):
         # Check if this fix has already been pre-processed
         fix_file_dir = os.path.join(db_dir, self.identifier())
         if os.path.exists(fix_file_dir):
-            print "skipping fix (%s) - already preprocessed" % self.identifier()
+            print "skipping fix: %s (cached)" % self.identifier()
             return
         print "preprocessing fix: %s" % self.identifier()
 
@@ -118,7 +137,7 @@ class Fix(object):
 
         # destroy the fix files in the event of an error
         except Exception as e:
-            print "failed to preprocess fix: %s" % self.identifier()
+            print "failed preprocessing fix: %s" % self.identifier()
             shutil.rmtree(fix_file_dir)
             raise e
 
@@ -194,7 +213,10 @@ class FixDB(object):
         for fix in self.__fixes:
             try:
                 fix.preprocess(d, self.__repo)
-            except:
+            except (KeyboardInterrupt, SystemExit) as e:
+                raise e
+            except Exception as e:
+                print e
                 pass
         print "Finished pre-processing fixes"
 
@@ -220,6 +242,9 @@ if __name__ == "__main__":
     if len(sys.argv) == 1:
         print "Usage: ./bughunter.py [repository]"
     elif len(sys.argv) == 2:
-        db = FixDB(sys.argv[1].strip())
+        try:
+            db = FixDB(sys.argv[1].strip())
+        except (KeyboardInterrupt, SystemExit):
+            pass
     else:
         print "Error: expected a single argument, specifying the path to the repository which should be inspected."

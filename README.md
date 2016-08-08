@@ -10,7 +10,7 @@ Usage
 ============
 
 ```
-./bugcollector.py [path_to_repository] [*options]
+./bughunter.py [path_to_repository] [*options]
 ```
 
 Requirements
