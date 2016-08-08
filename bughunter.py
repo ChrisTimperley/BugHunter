@@ -31,7 +31,7 @@ def exec_from_dir(cmd, cmd_dir):
      return subprocess.Popen(cmd, shell=True, stdout=FNULL,
                 stderr=subprocess.STDOUT, cwd=cmd_dir).wait() == 0
 
-def compile_source(src_dir):
+def compile_source(src_dir, threads=1):
     # attempt to configure
     configured = False
     if os.path.exists(os.path.join(src_dir, 'autogen.sh')):
@@ -45,13 +45,13 @@ def compile_source(src_dir):
     # attempt to make; ensure Makefile exists
     if not os.path.exists(os.path.join(src_dir, 'Makefile')):
         raise 'No Makefile found within source directory' 
-    make_cmd = "make" if configured else "make 'CFLAGS=-save-temps'"
+    make_cmd = "make" if configured else "make 'CFLAGS=-save-temps' -j%d" % threads
     assert exec_from_dir('make clean && %s' % make_cmd, src_dir), "failed to make"
 
-def preprocess_files(files, src_dir, dest_dir):
+def preprocess_files(files, src_dir, dest_dir, threads=1):
     destroy_save_temps_artefacts(src_dir)
     try:
-        compile_source(src_dir)
+        compile_source(src_dir, threads=threads)
         for fn in files:
             pp_fn = fn[:-2] + '.i'
             cp_to = os.path.join(dest_dir, fn)
@@ -118,7 +118,7 @@ class Fix(object):
                 (not (any (s in msg for s in BUG_ANTI_MARKERS))) and \
                 any(f.endswith('.c') for f in self.files())
 
-    def preprocess(self, db_dir, repo):
+    def preprocess(self, db_dir, repo, threads=1):
         # Check if this fix has already been pre-processed
         fix_file_dir = os.path.join(db_dir, self.identifier())
         if os.path.exists(fix_file_dir):
@@ -137,7 +137,7 @@ class Fix(object):
             repo.git.reset('--hard')
             repo.git.checkout("%s~1" % self.__identifier)
             preprocess_files(self.source_files(), repo.working_dir,\
-                    os.path.join(fix_file_dir, 'faulty'))
+                    os.path.join(fix_file_dir, 'faulty'), threads=threads)
 
         # destroy the fix files in the event of an error
         except Exception as e:
@@ -183,7 +183,7 @@ class FixDB(object):
             self.build()
 
         # Ensure the files are pre-processed
-        self.preprocess()
+        self.preprocess(threads=threads)
 
     def fixes(self):
         return self.__fixes
@@ -211,16 +211,16 @@ class FixDB(object):
         self.save()
 
     # Pre-processes each of the fixes within this database
-    def preprocess(self):
+    def preprocess(self, threads=1):
         print "Preprocessing fixes..."
         d = self.directory()
         for fix in self.__fixes:
             try:
-                fix.preprocess(d, self.__repo)
+                fix.preprocess(d, self.__repo, threads=threads)
             except (KeyboardInterrupt, SystemExit) as e:
                 raise e
             except Exception as e:
-                print e
+                print "REASON: %s" % str(e)
                 pass
         print "Finished pre-processing fixes"
 
