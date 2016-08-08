@@ -10,12 +10,18 @@ Usage
 ============
 
 ```
-./bugcollector.py [path_to_repository]
+./bugcollector.py [path_to_repository] [*options]
 ```
 
 Requirements
 ============
 
-As its minimum requirements, BugHunter requires Python 3 and the
-`gitpython` package to operate correctly. This package may be installed using
-`pip`, by executing the following command: `pip install gitpython`.
+At a minimum, BugHunter requires Python 3 and the `gitpython` package to operate
+correctly. This package may be installed using `pip`, by executing the following
+command: `pip install gitpython`.
+
+In addition to these minimum requirements, the host machine must be capable of
+compiling the source code of the project(s) under investigation. Failing this,
+BugHunter will be unable to produce the pre-processed form of the modified
+source code files, and thus, will be unable to perform an analysis of the
+repair.
