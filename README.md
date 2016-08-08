@@ -1,4 +1,4 @@
-# BugCollector
+# BugHunter
 
 A simple, but capable Python script for efficiently mining Git repositories
 for C-related bugs. Computes a list of all the identified bugs within the
@@ -12,3 +12,10 @@ Usage
 ```
 ./bugcollector.py [path_to_repository]
 ```
+
+Requirements
+============
+
+As its minimum requirements, BugHunter requires Python 3 and the
+`gitpython` package to operate correctly. This package may be installed using
+`pip`, by executing the following command: `pip install gitpython`.
