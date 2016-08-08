@@ -171,7 +171,7 @@ class FixDB(object):
 
     # Model the repository using GitCmdObjectDB as it gives better performance
     # than GitDB when dealing with large quantities of smaller files.
-    def __init__(self, repoPath):
+    def __init__(self, repoPath, threads=1):
         self.__name = os.path.basename(repoPath)
         self.__repo = git.Repo(repoPath, odbt=git.GitCmdObjectDB)
 
@@ -246,8 +246,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='bughunter', description=DESCRIPTION)
     parser.add_argument('repository', type=str,
             help='path to the repository under investigation')
+    parser.add_argument('--threads', action='store', dest='threads', type=int, default=1,
+            help='number of threads to utilise during pre-processing')
     args = parser.parse_args()
+
+    if args.threads <= 0:
+        raise "Illegal number of threads specified (should be >= 1)"
     try:
-        db = FixDB(args.repository.strip())
+        db = FixDB(args.repository.strip(), threads=args.threads)
     except (KeyboardInterrupt, SystemExit):
         pass
