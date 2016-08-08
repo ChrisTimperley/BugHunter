@@ -36,11 +36,12 @@ def preprocess_files(files, src_dir, dest_dir):
                 shell=True, stdout=FNULL, stderr=subprocess.STDOUT,
                 cwd=src_dir).wait() == 0, "failed to make"
         for fn in files:
-            fn = fn[:-2] + '.i'
-            cp_from = os.path.join(src_dir, os.path.basename(fn))
+            base_fn = os.path.basename(fn)
+            cp_from = os.path.join(src_dir, base_fn[:-2] + '.i')
             cp_to = os.path.join(dest_dir, fn)
-            ensure_dir(os.path.dirname(cp_to))
-            shutil.copyfile(cp_from, cp_to)
+            if os.path.exists(cp_from):
+                ensure_dir(os.path.dirname(cp_to))
+                shutil.copyfile(cp_from, cp_to)
     finally:
         destroy_save_temps_artefacts(src_dir)
 
@@ -191,7 +192,10 @@ class FixDB(object):
         print "Preprocessing fixes..."
         d = self.directory()
         for fix in self.__fixes:
-            fix.preprocess(d, self.__repo)
+            try:
+                fix.preprocess(d, self.__repo)
+            except:
+                pass
         print "Finished pre-processing fixes"
 
     # Loads the contents of this fix database from its JSON index file
