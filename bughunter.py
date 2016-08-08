@@ -1,4 +1,5 @@
 #!/usr/bin/python
+import argparse
 import json
 import sys
 import git
@@ -8,7 +9,10 @@ import subprocess
 import multiprocessing
 import shutil
 
-# Create null file handler for subprocess calls
+DESCRIPTION = "BugHunter - a small, but mighty bug mining tool for extracting" + \
+    " and analysing bugs from offline Git repositories for projects using C;" + \
+    " source code available at [http://github.com/ChrisTimperley/BugHunter]."
+
 FNULL = open(os.devnull, 'w')
 
 # Any commit containing a bug marker will be treated as a bug fix, unless the
@@ -239,12 +243,11 @@ class FixDB(object):
         print "Saved fix database to index file"
 
 if __name__ == "__main__":
-    if len(sys.argv) == 1:
-        print "Usage: ./bughunter.py [repository]"
-    elif len(sys.argv) == 2:
-        try:
-            db = FixDB(sys.argv[1].strip())
-        except (KeyboardInterrupt, SystemExit):
-            pass
-    else:
-        print "Error: expected a single argument, specifying the path to the repository which should be inspected."
+    parser = argparse.ArgumentParser(prog='bughunter', description=DESCRIPTION)
+    parser.add_argument('repository', type=str,
+            help='path to the repository under investigation')
+    args = parser.parse_args()
+    try:
+        db = FixDB(args.repository.strip())
+    except (KeyboardInterrupt, SystemExit):
+        pass
