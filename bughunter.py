@@ -1,31 +1,23 @@
 #!/usr/bin/env python3
+import parser as psr
 import argparse
 import json
 import sys
 import git
-import os
 import os.path
-import subprocess
 import multiprocessing
 import shutil
+
+from utility import *
 
 DESCRIPTION = "BugHunter - a small, but mighty bug mining tool for extracting" + \
     " and analysing bugs from offline Git repositories for projects using C;" + \
     " source code available at [http://github.com/ChrisTimperley/BugHunter]."
 
-FNULL = open(os.devnull, 'w')
-
 # Any commit containing a bug marker will be treated as a bug fix, unless the
 # commit also contains an anti-marker
 BUG_MARKERS = ['fixed', 'bug']
 BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
-
-def ensure_dir(d):
-    os.path.exists(d) or os.makedirs(d)
-
-def exec_from_dir(cmd, cmd_dir):
-     return subprocess.Popen(cmd, shell=True, stdout=FNULL,
-                stderr=subprocess.STDOUT, cwd=cmd_dir).wait() == 0
 
 def compile_source(src_dir, threads=1):
     # attempt to configure
@@ -60,7 +52,6 @@ def preprocess_files(files, src_dir, dest_dir, threads=1):
     compile_source(src_dir, threads=threads)
     print("Finished compiling pre-processed source code...")
     for fn in files:
-        print("Handling file: %s", fn)
         pp_fn = fn[:-2] + '.i'
         cp_to = os.path.join(dest_dir, fn)
 
@@ -76,7 +67,6 @@ def preprocess_files(files, src_dir, dest_dir, threads=1):
         if cp_from:
             print("Ensuring directory exists: %s" % os.path.dirname(cp_to)) 
             ensure_dir(os.path.dirname(cp_to))
-            print("Copying file from '%s' to '%s' % (cp_from, cp_to)")
             shutil.copyfile(cp_from, cp_to)
 
 # Used to store information about a mined bug fix
@@ -119,7 +109,11 @@ class Fix(object):
             self.__files = list(self.__commit.stats.files.keys())
         return self.__files
     def source_files(self):
-        return filter(lambda s: s.endswith('.c'),self.files())
+        return filter(lambda s: s.endswith('.c'), self.files())
+    
+    # Returns the directory where the files related to this fix reside
+    def fix_dir(self, db_dir):
+        return os.path.join(db_dir, self.identifier())
 
     # Determines whether this object is indeed a fix
     def is_fix(self):
@@ -130,8 +124,38 @@ class Fix(object):
 
     # Parses the source code for this fix into a set of GumTree AST files and
     # differences
-    def parse(self):
-        pass
+    def parse(self, db_dir):
+        fix_dir = self.fix_dir(db_dir)
+        ast_dir = os.path.join(fix_dir, 'ast')
+        diff_dir = os.path.join(fix_dir, 'diff')
+        if not os.path.isdir(fix_dir):
+            print("Skipping fix: %s (no preprocessed files)" % self.identifier())
+        elif os.path.isdir(os.path.join(fix_dir, 'ast')):
+            print("Skipping fix: %s (already preprocessed)" % self.identifier())
+        else:
+            try:
+                print("Parsing fix: %s" % self.identifier()) 
+
+                # Generate ASTs
+                psr.parse_files(self.source_files(), \
+                                   os.path.join(fix_dir, 'fixed'), \
+                                   os.path.join(ast_dir, 'fixed'))
+                psr.parse_files(self.source_files(), \
+                                   os.path.join(fix_dir, 'faulty'), \
+                                   os.path.join(ast_dir, 'faulty'))
+
+                # Generate AST diffs
+                psr.generate_diffs(self.source_files(), \
+                                      os.path.join(fix_dir, 'fixed'), \
+                                      os.path.join(fix_dir, 'faulty'), \
+                                      diff_dir)
+
+                print("Parsed fix: %s" % self.identifier())
+            except Exception as e:
+                print("Failed to parse fix: %s" % self.identifier())
+                print("- Reason: %s" % str(e))
+                os.path.isdir(ast_dir) and shutil.rmtree(ast_dir)
+                os.path.isdir(diff_dir) and shutil.rmtree(diff_dir)
 
     def preprocess(self, db_dir, repo, threads=1):
         # Check if this fix has already been pre-processed
@@ -160,7 +184,6 @@ class Fix(object):
             print("failed preprocessing fix: %s" % self.identifier())
             print("reason: %r" % e)
             shutil.rmtree(fix_file_dir)
-            raise e
 
         # destroy the temporary branch and revert back to the previous one
         finally:
@@ -210,7 +233,7 @@ class FixDB(object):
     def parse(self, threads=1):
         print("Parsing fixes...")
         for fix in self.fixes():
-            fix.parse(threads)
+            fix.parse(self.directory())
         print("Parsed fixes")
 
     # Returns the name of the directory that this database belongs to
