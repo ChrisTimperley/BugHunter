@@ -117,7 +117,7 @@ class Fix(object):
         return self.__date
     def files(self):
         if self.__files is None:
-            self.__files = self.__commit.stats.files.keys()
+            self.__files = list(self.__commit.stats.files.keys())
         return self.__files
     def source_files(self):
         return filter(lambda s: s.endswith('.c'),self.files())
@@ -189,16 +189,10 @@ class FixDB(object):
 
         # Load the fixes from the JSON index file for this repo, if one exists
         if os.path.isfile(self.indexFileName()):
+            print("Found fix database stored on disk")
             self.from_json()
-        # Otherwise, generate the index file from scratch and save it to disk
         else:
-            self.build()
-
-        # Ensure the files are pre-processed
-        self.preprocess(threads=threads)
-
-        # Parse the files using GumTree / CGum
-        self.parse()
+            self.__fixes = None
 
     def fixes(self):
         return self.__fixes
@@ -208,7 +202,7 @@ class FixDB(object):
         return self.__repo
 
     # Parses each of the fixes into a set of GumTree ASTs and differences
-    def parse(self):
+    def parse(self, threads=1):
         print("Parsing fixes...")
 
     # Returns the name of the directory that this database belongs to
@@ -219,15 +213,19 @@ class FixDB(object):
     def indexFileName(self):
         return "%s/database.json" % self.directory()
 
-    # Builds the contents of this fix database from scratch, then saves to disk
-    def build(self):
+    # Builds the contents of this fix database from scratch and saves to disk.
+    # Skips the process if a fix database already exists for this repository,
+    # unless the force flag is provided and set to true.
+    def collect(self, force=False):
+        if (not self.__fixes is None) and (not force):
+            print("Skipping collection of bug fixes - database already exists.")
+            return
         print("Building fix database from scratch...")
         print("Extracting commits from repository...")
         commits = map(Fix, self.repository().iter_commits())
         print("Filtering fixes from list of commits...")
-        self.__fixes = filter(Fix.is_fix, commits)
+        self.__fixes = [c for c in commits if Fix.is_fix(c)]
         print("Finished filtering - found %d fixes" % len(self.__fixes))
-        # save to disk
         self.save()
 
     # Pre-processes each of the fixes within this database
@@ -248,31 +246,38 @@ class FixDB(object):
     def from_json(self):
         print("Loading fix database from index file...")
         with open(self.indexFileName(), 'r') as f:
-            self.__fixes = map(Fix.from_json, json.load(f))
-        print("Loaded fix database from index file")
+            self.__fixes = [Fix.from_json(fx) for fx in json.load(f)]
+        print("Loaded fix database from index file - contains %d fixes" % len(self.__fixes))
 
     # Saves the contents of this fix database to its JSON index file
     def save(self):
         indexFileName = self.indexFileName()
         indexFileDir = os.path.dirname(indexFileName)
         print("Saving fix database to index file: %s" % indexFileName)
-
         ensure_dir(indexFileDir)
         with open(self.indexFileName(), 'w') as f:
-            json.dump(map(Fix.to_json, self.__fixes), f, indent=2)
+            json.dump([Fix.to_json(fx) for fx in self.__fixes], f, indent=2)
         print("Saved fix database to index file")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='bughunter', description=DESCRIPTION)
+    parser.add_argument('mode', type=str, action='store',\
+                        choices=['collect', 'preprocess', 'parse'])
     parser.add_argument('repository', type=str,
             help='path to the repository under investigation')
     parser.add_argument('--threads', action='store', dest='threads', type=int, default=1,
             help='number of threads to utilise during pre-processing')
+    parser.add_argument('--force', action='store', dest='force', type=bool, default=False)
     args = parser.parse_args()
 
     if args.threads <= 0:
         raise "Illegal number of threads specified (should be >= 1)"
     try:
         db = FixDB(args.repository.strip(), threads=args.threads)
+        ({
+            'collect': (lambda: db.collect(force=args.force)),
+            'preprocess': (lambda: db.preprocess(threads=args.threads)),
+            'parse': (lambda: db.preprocess(threads=args.threads))
+        })[args.mode]()
     except (KeyboardInterrupt, SystemExit):
         pass
