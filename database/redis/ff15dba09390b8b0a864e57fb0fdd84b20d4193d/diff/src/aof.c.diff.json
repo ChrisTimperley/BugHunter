@@ -1,0 +1,85 @@
+[
+  {
+    "action": "insert",
+    "tree": 9262,
+    "parent": 9263,
+    "at": 2
+  },
+  {
+    "action": "update",
+    "tree": 9248,
+    "label": "\"Used tried to switch on AOF via CONFIG, I can't trigger a background AOF rewrite operation. Check the above logs for more info about the error.\""
+  },
+  {
+    "action": "insert",
+    "tree": 9261,
+    "parent": 9262,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9251,
+    "parent": 9261,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9260,
+    "parent": 9261,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 9250,
+    "parent": 9251,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9259,
+    "parent": 9260,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9258,
+    "parent": 9259,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9257,
+    "parent": 9258,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9255,
+    "parent": 9257,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9256,
+    "parent": 9257,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 9253,
+    "parent": 9255,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 9254,
+    "parent": 9255,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 9252,
+    "parent": 9253,
+    "at": 0
+  }
+]

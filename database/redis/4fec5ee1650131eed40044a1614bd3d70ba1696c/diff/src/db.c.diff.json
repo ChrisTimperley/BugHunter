@@ -1,0 +1,38 @@
+[
+  {
+    "action": "insert",
+    "tree": 24478,
+    "parent": 24499,
+    "at": 1
+  },
+  {
+    "action": "move",
+    "tree": 24477,
+    "parent": 24478,
+    "at": 0
+  },
+  {
+    "action": "delete",
+    "tree": 24478
+  },
+  {
+    "action": "delete",
+    "tree": 24479
+  },
+  {
+    "action": "delete",
+    "tree": 24480
+  },
+  {
+    "action": "delete",
+    "tree": 24481
+  },
+  {
+    "action": "delete",
+    "tree": 24482
+  },
+  {
+    "action": "delete",
+    "tree": 24483
+  }
+]

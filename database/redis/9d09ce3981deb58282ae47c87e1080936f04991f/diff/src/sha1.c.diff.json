@@ -1,0 +1,35 @@
+[
+  {
+    "action": "insert",
+    "tree": 21245,
+    "parent": 21478,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 21247,
+    "parent": 21478,
+    "at": 1
+  },
+  {
+    "action": "move",
+    "tree": 21244,
+    "parent": 21245,
+    "at": 0
+  },
+  {
+    "action": "move",
+    "tree": 21245,
+    "parent": 21247,
+    "at": 0
+  },
+  {
+    "action": "update",
+    "tree": 21492,
+    "label": "# 181 \"sha1.c\" "
+  },
+  {
+    "action": "delete",
+    "tree": 21246
+  }
+]

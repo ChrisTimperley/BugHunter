@@ -1,0 +1,52 @@
+[
+  {
+    "action": "update",
+    "tree": 6196,
+    "label": "/"
+  },
+  {
+    "action": "update",
+    "tree": 6197,
+    "label": "2"
+  },
+  {
+    "action": "insert",
+    "tree": 6188,
+    "parent": 6192,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 6191,
+    "parent": 6192,
+    "at": 2
+  },
+  {
+    "action": "move",
+    "tree": 6187,
+    "parent": 6188,
+    "at": 0
+  },
+  {
+    "action": "move",
+    "tree": 6191,
+    "parent": 6191,
+    "at": 0
+  },
+  {
+    "action": "delete",
+    "tree": 6188
+  },
+  {
+    "action": "delete",
+    "tree": 6189
+  },
+  {
+    "action": "delete",
+    "tree": 6192
+  },
+  {
+    "action": "delete",
+    "tree": 6193
+  }
+]

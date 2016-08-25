@@ -1,0 +1,60 @@
+[
+  {
+    "action": "insert",
+    "tree": 20008,
+    "parent": 20009,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 20007,
+    "parent": 20008,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 20006,
+    "parent": 20007,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 20003,
+    "parent": 20006,
+    "at": 0
+  },
+  {
+    "action": "move",
+    "tree": 20006,
+    "parent": 20006,
+    "at": 1
+  },
+  {
+    "action": "move",
+    "tree": 20007,
+    "parent": 20006,
+    "at": 2
+  },
+  {
+    "action": "move",
+    "tree": 20002,
+    "parent": 20003,
+    "at": 0
+  },
+  {
+    "action": "delete",
+    "tree": 20003
+  },
+  {
+    "action": "delete",
+    "tree": 20004
+  },
+  {
+    "action": "delete",
+    "tree": 20005
+  },
+  {
+    "action": "delete",
+    "tree": 20008
+  }
+]

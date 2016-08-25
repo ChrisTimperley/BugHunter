@@ -1,0 +1,38 @@
+[
+  {
+    "action": "move",
+    "tree": 15980,
+    "parent": 27840,
+    "at": 2312
+  },
+  {
+    "action": "update",
+    "tree": 16582,
+    "label": "# 1041 \"redis.h\" 2 "
+  },
+  {
+    "action": "update",
+    "tree": 23939,
+    "label": "dbDictType"
+  },
+  {
+    "action": "delete",
+    "tree": 15976
+  },
+  {
+    "action": "delete",
+    "tree": 15977
+  },
+  {
+    "action": "delete",
+    "tree": 15978
+  },
+  {
+    "action": "delete",
+    "tree": 16348
+  },
+  {
+    "action": "delete",
+    "tree": 16349
+  }
+]

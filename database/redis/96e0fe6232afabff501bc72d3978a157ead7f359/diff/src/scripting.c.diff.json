@@ -1,0 +1,131 @@
+[
+  {
+    "action": "insert",
+    "tree": 27679,
+    "parent": 27971,
+    "at": 27
+  },
+  {
+    "action": "insert",
+    "tree": 27678,
+    "parent": 27679,
+    "at": 0
+  },
+  {
+    "action": "update",
+    "tree": 27661,
+    "label": "# 1006 \"scripting.c\" "
+  },
+  {
+    "action": "update",
+    "tree": 27794,
+    "label": "# 1037 \"scripting.c\" "
+  },
+  {
+    "action": "insert",
+    "tree": 27676,
+    "parent": 27678,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27677,
+    "parent": 27678,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 27662,
+    "parent": 27676,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27675,
+    "parent": 27676,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 27661,
+    "parent": 27662,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27665,
+    "parent": 27675,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27674,
+    "parent": 27675,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 27664,
+    "parent": 27665,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27673,
+    "parent": 27674,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27663,
+    "parent": 27664,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27671,
+    "parent": 27673,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27672,
+    "parent": 27673,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 27669,
+    "parent": 27671,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27670,
+    "parent": 27671,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 27667,
+    "parent": 27669,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 27668,
+    "parent": 27669,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 27666,
+    "parent": 27667,
+    "at": 0
+  },
+  {
+    "action": "update",
+    "tree": 27875,
+    "label": "1045"
+  }
+]

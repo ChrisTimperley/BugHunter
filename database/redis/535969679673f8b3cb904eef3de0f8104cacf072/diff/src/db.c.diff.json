@@ -1,0 +1,20 @@
+[
+  {
+    "action": "insert",
+    "tree": 20594,
+    "parent": 20595,
+    "at": 2
+  },
+  {
+    "action": "delete",
+    "tree": 20594
+  },
+  {
+    "action": "delete",
+    "tree": 20595
+  },
+  {
+    "action": "delete",
+    "tree": 20596
+  }
+]

@@ -1,0 +1,12 @@
+[
+  {
+    "action": "update",
+    "tree": 19598,
+    "label": "\"I'm sorry, Dave, I can't do that. Latency monitoring is disabled in this Redis instance. You may use \\\"CONFIG SET latency-monitor-threshold <milliseconds>.\\\" in order to enable it. If we weren't in a deep space mission I'd suggest to take a look at http://redis.io/topics/latency-monitor.\""
+  },
+  {
+    "action": "update",
+    "tree": 20764,
+    "label": "\"- Latency during the AOF atomic rename operation or when the final difference is flushed to the AOF file at the end of the rewrite, sometimes is caused by very high write load, causing the AOF buffer to get very large. If possible try to send less commands to accomplish the same work, or use Lua scripts to group multiple operations into a single EVALSHA call.\""
+  }
+]
