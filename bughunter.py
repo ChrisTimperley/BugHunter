@@ -38,6 +38,8 @@ def compile_source(src_dir, threads=1):
         assert exec_from_dir('./autogen.sh', src_dir), "failed autogen"
     if os.path.exists(os.path.join(src_dir, 'buildconf.sh')):
         assert exec_from_dir('./buildconf.sh', src_dir), "failed buildconf"
+    if os.path.exists(os.path.join(src_dir, 'Makefile')):
+        exec_from_dir('make distclean', src_dir)
     if os.path.exists(os.path.join(src_dir, 'configure')):
         configured = True
         assert exec_from_dir('./configure "CFLAGS=-save-temps"', src_dir), "failed configure"
@@ -54,7 +56,9 @@ def preprocess_files(files, src_dir, dest_dir, threads=1):
     destroy_save_temps_artefacts(src_dir)
     try:
         compile_source(src_dir, threads=threads)
+        print("Finished compiling pre-processed source code...")
         for fn in files:
+            print("Handling file: %s", fn)
             pp_fn = fn[:-2] + '.i'
             cp_to = os.path.join(dest_dir, fn)
 
@@ -64,11 +68,16 @@ def preprocess_files(files, src_dir, dest_dir, threads=1):
                 cp_from = os.path.join(src_dir, pp_fn)
             elif os.path.exists(os.path.join(src_dir, os.path.basename(pp_fn))):
                 cp_from = os.path.basename(pp_fn)
+            else:
+                cp_from = None
 
             if cp_from:
+                print("Ensuring directory exists: %s" % os.path.dirname(cp_to)) 
                 ensure_dir(os.path.dirname(cp_to))
+                print("Copying file from '%s' to '%s' % (cp_from, cp_to)")
                 shutil.copyfile(cp_from, cp_to)
     finally:
+        #print("Destroying save temps artefacts")
         destroy_save_temps_artefacts(src_dir)
 
 # Used to store information about a mined bug fix
@@ -144,6 +153,7 @@ class Fix(object):
         # destroy the fix files in the event of an error
         except Exception as e:
             print("failed preprocessing fix: %s" % self.identifier())
+            print("reason: %r" % e)
             shutil.rmtree(fix_file_dir)
             raise e
 
