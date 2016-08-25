@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 import argparse
 import json
 import sys
@@ -48,6 +48,8 @@ def compile_source(src_dir, threads=1):
     make_cmd = "make" if configured else "make 'CFLAGS=-save-temps' -j%d" % threads
     assert exec_from_dir('make clean && %s' % make_cmd, src_dir), "failed to make"
 
+# Preprocesses a given set of files belonging to a given source code directory
+# and writes the result to a specified directory
 def preprocess_files(files, src_dir, dest_dir, threads=1):
     destroy_save_temps_artefacts(src_dir)
     try:
@@ -122,9 +124,9 @@ class Fix(object):
         # Check if this fix has already been pre-processed
         fix_file_dir = os.path.join(db_dir, self.identifier())
         if os.path.exists(fix_file_dir):
-            print "skipping fix: %s (cached)" % self.identifier()
+            print("skipping fix: %s (cached)" % self.identifier())
             return
-        print "preprocessing fix: %s" % self.identifier()
+        print("preprocessing fix: %s" % self.identifier())
 
         # revert the repository to this commit in a separate branch
         current_branch_name = repo.active_branch.name
@@ -141,7 +143,7 @@ class Fix(object):
 
         # destroy the fix files in the event of an error
         except Exception as e:
-            print "failed preprocessing fix: %s" % self.identifier()
+            print("failed preprocessing fix: %s" % self.identifier())
             shutil.rmtree(fix_file_dir)
             raise e
 
@@ -151,7 +153,7 @@ class Fix(object):
             repo.git.reset('--hard')
             repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
-        print "finished preprocessing fix: %s" % self.identifier()
+        print("finished preprocessing fix: %s" % self.identifier())
 
     # Returns a JSON description of this fix, in the form of a Dict
     def to_json(self):
@@ -185,11 +187,19 @@ class FixDB(object):
         # Ensure the files are pre-processed
         self.preprocess(threads=threads)
 
+        # Parse the files using GumTree / CGum
+        self.parse()
+
     def fixes(self):
         return self.__fixes
 
+    # Returns the name of the repository that this fix database is built from
     def repository(self):
         return self.__repo
+
+    # Parses each of the fixes into a set of GumTree ASTs and differences
+    def parse(self):
+        print("Parsing fixes...")
 
     # Returns the name of the directory that this database belongs to
     def directory(self):
@@ -201,18 +211,18 @@ class FixDB(object):
 
     # Builds the contents of this fix database from scratch, then saves to disk
     def build(self):
-        print "Building fix database from scratch..."
-        print "Extracting commits from repository..."
+        print("Building fix database from scratch...")
+        print("Extracting commits from repository...")
         commits = map(Fix, self.repository().iter_commits())
-        print "Filtering fixes from list of commits..."
+        print("Filtering fixes from list of commits...")
         self.__fixes = filter(Fix.is_fix, commits)
-        print "Finished filtering - found %d fixes" % len(self.__fixes)
+        print("Finished filtering - found %d fixes" % len(self.__fixes))
         # save to disk
         self.save()
 
     # Pre-processes each of the fixes within this database
     def preprocess(self, threads=1):
-        print "Preprocessing fixes..."
+        print("Preprocessing fixes...")
         d = self.directory()
         for fix in self.__fixes:
             try:
@@ -220,27 +230,27 @@ class FixDB(object):
             except (KeyboardInterrupt, SystemExit) as e:
                 raise e
             except Exception as e:
-                print "REASON: %s" % str(e)
+                print("REASON: %s" % str(e))
                 pass
-        print "Finished pre-processing fixes"
+        print("Finished pre-processing fixes")
 
     # Loads the contents of this fix database from its JSON index file
     def from_json(self):
-        print "Loading fix database from index file..."
+        print("Loading fix database from index file...")
         with open(self.indexFileName(), 'r') as f:
             self.__fixes = map(Fix.from_json, json.load(f))
-        print "Loaded fix database from index file"
+        print("Loaded fix database from index file")
 
     # Saves the contents of this fix database to its JSON index file
     def save(self):
         indexFileName = self.indexFileName()
         indexFileDir = os.path.dirname(indexFileName)
-        print "Saving fix database to index file: %s" % indexFileName
+        print("Saving fix database to index file: %s" % indexFileName)
 
         ensure_dir(indexFileDir)
         with open(self.indexFileName(), 'w') as f:
             json.dump(map(Fix.to_json, self.__fixes), f, indent=2)
-        print "Saved fix database to index file"
+        print("Saved fix database to index file")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='bughunter', description=DESCRIPTION)
