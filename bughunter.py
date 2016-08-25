@@ -33,20 +33,28 @@ def exec_from_dir(cmd, cmd_dir):
 
 def compile_source(src_dir, threads=1):
     # attempt to configure
+    has_file = lambda f: os.path.exists(os.path.join(src_dir, f))
     configured = False
-    if os.path.exists(os.path.join(src_dir, 'autogen.sh')):
+
+    # Build ./configure if appropriate
+    if has_file('autogen.sh'):
         assert exec_from_dir('./autogen.sh', src_dir), "failed autogen"
-    if os.path.exists(os.path.join(src_dir, 'buildconf.sh')):
+    if has_file('buildconf.sh'):
         assert exec_from_dir('./buildconf.sh', src_dir), "failed buildconf"
-    if os.path.exists(os.path.join(src_dir, 'Makefile')):
+    if (not has_file('./configure')) and has_file('Makefile.in'):
+        assert exec_from_dir('autoreconf -i', src_dir), "failed autoreconf"
+
+    if has_file('Makefile'): # avoids Redis bugs
         exec_from_dir('make distclean', src_dir)
-    if os.path.exists(os.path.join(src_dir, 'configure')):
+
+    # Configure
+    if has_file('configure'):
         configured = True
         assert exec_from_dir('./configure "CFLAGS=-save-temps"', src_dir), "failed configure"
    
     # attempt to make; ensure Makefile exists
-    if not os.path.exists(os.path.join(src_dir, 'Makefile')):
-        raise 'No Makefile found within source directory' 
+    if not has_file('Makefile'):
+        raise Exception('No Makefile found within source directory')
     make_cmd = "make" if configured else "make 'CFLAGS=-save-temps' -j%d" % threads
     assert exec_from_dir('make clean && %s' % make_cmd, src_dir), "failed to make"
 
@@ -77,8 +85,9 @@ def preprocess_files(files, src_dir, dest_dir, threads=1):
                 print("Copying file from '%s' to '%s' % (cp_from, cp_to)")
                 shutil.copyfile(cp_from, cp_to)
     finally:
+        pass
         #print("Destroying save temps artefacts")
-        destroy_save_temps_artefacts(src_dir)
+        #destroy_save_temps_artefacts(src_dir)
 
 # Used to store information about a mined bug fix
 class Fix(object):
@@ -129,6 +138,11 @@ class Fix(object):
                 (not (any (s in msg for s in BUG_ANTI_MARKERS))) and \
                 any(f.endswith('.c') for f in self.files())
 
+    # Parses the source code for this fix into a set of GumTree AST files and
+    # differences
+    def parse(self):
+        pass
+
     def preprocess(self, db_dir, repo, threads=1):
         # Check if this fix has already been pre-processed
         fix_file_dir = os.path.join(db_dir, self.identifier())
@@ -144,6 +158,7 @@ class Fix(object):
             repo.git.checkout(self.__identifier, b='preprocessing')
             preprocess_files(self.source_files(), repo.working_dir,\
                     os.path.join(fix_file_dir, 'fixed'))
+            repo.git.clean('-f', '-x')
 
             repo.git.reset('--hard')
             repo.git.checkout("%s~1" % self.__identifier)
@@ -159,7 +174,7 @@ class Fix(object):
 
         # destroy the temporary branch and revert back to the previous one
         finally:
-            #print "-- reverting to previous branch and destroying preprocessing branch"
+            repo.git.clean('-f', '-x')
             repo.git.reset('--hard')
             repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
@@ -204,6 +219,9 @@ class FixDB(object):
     # Parses each of the fixes into a set of GumTree ASTs and differences
     def parse(self, threads=1):
         print("Parsing fixes...")
+        for fix in self.fixes():
+            fix.parse(threads)
+        print("Parsed fixes")
 
     # Returns the name of the directory that this database belongs to
     def directory(self):
@@ -277,7 +295,7 @@ if __name__ == "__main__":
         ({
             'collect': (lambda: db.collect(force=args.force)),
             'preprocess': (lambda: db.preprocess(threads=args.threads)),
-            'parse': (lambda: db.preprocess(threads=args.threads))
+            'parse': (lambda: db.parse(threads=args.threads))
         })[args.mode]()
     except (KeyboardInterrupt, SystemExit):
         pass
