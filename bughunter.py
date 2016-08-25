@@ -23,10 +23,6 @@ BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
 def ensure_dir(d):
     os.path.exists(d) or os.makedirs(d)
 
-def destroy_save_temps_artefacts(d):
-    subprocess.Popen('find . -type f \( -name "*.i" -o -name "*.s" \) -delete',
-        shell=True, cwd=d, stdout=FNULL, stderr=subprocess.STDOUT).wait()
-
 def exec_from_dir(cmd, cmd_dir):
      return subprocess.Popen(cmd, shell=True, stdout=FNULL,
                 stderr=subprocess.STDOUT, cwd=cmd_dir).wait() == 0
@@ -41,7 +37,7 @@ def compile_source(src_dir, threads=1):
         assert exec_from_dir('./autogen.sh', src_dir), "failed autogen"
     if has_file('buildconf.sh'):
         assert exec_from_dir('./buildconf.sh', src_dir), "failed buildconf"
-    if (not has_file('./configure')) and has_file('Makefile.in'):
+    if (not has_file('./configure')) and has_file('Makefile.am'):
         assert exec_from_dir('autoreconf -i', src_dir), "failed autoreconf"
 
     if has_file('Makefile'): # avoids Redis bugs
@@ -61,33 +57,27 @@ def compile_source(src_dir, threads=1):
 # Preprocesses a given set of files belonging to a given source code directory
 # and writes the result to a specified directory
 def preprocess_files(files, src_dir, dest_dir, threads=1):
-    destroy_save_temps_artefacts(src_dir)
-    try:
-        compile_source(src_dir, threads=threads)
-        print("Finished compiling pre-processed source code...")
-        for fn in files:
-            print("Handling file: %s", fn)
-            pp_fn = fn[:-2] + '.i'
-            cp_to = os.path.join(dest_dir, fn)
+    compile_source(src_dir, threads=threads)
+    print("Finished compiling pre-processed source code...")
+    for fn in files:
+        print("Handling file: %s", fn)
+        pp_fn = fn[:-2] + '.i'
+        cp_to = os.path.join(dest_dir, fn)
 
-            # Find the pre-processed file, if there is one, and copy it into
-            # the database
-            if os.path.exists(os.path.join(src_dir, pp_fn)):
-                cp_from = os.path.join(src_dir, pp_fn)
-            elif os.path.exists(os.path.join(src_dir, os.path.basename(pp_fn))):
-                cp_from = os.path.basename(pp_fn)
-            else:
-                cp_from = None
+        # Find the pre-processed file, if there is one, and copy it into
+        # the database
+        if os.path.exists(os.path.join(src_dir, pp_fn)):
+            cp_from = os.path.join(src_dir, pp_fn)
+        elif os.path.exists(os.path.join(src_dir, os.path.basename(pp_fn))):
+            cp_from = os.path.basename(pp_fn)
+        else:
+            cp_from = None
 
-            if cp_from:
-                print("Ensuring directory exists: %s" % os.path.dirname(cp_to)) 
-                ensure_dir(os.path.dirname(cp_to))
-                print("Copying file from '%s' to '%s' % (cp_from, cp_to)")
-                shutil.copyfile(cp_from, cp_to)
-    finally:
-        pass
-        #print("Destroying save temps artefacts")
-        #destroy_save_temps_artefacts(src_dir)
+        if cp_from:
+            print("Ensuring directory exists: %s" % os.path.dirname(cp_to)) 
+            ensure_dir(os.path.dirname(cp_to))
+            print("Copying file from '%s' to '%s' % (cp_from, cp_to)")
+            shutil.copyfile(cp_from, cp_to)
 
 # Used to store information about a mined bug fix
 class Fix(object):
