@@ -50,7 +50,6 @@ def compile_source(src_dir, threads=1):
 # and writes the result to a specified directory
 def preprocess_files(files, src_dir, dest_dir, threads=1):
     compile_source(src_dir, threads=threads)
-    print("Finished compiling pre-processed source code...")
     for fn in files:
         pp_fn = fn[:-2] + '.i'
         cp_to = os.path.join(dest_dir, fn)
@@ -179,6 +178,8 @@ class Fix(object):
             preprocess_files(self.source_files(), repo.working_dir,\
                     os.path.join(fix_file_dir, 'faulty'), threads=threads)
 
+            print("finished preprocessing fix: %s" % self.identifier())
+
         # destroy the fix files in the event of an error
         except Exception as e:
             print("failed preprocessing fix: %s" % self.identifier())
@@ -191,7 +192,6 @@ class Fix(object):
             repo.git.reset('--hard')
             repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
-        print("finished preprocessing fix: %s" % self.identifier())
 
     # Returns a JSON description of this fix, in the form of a Dict
     def to_json(self):
