@@ -3,6 +3,7 @@ from fix import Fix
 import os.path
 import git
 import json
+import analysis
 
 # Used to hold all the fixes for a particular repository
 class Database(object):
@@ -61,7 +62,7 @@ class Database(object):
     def analyse(self, force=False):
         print("Analysing fixes...")
         for fix in self.__fixes:
-            analysis.analyse(fix)
+            analysis.analyse(fix, self.directory())
         print("Analysed fixes")
 
     # Pre-processes each of the fixes within this database

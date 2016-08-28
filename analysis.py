@@ -21,7 +21,7 @@
 # * Is the name of the called function modified?
 # * Are the arguments of the function call changed?
 
-def analyse(fix):
+def analyse(fix, db_dir):
     print("Analysing fix: %s" % fix.identifier())
 
     # Q) How many files were modified?
