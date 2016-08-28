@@ -33,10 +33,12 @@ def analyse(fix, db_dir):
         print("skipping fix: %s (not preprocessed)" % fix.identifier())
         return False
 
-    # Q) How many files were modified?
-    num_files_modified = len(fix.files())
-
     # Get the ASTs of the fixed and faulty versions of the program.
+    fix_dir = fix.fix_dir(db_dir)
+    modified_fn = fix.source_files()[0]
+    ast_faulty = fix.ast_faulty(modified_fn, db_dir)
+    ast_fixed = fix.ast_fixed(modified_fn, db_dir)
+    ast_diff = fix.diff(modified_fn, db_dir)
 
     # Q) Were any function names changed?
 
