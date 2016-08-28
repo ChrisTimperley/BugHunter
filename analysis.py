@@ -1,7 +1,7 @@
 #
 # * We only bother analysing single-file 
 #
-import cgum
+#import cgum
 
 # Info:
 # - Extract a numbered list of all the statements in the faulty program
