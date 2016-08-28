@@ -1,3 +1,6 @@
+#
+# * We only bother analysing single-file 
+#
 import cgum
 
 # Info:
@@ -19,6 +22,8 @@ import cgum
 # * Are the arguments of the function call changed?
 
 def analyse(fix):
+    print("Analysing fix: %s" % fix.identifier())
+
     # Q) How many files were modified?
     num_files_modified = len(fix.files())
 
@@ -31,3 +36,5 @@ def analyse(fix):
     # Q) Were any functions added?
 
     # Q) Were any functions removed?
+
+    print("Analysed fix: %s" % fix.identifier())

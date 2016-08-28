@@ -7,6 +7,7 @@ import git
 import os.path
 import multiprocessing
 import shutil
+import analysis
 
 from utility import *
 
@@ -259,6 +260,13 @@ class FixDB(object):
         print("Finished filtering - found %d fixes" % len(self.__fixes))
         self.save()
 
+    # Analyses each of the fixes within this database
+    def analyse(self, force=False):
+        print("Analysing fixes...")
+        for fix in self.__fixes:
+            analysis.analyse(fix)
+        print("Analysed fixes")
+
     # Pre-processes each of the fixes within this database
     def preprocess(self, threads=1):
         print("Preprocessing fixes...")
@@ -308,7 +316,8 @@ if __name__ == "__main__":
         ({
             'collect': (lambda: db.collect(force=args.force)),
             'preprocess': (lambda: db.preprocess(threads=args.threads)),
-            'parse': (lambda: db.parse(threads=args.threads))
+            'parse': (lambda: db.parse(threads=args.threads)),
+            'analyse': (lambda: db.analyse(force=args.force))
         })[args.mode]()
     except (KeyboardInterrupt, SystemExit):
         pass
