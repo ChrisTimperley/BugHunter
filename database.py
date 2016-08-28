@@ -61,9 +61,10 @@ class Database(object):
     # Analyses each of the fixes within this database
     def analyse(self, force=False):
         print("Analysing fixes...")
+        num = 0
         for fix in self.__fixes:
-            analysis.analyse(fix, self.directory())
-        print("Analysed fixes")
+            num += int(analysis.analyse(fix, self.directory()))
+        print("Analysed %d of %d fixes" % (num, len(self.__fixes)))
 
     # Pre-processes each of the fixes within this database
     def preprocess(self, threads=1):

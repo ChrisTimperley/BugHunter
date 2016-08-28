@@ -98,6 +98,10 @@ class Fix(object):
     def fix_dir(self, db_dir):
         return os.path.join(db_dir, self.identifier())
 
+    # Determines whether this fix has been pre-processed
+    def is_preprocessed(self, db_dir):
+        return os.path.isdir(self.fix_dir(db_dir))
+
     # Determines whether this object is indeed a fix
     def is_fix(self):
         msg = self.message().lower()
@@ -111,7 +115,7 @@ class Fix(object):
 
     # Determines whether this fix modifies multiple C source code files
     def modifies_multiple_source_files(self):
-        return len(self.source_files()) > 1
+        return len(list(self.source_files())) > 1
 
     # Parses the source code for this fix into a set of GumTree AST files and
     # differences

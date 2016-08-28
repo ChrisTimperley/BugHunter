@@ -23,6 +23,15 @@
 
 def analyse(fix, db_dir):
     print("Analysing fix: %s" % fix.identifier())
+    if fix.modifies_header_file():
+        print("Skipping fix: %s (modifies header file)" % fix.identifier())
+        return False
+    if fix.modifies_multiple_source_files():
+        print("Skipping fix: %s (modifiers multiple source files)" % fix.identifier())
+        return False
+    if not fix.is_preprocessed(db_dir):
+        print("skipping fix: %s (not preprocessed)" % fix.identifier())
+        return False
 
     # Q) How many files were modified?
     num_files_modified = len(fix.files())
@@ -38,3 +47,4 @@ def analyse(fix, db_dir):
     # Q) Were any functions removed?
 
     print("Analysed fix: %s" % fix.identifier())
+    return True
