@@ -105,6 +105,14 @@ class Fix(object):
                 (not (any (s in msg for s in BUG_ANTI_MARKERS))) and \
                 any(f.endswith('.c') for f in self.files())
 
+    # Determines whether this fix modifies a header file
+    def modifies_header_file(self):
+        return any(f.endswith('.h') for f in self.files())
+
+    # Determines whether this fix modifies multiple C source code files
+    def modifies_multiple_source_files(self):
+        return len(self.source_files()) > 1
+
     # Parses the source code for this fix into a set of GumTree AST files and
     # differences
     def parse(self, db_dir):
@@ -115,6 +123,10 @@ class Fix(object):
             print("Skipping fix: %s (no preprocessed files)" % self.identifier())
         elif os.path.isdir(os.path.join(fix_dir, 'ast')):
             print("Skipping fix: %s (already preprocessed)" % self.identifier())
+        elif self.modifies_header_file():
+            print("Skipping fix: %s (modifies header file)" % self.identifier())
+        elif self.modifiers_multiple_source_files():
+            print("Skipping fix: %s (modifiers multiple source files)" % self.identifier())
         else:
             try:
                 print("Parsing fix: %s" % self.identifier()) 
@@ -145,6 +157,12 @@ class Fix(object):
         fix_file_dir = os.path.join(db_dir, self.identifier())
         if os.path.exists(fix_file_dir):
             print("skipping fix: %s (cached)" % self.identifier())
+            return
+        if self.modifies_header_file():
+            print("Skipping fix: %s (modifies header file)" % self.identifier())
+            return
+        if self.modifiers_multiple_source_files():
+            print("Skipping fix: %s (modifiers multiple source files)" % self.identifier())
             return
         print("preprocessing fix: %s" % self.identifier())
 
@@ -189,5 +207,3 @@ class Fix(object):
             'date': self.date(),
             'files': self.files()
         }
-
-
