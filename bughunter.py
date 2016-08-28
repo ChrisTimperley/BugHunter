@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
+from database import Database
 import parser as psr
 import argparse
 import git
 import analysis
-import database
 
 DESCRIPTION = "BugHunter - a small, but mighty bug mining tool for extracting" + \
     " and analysing bugs from offline Git repositories for projects using C;" + \
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     if args.threads <= 0:
         raise "Illegal number of threads specified (should be >= 1)"
     try:
-        db = database.Database(args.repository.strip(), threads=args.threads)
+        db = Database(args.repository.strip(), threads=args.threads)
         ({
             'collect': (lambda: db.collect(force=args.force)),
             'preprocess': (lambda: db.preprocess(threads=args.threads)),

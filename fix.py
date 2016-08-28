@@ -1,6 +1,7 @@
 import os.path
 import shutil
 import git
+import json
 
 def compile_source(src_dir, threads=1):
     # attempt to configure

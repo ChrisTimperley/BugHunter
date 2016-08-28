@@ -1,11 +1,11 @@
 from utility import *
+from fix import Fix
 import os.path
-import fix
 import git
 import json
 
 # Used to hold all the fixes for a particular repository
-class FixDB(object):
+class Database(object):
 
     # Model the repository using GitCmdObjectDB as it gives better performance
     # than GitDB when dealing with large quantities of smaller files.
