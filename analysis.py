@@ -67,6 +67,15 @@ def analyse(fix, db_dir):
     any_functions_removed = \
         any(isinstance(FunctionDefinition, deletion) for deletion in deleted_nodes)
 
+    # Q) Were any variables added?
+    any_variables_added = \
+        any(isinstance(Declaration, insert) for insert in inserted_nodes)
+
+    # Q) Were any variables removed?
+    any_variables_removed = \
+        any(isinstance(Declaration, removed.descendants()) \
+            for removed in (removed_nodes + deleted_nodes))
+
     # Q) Were any statements removed?
 
     # Put together all the analysis
