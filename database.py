@@ -4,6 +4,7 @@ import os.path
 import git
 import json
 import analysis
+import cgum
 
 # Used to hold all the fixes for a particular repository
 class Database(object):

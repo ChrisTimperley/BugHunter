@@ -1,8 +1,8 @@
-import os.path
-import cgum
 import shutil
 import git
 import json
+import os.path
+import cgum
 
 def compile_source(src_dir, threads=1):
     # attempt to configure
@@ -119,22 +119,22 @@ class Fix(object):
         return len(list(self.source_files())) > 1
 
     # Returns the AST for the faulty version of a given file for this fix
-    def faulty_ast(self, fn, db_dir):
-        fn = os.path.join(os.path.join(self.fix_dir(), 'ast/faulty'),\
+    def ast_faulty(self, fn, db_dir):
+        fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'ast/faulty'),\
                           ("%s.ast.json" % fn))
-        return cgum.Program.from_file(fn)
+        return cgum.program.Program.from_file(fn)
 
     # Returns the AST for the fixed version of a given file for this fix
-    def fixed_ast(self, fn, db_dir):
-        fn = os.path.join(os.path.join(self.fix_dir(), 'ast/fixed'),\
+    def ast_fixed(self, fn, db_dir):
+        fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'ast/fixed'),\
                           ("%s.ast.json" % fn))
-        return cgum.Program.from_file(fn)
+        return cgprog.Program.from_file(fn)
 
     # Returns the diff for a given file from this fix
     def diff(self, fn, db_dir):
         fn = os.path.join(os.path.join(self.fix_dir(), 'diff'),\
                           ("%s.diff.json" % fn))
-        return cgum.Diff.from_file(fn)
+        return cgdiff.Diff.from_file(fn)
 
     # Parses the source code for this fix into a set of GumTree AST files and
     # differences
