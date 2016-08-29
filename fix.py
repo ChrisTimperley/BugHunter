@@ -123,19 +123,28 @@ class Fix(object):
     def ast_faulty(self, fn, db_dir):
         fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'ast/faulty'),\
                           ("%s.ast.json" % fn))
-        return cgum.program.Program.from_file(fn)
+        if os.path.isfile(fn):
+            return cgum.program.Program.from_file(fn)
+        else:
+            return None
 
     # Returns the AST for the fixed version of a given file for this fix
     def ast_fixed(self, fn, db_dir):
         fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'ast/fixed'),\
                           ("%s.ast.json" % fn))
-        return cgum.program.Program.from_file(fn)
+        if os.path.isfile(fn):
+            return cgum.program.Program.from_file(fn)
+        else:
+            return None
 
     # Returns the diff for a given file from this fix
     def diff(self, fn, db_dir):
         fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'diff'),\
                           ("%s.diff.json" % fn))
-        return cgum.diff.Diff.from_file(fn)
+        if os.path.isfile(fn):
+            return cgum.diff.Diff.from_file(fn)
+        else:
+            return None
 
     # Parses the source code for this fix into a set of GumTree AST files and
     # differences

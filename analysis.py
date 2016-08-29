@@ -37,6 +37,10 @@ def analyse(fix, db_dir):
     ast_fixed = fix.ast_fixed(modified_fn, db_dir)
     ast_diff = fix.diff(modified_fn, db_dir)
 
+    if not ast_diff:
+        print("skipping fix: %s (no diff; added or removed file)" % fix.identifier())
+        return False
+
     # Q) Were any function names changed?
 
     # Q) Were any function parameters changed?
