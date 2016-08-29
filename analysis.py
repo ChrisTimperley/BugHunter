@@ -44,10 +44,18 @@ def analyse(fix, db_dir):
     # Q) Were any function names changed?
 
     # Q) Were any function parameters changed?
+    # - for each edit, are any of its ancestors FunctionParameter?
+    #any(isinstance(FunctionParameter, an) for an in affected.ancestors())
 
     # Q) Were any functions added?
+    any_functions_added = \
+        any(isinstance(FunctionDefinition, edit.added()) for edit in ast_diff.insertions())
 
     # Q) Were any functions removed?
+    any_functions_removed = \
+        any(isinstance(FunctionDefinition, edit.deleted()) for edit in ast_diff.deletions())
+
+    # Put together all the analysis
 
     print("Analysed fix: %s" % fix.identifier())
     return True
