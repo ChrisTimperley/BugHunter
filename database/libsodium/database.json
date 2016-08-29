@@ -1,0 +1,76 @@
+[
+  {
+    "id": "654a2b3f95ce04242991f3a6c2de8351f6a1853a",
+    "message": "Shorten a few test argon2i test vectors for V8\nThis is enough to reproduce an bug with Chrome",
+    "files": [
+      "test/default/pwhash_argon2i.exp",
+      "test/default/pwhash_argon2i.c"
+    ],
+    "date": 1451419583,
+    "committer": {
+      "name": "Frank Denis",
+      "email": "github@pureftpd.org"
+    }
+  },
+  {
+    "id": "58c211a8a333312e4c24aa1936f3439a7c31b6f3",
+    "message": "Work around gcc 5.1.1/arvm7l VRP bugs\nNo binary changes on other platforms",
+    "files": [
+      "src/libsodium/crypto_sign/ed25519/ref10/sc_muladd.c",
+      "src/libsodium/crypto_sign/ed25519/ref10/sc_reduce.c",
+      "src/libsodium/crypto_sign/ed25519/ref10/fe_sq2.c",
+      "src/libsodium/crypto_sign/ed25519/ref10/fe_mul.c",
+      "src/libsodium/crypto_sign/ed25519/ref10/fe_frombytes.c",
+      "src/libsodium/crypto_sign/ed25519/ref10/fe_sq.c"
+    ],
+    "date": 1445697682,
+    "committer": {
+      "name": "Frank Denis",
+      "email": "github@pureftpd.org"
+    }
+  },
+  {
+    "id": "9ca34ef98e1a9a8fc93c1b4a80334b809c77b698",
+    "message": "Work around a GCC VRP bug.\n\nSpotted on:\n\ngcc (SUSE Linux) 5.1.1 20150713 [gcc-5-branch revision 225736]\nopenSUSE 20151014 (armv7hl)\nVERSION = 20151014\nCODENAME = Tumbleweed",
+    "files": [
+      "src/libsodium/crypto_sign/ed25519/ref10/sc_muladd.c"
+    ],
+    "date": 1445244444,
+    "committer": {
+      "name": "Frank Denis",
+      "email": "github@pureftpd.org"
+    }
+  },
+  {
+    "id": "9060457fac6e9b4e949a9187495a8eab50406a84",
+    "message": "Make prompt_input accept fixed-length and variable-length input.\nNow that strings have the correct size, but no trailing \\0, puts() cannot safely be\nused any more.",
+    "files": [
+      "demos/shorthash.c",
+      "demos/generichashstream.c",
+      "demos/generichash.c",
+      "demos/utils.c",
+      "demos/auth.c",
+      "demos/utils.h",
+      "demos/box_detached.c",
+      "demos/box.c",
+      "demos/sign.c"
+    ],
+    "date": 1432743028,
+    "committer": {
+      "name": "Frank Denis",
+      "email": "github@pureftpd.org"
+    }
+  },
+  {
+    "id": "44fed3dd0ed28cd8a4132e3162e2a600c37dc7f2",
+    "message": "fixed the comment about both message and signed message being padded",
+    "files": [
+      "demos/sign.c"
+    ],
+    "date": 1411665704,
+    "committer": {
+      "name": "GraxRabble",
+      "email": "GraxRabble@gmail.com"
+    }
+  }
+]

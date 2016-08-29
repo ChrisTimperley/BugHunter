@@ -1,0 +1,469 @@
+[
+  {
+    "message": "fixed slice documentation",
+    "id": "7691408de07ee9b7ca345599bc53a9436f9e1239",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Iter.c"
+    ],
+    "date": 1434562367
+  },
+  {
+    "message": "Fixed issue with gc and changed interface to more Celloish one",
+    "id": "8a880a3d19843e22390fe6c19bbf537072bf0603",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/List.c",
+      "src/Thread.c",
+      "include/Cello.h",
+      "src/Alloc.c",
+      "src/GC.c"
+    ],
+    "date": 1427816104
+  },
+  {
+    "message": "removed conditional test macros. Added cmp class. Fixed removal of closures.",
+    "id": "31f96bf8783418d7ca140e6627a9df8e190a788b",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/data.c",
+      "src/Cmp.c",
+      "tests/core.c",
+      "tests/threading.c",
+      "src/Table.c",
+      "src/Thread.c",
+      "tests/functional.c",
+      "src/CTypes.c",
+      "src/Tuple.c",
+      "src/Map.c",
+      "src/Array.c",
+      "src/String.c",
+      "src/List.c",
+      "include/Cello.h",
+      "tests/test.c",
+      "src/Num.c"
+    ],
+    "date": 1426768157
+  },
+  {
+    "message": "Fixed garbage collection",
+    "id": "e2cc4fe2f5998094caed448e79b97f64b026361f",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/test.c",
+      "src/Alloc.c",
+      "tests/core.c",
+      "tests/data.c",
+      "src/GC.c",
+      "src/Type.c"
+    ],
+    "date": 1426436519
+  },
+  {
+    "message": "Various updates included fixed Map and updated range/slice behaviour",
+    "id": "42c160004f17148f8f4bded39f4b5a4615ceac1e",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Cmp.c",
+      "src/Copy.c",
+      "tests/threading.c",
+      "tests/data.c",
+      "src/New.c",
+      "src/Hash.c",
+      "src/Begin.c",
+      "src/Range.c",
+      "examples/ranges.c",
+      "src/Tuple.c",
+      "src/Map.c",
+      "src/Start.c",
+      "src/File.c",
+      "tests/exceptions.c",
+      "src/Math.c",
+      "include/Cello.h",
+      "benchmarks/Nbodies/nbodies_cello.c",
+      "tests/core.c",
+      "src/Thread.c",
+      "examples/garbage_collection.c",
+      "benchmarks/benchmark",
+      "src/Type.c",
+      "tests/functional.c",
+      "src/Slice.c",
+      "src/String.c",
+      "TODO.md",
+      "src/Iter.c"
+    ],
+    "date": 1423600606
+  },
+  {
+    "message": "Fixed typo in Vec2_Dot",
+    "id": "c9b3e29d5205d3627d091d89a087c5d0695a6d0e",
+    "committer": {
+      "email": "ludolacost@gmail.com",
+      "name": "Ludovic Lacoste"
+    },
+    "files": [
+      "demos/Vec2.c"
+    ],
+    "date": 1399762297
+  },
+  {
+    "message": "Fixed leak in test",
+    "id": "ed836e2b5094f9fe3d83006a1c931c249704ce58",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/data.c"
+    ],
+    "date": 1386087815
+  },
+  {
+    "message": "Fixed bugs, fixed clearing of Table, memory initialization",
+    "id": "36f59e1070ba914a996fd1d06ff81a779bad240c",
+    "committer": {
+      "email": "mogui83@gmail.com",
+      "name": "mogui"
+    },
+    "files": [
+      "src/Table.c",
+      "src/Dictionary.c",
+      "tests/core.c",
+      "tests/data.c"
+    ],
+    "date": 1385321352
+  },
+  {
+    "message": "Fixed segfault in Type Inheritance. Changed block usage to be under clang rather than apple.",
+    "id": "138d6e00478b25d8a1e89217d355c21c81dcdf22",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/functional.c",
+      "include/Cello/Prelude.h",
+      "tests/core.c",
+      "include/Cello/Function.h",
+      "Makefile"
+    ],
+    "date": 1384013822
+  },
+  {
+    "message": "Tests should now build on mac agagin. Fixed issue in readme.",
+    "id": "e69e8f534a056a69e0c6b9c4d818af17bc19a933",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/memory.c",
+      "tests/functional.c",
+      "tests/core.c",
+      "tests/threading.c",
+      "README.md",
+      "tests/data.c",
+      "tests/exceptions.c",
+      "tests/ptest.h",
+      "Makefile"
+    ],
+    "date": 1380533777
+  },
+  {
+    "message": "Fixed memory leaks",
+    "id": "35e60d0e96685a6656e9dbd35faccc542314e239",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Tree.c",
+      "src/Pool.c",
+      "src/Array.c",
+      "tests/data.c",
+      "src/Exception.c"
+    ],
+    "date": 1380474009
+  },
+  {
+    "message": "Fixed nasty bug with push_front on empty list",
+    "id": "85aade92194ecaea681c9432b6023831dea1404d",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "demos/Vec2.c",
+      "tests/threading.c",
+      "src/List.c",
+      "src/Thread.c",
+      "demos/threading.c",
+      "Makefile"
+    ],
+    "date": 1380028756
+  },
+  {
+    "message": "Still some issues getting module loading bug free on linux",
+    "id": "656f91f1383859905a485d0116af0534dfbfc4e9",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/core.c",
+      "src/String.c",
+      "include/Cello/Prelude.h",
+      "src/Module.c",
+      "include/Cello/Module.h",
+      "Makefile"
+    ],
+    "date": 1378915196
+  },
+  {
+    "message": "Fixed OS check in Thread.h and Thread.c to properly check for __APPLE__ to detect OS X.",
+    "id": "2ca301ac24010d560f9d9e9c1a617fe4c7c5efc8",
+    "committer": {
+      "email": "cody.rioux@gmail.com",
+      "name": "codyrioux"
+    },
+    "files": [
+      "src/Thread.c",
+      "include/Cello/Thread.h"
+    ],
+    "date": 1374642115
+  },
+  {
+    "message": "Fixed small issues",
+    "id": "babd4a5d2d4eabf4cf609c83c6d4665d753a5ac9",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Exception.c"
+    ],
+    "date": 1368452506
+  },
+  {
+    "message": "Fixed exception message behaviour",
+    "id": "03e88af2a76e1c48cffa0e1c0474fe22c407d8b7",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Type.c",
+      "demos/example.c",
+      "src/String.c",
+      "src/Exception.c"
+    ],
+    "date": 1368452239
+  },
+  {
+    "message": "Fixed errors in thrown exceptions",
+    "id": "575c38270ade26710730c368d2374da11f54de11",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Map.c",
+      "src/Array.c",
+      "src/Format.c",
+      "src/List.c",
+      "src/Dictionary.c",
+      "src/File.c",
+      "src/Prelude.c",
+      "src/Type.c"
+    ],
+    "date": 1368450359
+  },
+  {
+    "message": "Fixed some bugs",
+    "id": "c7a796ad5e7fcc587c911dcde3b0bbc1a13ddeb8",
+    "committer": {
+      "email": "theonlydancingbanana@hotmail.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Exception.c",
+      "include/Exception.h",
+      "Makefile.am",
+      "configure.ac",
+      "Makefile"
+    ],
+    "date": 1368002116
+  },
+  {
+    "message": "Fixed cross-platform bug in Exception.c",
+    "id": "a454f8ca79669c6ad0d0601aeea005a194fb2922",
+    "committer": {
+      "email": "theonlydancingbanana@hotmail.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Exception.c"
+    ],
+    "date": 1367952263
+  },
+  {
+    "message": "Various bugfixes",
+    "id": "25bf838f375f0a85810ac358ca76e072c3e2f3a2",
+    "committer": {
+      "email": "theonlydancingbanana@hotmail.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Format+.c",
+      "demos/Vec2+.h",
+      "include/Number+.h",
+      "src/String+.c",
+      "demos/Vec2+.c",
+      "tests/data.c",
+      "demos/example.c",
+      "include/String+.h",
+      "src/Prelude+.c",
+      "src/File+.c",
+      "tests/core.c",
+      "README.md",
+      "include/Prelude+.h",
+      "src/Char+.c",
+      "include/Char+.h",
+      "src/Number+.c"
+    ],
+    "date": 1364164731
+  },
+  {
+    "message": "Fixed nasty bug in Array. Started updating readme.",
+    "id": "16ee417517cea36f9b10db338d0599b1a46140f3",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "tests/memory.c",
+      "demos/types.c",
+      "bin/C+.lib",
+      "demos/reference.c",
+      "src/Dictionary+.c",
+      "demos/Vec2+.c",
+      "tests/data.c",
+      "src/Array+.c",
+      "src/Table+.c",
+      "README.md",
+      "bin/C+.dll",
+      "examples/functions.c",
+      "examples/files",
+      "examples/functions"
+    ],
+    "date": 1363914313
+  },
+  {
+    "message": "Fixed bugs in Table and Map",
+    "id": "a892d761f8790d526d87d737cefeb9d8967a6bc6",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "src/Pool+.c",
+      "tests/core.c",
+      "tests/memory.c",
+      "src/Map+.c",
+      "include/Reference+.h",
+      "src/Table+.c",
+      "src/List+.c"
+    ],
+    "date": 1363906353
+  },
+  {
+    "message": "WIP Updating of test framework...fixed a lot of nasty bugs.",
+    "id": "f26e8718c24dc496e91bf4775102dd3c5080dae0",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "demos/types.c",
+      ".gitignore",
+      "src/List+.c",
+      "src/String+.c",
+      "src/Array+.c",
+      "tests/test.h",
+      "src/Table+.c",
+      "tests/test_core.c",
+      "src/Prelude+.c",
+      "Makefile",
+      "tests/test.c",
+      "src/Number+.c"
+    ],
+    "date": 1347564909
+  },
+  {
+    "message": "Fixed memory bug in list",
+    "id": "d6a1ce01a702f25f69b31182805a8802046e7562",
+    "committer": {
+      "email": "contact@theorangeduck.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "examples/lists.c",
+      "examples/lists",
+      "src/List+.c",
+      "examples/files",
+      "examples/types",
+      "examples/functions"
+    ],
+    "date": 1344983474
+  },
+  {
+    "message": "Added basic test for Arrays. Fixed segfault bug.",
+    "id": "c25c64599e491366d5f11663d6db2d4c16c387f0",
+    "committer": {
+      "email": "theonlydancingbanana@hotmail.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "README.md",
+      "include/Array+.h",
+      "src/Array+.c",
+      "tests/test.c",
+      "Makefile"
+    ],
+    "date": 1343069700
+  },
+  {
+    "message": "Added NoneType. Fixed list allocation.",
+    "id": "125ccb175859246de1fabf7369a2a033b5764f6c",
+    "committer": {
+      "email": "theonlydancingbanana@hotmail.com",
+      "name": "Daniel Holden"
+    },
+    "files": [
+      "include/NoneType+.h",
+      "test.c",
+      "src/HashTable+.c",
+      "README.md",
+      "test.exe",
+      "C+.dll",
+      "src/NoneType+.c",
+      "src/List+.c"
+    ],
+    "date": 1342806878
+  }
+]

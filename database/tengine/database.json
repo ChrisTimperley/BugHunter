@@ -1,0 +1,1274 @@
+[
+  {
+    "message": "[Bug] should not delete cookie when cookie->len == 0 on\nsession_sticky_module",
+    "id": "8b421848032f370f6b98d831b244b4cf8af7a6dd",
+    "files": [
+      "src/http/modules/ngx_http_upstream_session_sticky_module.c"
+    ],
+    "committer": {
+      "name": "detailyang",
+      "email": "detailyang@gmail.com"
+    },
+    "date": 1470475307
+  },
+  {
+    "message": "fix bug:In the /etc/resolv.conf file,'#' is not the first character in a line",
+    "id": "966a9ea28f5cd1977aa97b9f2a28b258a396a24f",
+    "files": [
+      "src/core/ngx_resolver.c"
+    ],
+    "committer": {
+      "name": "zuopucuen",
+      "email": "zuopucuen@qq.com"
+    },
+    "date": 1464845586
+  },
+  {
+    "message": "tcp health check does not need keepalive\n\nmaking tcp health check be \"keepalive\" is buggy\nif backend server crashes quietly",
+    "id": "4334eed30002ca7f0e5826ac758269d902d60b82",
+    "files": [
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Wang Xinyong",
+      "email": "wang.xy.chn@gmail.com"
+    },
+    "date": 1464693320
+  },
+  {
+    "message": "Resolver: fixed use-after-free memory accesses with CNAME.\n\nWhen several requests were waiting for a response, then after getting\na CNAME response only the last request's context had the name updated.\nContexts of other requests had the wrong name.  This name was used by\nngx_resolve_name_done() to find the node to remove the request context\nfrom.  When the name was wrong, the request could not be properly\ncancelled, its context was freed but stayed linked to the node's waiting\nlist.  This happened e.g. when the first request was aborted or timed\nout before the resolving completed.  When it completed, this triggered\na use-after-free memory access by calling ctx->handler of already freed\nrequest context.  The bug manifests itself by\n\"could not cancel <name> resolving\" alerts in error_log.\n\nWhen a request was responded with a CNAME, the request context kept\nthe pointer to the original node's rn->u.cname.  If the original node\nexpired before the resolving timed out or completed with an error,\nthis would trigger a use-after-free memory access via ctx->name in\nctx->handler().\n\nThe fix is to keep ctx->name unmodified.  The name from context\nis no longer used by ngx_resolve_name_done().  Instead, we now keep\nthe pointer to resolver node to which this request is linked.\nKeeping the original name intact also improves logging.",
+    "id": "11f57fb5668c97d45616ac98c2f2167412feddbf",
+    "files": [
+      "src/core/ngx_resolver.c",
+      "src/core/ngx_resolver.h"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930993
+  },
+  {
+    "message": "Resolver: fixed CNAME processing for several requests.\n\nWhen several requests were waiting for a response, then after getting\na CNAME response only the last request was properly processed, while\nothers were left waiting.",
+    "id": "13e8326b98c190bd975190b6550c306635d1a36f",
+    "files": [
+      "src/core/ngx_resolver.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930978
+  },
+  {
+    "message": "Resolver: fixed possible segmentation fault on DNS format error.",
+    "id": "2286a9cb3f15145dcc02f8f284cc4d686b9d43b4",
+    "files": [
+      "src/core/ngx_resolver.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930542
+  },
+  {
+    "message": "Fixed ngx_parse_time() out of bounds access (ticket #821).\n\nThe code failed to ensure that \"s\" is within the buffer passed for\nparsing when checking for \"ms\", and this resulted in unexpected errors when\nparsing non-null-terminated strings with trailing \"m\".  The bug manifested\nitself when the expires directive was used with variables.\n\nFound by Roman Arutyunyan.",
+    "id": "627b25722f81993a8738d8846d46b59a81f80f27",
+    "files": [
+      "src/core/ngx_parse.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930187
+  },
+  {
+    "message": "Upstream: fixed cache send error handling.\n\nThe value of NGX_ERROR, returned from filter handlers, was treated as a generic\nupstream error and changed to NGX_HTTP_INTERNAL_SERVER_ERROR before calling\nngx_http_finalize_request().  This resulted in \"header already sent\" alert\nif header was already sent in filter handlers.\n\nThe problem appeared in 54e9b83d00f0 (1.7.5).",
+    "id": "29317558eb8ac2d6aa8e9332968b67c66b774df1",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930180
+  },
+  {
+    "message": "Fixed wrong URI after try_files in nested location (ticket #97).\n\nThe following configuration with alias, nested location and try_files\nresulted in wrong file being used.  Request \"/foo/test.gif\" tried to\nuse \"/tmp//foo/test.gif\" instead of \"/tmp/test.gif\":\n\n    location /foo/ {\n        alias /tmp/;\n        location ~ gif {\n            try_files $uri =405;\n        }\n    }\n\nAdditionally, rev. c985d90a8d1f introduced a regression if\nthe \"/tmp//foo/test.gif\" file was found (ticket #768).  Resulting URI\nwas set to \"gif?/foo/test.gif\", as the code used clcf->name of current\nlocation (\"location ~ gif\") instead of parent one (\"location /foo/\").\n\nFix is to use r->uri instead of clcf->name in all cases in the\nngx_http_core_try_files_phase() function.  It is expected to be\nalready matched and identical to the clcf->name of the right\nlocation.",
+    "id": "d324e579aacc6c0043e9268269a10f76af49acfc",
+    "files": [
+      "src/http/ngx_http_core_module.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930176
+  },
+  {
+    "message": "Fixed segfault with try_files introduced by c985d90a8d1f.\n\nIf alias was used in a location given by a regular expression,\nnginx used to do wrong thing in try_files if a location name (i.e.,\nregular expression) was an exact prefix of URI.  The following\nconfiguration triggered a segmentation fault on a request to \"/mail\":\n\n    location ~ /mail {\n        alias /path/to/directory;\n        try_files $uri =404;\n    }\n\nReported by Per Hansson.",
+    "id": "09e2faac87592d6dd66e8b0e0a9758dca0673581",
+    "files": [
+      "src/http/ngx_http_core_module.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "mb@bilibili.com"
+    },
+    "date": 1454930173
+  },
+  {
+    "message": "Update ngx_http_concat_module.c\n\nbugfix: x-javascript -> javascript",
+    "id": "310b4ff44bb715def8c0222f543553a5a66d8bca",
+    "files": [
+      "src/http/modules/ngx_http_concat_module.c"
+    ],
+    "committer": {
+      "name": "IYism",
+      "email": "admin@iyism.com"
+    },
+    "date": 1447403879
+  },
+  {
+    "message": "bugfix: upstream check for dynamic",
+    "id": "2098b8b8532711abfe7e84b506fa5a200ad21f89",
+    "files": [
+      "auto/options",
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1441781211
+  },
+  {
+    "message": "Add variables $trim_bytes and $trim_original_bytes, and fix a bug.",
+    "id": "0c756df2486e7414b09f409669ca7f3e83781f16",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1431681326
+  },
+  {
+    "message": "SPDY: fixed compiling error with ssl module",
+    "id": "2b1c7ab0edda6a536fe0dfe4af7b700eb23c3a25",
+    "files": [
+      "src/http/modules/ngx_http_ssl_module.c",
+      "src/http/ngx_http_request.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1428660386
+  },
+  {
+    "message": "proxy_request_buffering_off: fixed unhandled read/write event\n\nThis bug may cause CPU 100% if tengine uses LEVEL event module\n(e.g. select, poll, /dev/poll).\n\nWhile receiving write event from upstream connection, it tries to read\ndata from client and check whether there is enough data to send to upstream.\nIf there is not enough data, it just returns and waits next event. However,\nthere is a bug that it does not \"handle\" the write event. If it does not delete\nthe write event from /dev/poll, this write event will be reported to tengine again.\nAnd then tengine has infinite loops.\n\nFor read event, the situation is similar to write event.\n\nThanks to Arne Jansen.",
+    "id": "d12c2c51aca83a6bb2b94ebe486761973bb6ed16",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1426474043
+  },
+  {
+    "message": "fixed the bug that nginx testconfig (nginx -t) will fail after setting reuseport and started nginx.\n\nissue#565",
+    "id": "40af7747a7eef7c6c19a9ba1067199e442ce29d8",
+    "files": [
+      "src/core/ngx_connection.c"
+    ],
+    "committer": {
+      "name": "Simon Liu",
+      "email": "simohayha.bobo@gmail.com"
+    },
+    "date": 1425461662
+  },
+  {
+    "message": "bugfixed: syslog crashed when used in error_log within 'http' block",
+    "id": "f1a078f2f1164d043d5e56bc036fa25707029b37",
+    "files": [
+      "src/core/ngx_log.c",
+      "tests/test-nginx/cases/syslog.t"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@test.com"
+    },
+    "date": 1418990506
+  },
+  {
+    "message": "Fixed units of delay time in limit_req log",
+    "id": "42c9a5c1876d6c5252532f55fe3448110e4bd83a",
+    "files": [
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "yzprofile",
+      "email": "yzprofiles@gmail.com"
+    },
+    "date": 1418003883
+  },
+  {
+    "message": "fixed the bug of setting reuse_port have no effect.",
+    "id": "6681907635eb17a48d15421f86b897446b3422e8",
+    "files": [
+      "src/os/unix/ngx_process_cycle.c"
+    ],
+    "committer": {
+      "name": "Simon Liu",
+      "email": "simohayha.bobo@gmail.com"
+    },
+    "date": 1414991078
+  },
+  {
+    "message": "upstream rbtree bugfix(issue #530)",
+    "id": "c1a42d2d0498659d949afd4ecd66669655cc4e2c",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1414229020
+  },
+  {
+    "message": "bugfix: ngx_http_upstream_init_process will cause coredump while not have http block.",
+    "id": "b6ae2bf15b4c26a328ff58d374a97f902164caec",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1411953791
+  },
+  {
+    "message": "Bugfix: in ngx_http_upstream_dynamic_module\n\nIf fail_timeout is enabled and fallback action is specified\nto either \"stale\" or \"next\", a segmentation fault would happen.\n\nSigned-off-by: Paul Yang(InfoHunter) <paulyang.inf@gmail.com>",
+    "id": "8c28f34c2f2ff8bf8c39a5351357a4467d9f99d3",
+    "files": [
+      "src/http/modules/ngx_http_upstream_dynamic_module.c"
+    ],
+    "committer": {
+      "name": "Paul Yang(InfoHunter)",
+      "email": "paulyang.inf@gmail.com"
+    },
+    "date": 1406775496
+  },
+  {
+    "message": "Bugfix: /etc/resolv.conf parsing error with ipv6.",
+    "id": "af01c809727a54f4727d7d0615c75ed1a1c0bb8d",
+    "files": [
+      "src/core/ngx_resolver.c"
+    ],
+    "committer": {
+      "name": "lifeibo",
+      "email": "lifeibo382005@gmail.com"
+    },
+    "date": 1406685996
+  },
+  {
+    "message": "SPDY/3: drop the \"delayed\" flag when finalizing connection\n\nThis problem has been fixed for SPDY/2.\nMore details are available here: http://hg.nginx.org/nginx/rev/a279d2a33dbf",
+    "id": "f4b4d06b64cca1899331a28700cfb0a2b5e0dbe5",
+    "files": [
+      "src/http/ngx_http_spdy_v3.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1406033758
+  },
+  {
+    "message": "Fixed: fastcgi_check compatible with new health check module",
+    "id": "8a232f1e07061e579b88bb09019a0760c679947f",
+    "files": [
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "yzprofile",
+      "email": "yzprofiles@gmail.com"
+    },
+    "date": 1403664846
+  },
+  {
+    "message": "bugfix for upstream",
+    "id": "8fea99329bbee9b0f1d70d9aea8cb9479a2616dc",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@module004030.sqa.cm4"
+    },
+    "date": 1401099939
+  },
+  {
+    "message": "Bugfixed: rewrite directive do not use ngx_http_named_location",
+    "id": "1de1c7d184337496d3c342c532f406fd574c36ac",
+    "files": [
+      "src/http/ngx_http_core_module.c"
+    ],
+    "committer": {
+      "name": "yzprofile",
+      "email": "yzprofiles@gmail.com"
+    },
+    "date": 1400841777
+  },
+  {
+    "message": "bugfix \u56de\u6eda",
+    "id": "e3ec82941d6991980863656c154e7e7bb96c9031",
+    "files": [
+      "tests/nginx-tests/cases/session_sticky.t",
+      "src/http/modules/ngx_http_upstream_session_sticky_module.c"
+    ],
+    "committer": {
+      "name": "dinic",
+      "email": "x.dinic@gmail.com"
+    },
+    "date": 1400760023
+  },
+  {
+    "message": "\u4fee\u590dsession sticky\u52a0\u4e0aoption=indirect\u9009\u9879\u5bfc\u81f4http \u53d8\u91cf\u4e71\u6389\u7684bug",
+    "id": "b7c35c3570001024f9440c831b34c597cf8b4a1b",
+    "files": [
+      "tests/nginx-tests/cases/session_sticky.t",
+      "src/http/modules/ngx_http_upstream_session_sticky_module.c"
+    ],
+    "committer": {
+      "name": "dinic",
+      "email": "x.dinic@gmail.com"
+    },
+    "date": 1400253237
+  },
+  {
+    "message": "SPDY: fix bug that server_tag directive can not work",
+    "id": "ede5d9b741703574104fdb9fa63ef9e042b27a18",
+    "files": [
+      "src/http/ngx_http_spdy_filter_module.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1398236972
+  },
+  {
+    "message": "SPDY: fixed the DATA frame length handling in case of some errors.\n\nThere are a few cases in ngx_http_spdy_state_read_data() related to error\nhandling when ngx_http_spdy_state_skip() might be called with an inconsistent\nstate between *pos and sc->length, that leads to violation of frame layout\nparsing and resuted in corruption of spdy connection.",
+    "id": "c5dcba5242e1dcc706e526e0cbcc045031cea1df",
+    "files": [
+      "src/http/ngx_http_spdy.c",
+      "src/http/ngx_http_spdy_v3.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1396258296
+  },
+  {
+    "message": "SPDY: fixed parsing of http version.\n\nThere is an error while parsing multi-digit minor version numbers (e.g.\n\"HTTP/1.10\").",
+    "id": "0467bae22a4a4d6c7c6e657a8e7e7221ede8eb3b",
+    "files": [
+      "src/http/ngx_http_spdy.c",
+      "src/http/ngx_http_spdy_v3.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1396258261
+  },
+  {
+    "message": "SPDY: heap buffer overflow (bugfix for CVE-2014-0133)\n\nMore details from nginx announcement are available here:\n http://mailman.nginx.org/pipermail/nginx-announce/2014/000135.html",
+    "id": "5db7de9c3cab48fbc8123b58a9d6ab4cb90626fc",
+    "files": [
+      "src/http/ngx_http_spdy.c",
+      "src/http/ngx_http_spdy_v3.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1395213497
+  },
+  {
+    "message": "SPDY: memory corruption (bugfix for CVE-2014-0088)\n\nMore details from nginx announcement are available here:\n http://mailman.nginx.org/pipermail/nginx-announce/2014/000132.html",
+    "id": "6df21ff8de361e7a9beb7cfd09945378b00b90e2",
+    "files": [
+      "src/http/ngx_http_spdy.c",
+      "src/http/ngx_http_spdy_v3.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1395213192
+  },
+  {
+    "message": "SPDY: send output queue after processing of read event.\n\nSome users reported that their spdy client could not receive the reply of PING\nframe in time.\nNote that this problem has also been fixed in official nginx.\nMore details are available here: http://hg.nginx.org/nginx/rev/a336cbc3dd44.",
+    "id": "f3bc48e15d7a3a093cf9b258a90e91270f32ef27",
+    "files": [
+      "src/http/ngx_http_spdy.c",
+      "src/http/ngx_http_spdy_v3.c"
+    ],
+    "committer": {
+      "name": "Xiaochen Wang",
+      "email": "wangxiaochen0@gmail.com"
+    },
+    "date": 1394620810
+  },
+  {
+    "message": "fixed a variable set but unused warning",
+    "id": "4262590f2ded6bb6ffdad9c0585e5b2247659b03",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1393508260
+  },
+  {
+    "message": "upgrade bugfix:\nhttp://hg.nginx.org/nginx/rev/7586e7b2dbe9",
+    "id": "c37cc25fca25c4bb2c487103514fbdff5120be19",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@module004030.sqa.cm4"
+    },
+    "date": 1393495932
+  },
+  {
+    "message": "fix bug described in issue 384, which is about persistent connection in upstream_check_module",
+    "id": "3971cf30e081df85c8613c76c0732b7a9f00b030",
+    "files": [
+      "tests/test-nginx/cases/ngx_http_upstream_check_module/http_check.t",
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Li Liangbin",
+      "email": "lilb.edwin@gmail.com"
+    },
+    "date": 1390378673
+  },
+  {
+    "message": "fix nginx-tfs rcs keepalive bug.\n\n1. fix rc_stat count not initialized bug.",
+    "id": "3b821e0ec825fc4419ce05f7e229800192ca4639",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_serialization.c",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_message.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1388639267
+  },
+  {
+    "message": "nginx-tfs new feature and bugfixs\n\n1. add reporting access stat to rcs while keepalive and multiple rcs support\n2. raw tfs add HEAD protocol for check file exist\n3. fix update file fail will rollback lead to unlink file bug\n4. fix memory leak bug\n5. fix stat larger than 2GB file size is negative bug\n6. fix may infinitely looping while saving dedup file bug\n7. fix read incomplete large file core bug\n8. modify choose unlink cluster related stratery and bugfix",
+    "id": "db04a2c640c365dccbc1a4a00f7de3091a07757c",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_serialization.h",
+      "src/http/modules/tfs/ngx_http_tfs_protocol.h",
+      "src/http/modules/tfs/ngx_http_tfs_json.c",
+      "src/http/modules/tfs/ngx_http_tfs_server_handler.c",
+      "auto/sources",
+      "src/http/modules/tfs/ngx_tfs_common.c",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_info.h",
+      "src/http/modules/tfs/ngx_http_tfs_errno.h",
+      "src/http/modules/tfs/ngx_http_tfs_json.h",
+      "src/http/modules/tfs/ngx_http_tfs_name_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.h",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs.h",
+      "src/http/modules/tfs/ngx_http_tfs_remote_block_cache.c",
+      "src/http/modules/tfs/ngx_http_tfs_serialization.c",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_info.c",
+      "src/http/modules/tfs/ngx_http_tfs_restful.c",
+      "src/http/modules/tfs/ngx_http_tfs.c",
+      "src/http/modules/tfs/ngx_http_tfs_timers.c",
+      "src/http/modules/tfs/ngx_tfs_common.h",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_message.h",
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1387891858
+  },
+  {
+    "message": "bugfix: don't record request time in subrequest",
+    "id": "5b54b543792fd6e0a30c1c213063b4aef3f14ea3",
+    "files": [
+      "src/http/modules/ngx_http_stub_status_module.c"
+    ],
+    "committer": {
+      "name": "\u9759\u9f99",
+      "email": "jinglong.pq@taobao.com"
+    },
+    "date": 1384397060
+  },
+  {
+    "message": "bugfixed: nodelay of limit_req failed to work\nthanks to jiyiping",
+    "id": "3b388bbc76dd1afee0edece735b794fa356c4cb3",
+    "files": [
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "cfsego",
+      "email": "crk_world@yahoo.com.cn"
+    },
+    "date": 1383556960
+  },
+  {
+    "message": "fixed an problem that it may don't pass the request header\n\nWhen the client_body_postpone_size is specified to be 0, it doesn't\npass the headers before receving any request body.",
+    "id": "97b0af34f3595ee53a0c89a379c017cb1307d8b9",
+    "files": [
+      "src/http/ngx_http_request_body.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1383528277
+  },
+  {
+    "message": "nginx-tfs new features and bug-fixs.\n\n1. fix nginx do not close connection bug\n2. use readv2 if read from start\n3. write failed now retry ns instead of ds\n4. fix do not remove dirty block cache when stat large file bug\n5. fix pread custom file bug when read offset is larger than 2 times of segment's start offset\n6. fix rc timer bug\n7. fix write failed bug when data to write is in memory\n8. fix select cluster bug\n9. add Content-type response header",
+    "id": "eb46ef76868440bbeddf6bde4b618d6726b58279",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_info.c",
+      "src/http/modules/tfs/ngx_http_tfs_name_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_restful.c",
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_server_handler.c",
+      "src/http/modules/tfs/ngx_http_tfs_peer_connection.c",
+      "src/http/modules/tfs/ngx_http_tfs_protocol.h",
+      "src/http/modules/tfs/ngx_http_tfs.c",
+      "src/http/modules/tfs/ngx_http_tfs_timers.c",
+      "src/http/modules/tfs/ngx_tfs_common.c",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_info.h",
+      "src/http/modules/tfs/ngx_tfs_common.h",
+      "src/http/modules/tfs/ngx_http_tfs_restful.h",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs.h"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1381733050
+  },
+  {
+    "message": "fixed a bug of trim module.",
+    "id": "3489f268c4d00e7b6dd181475f22de344a30342d",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c",
+      "tests/test-nginx/cases/trim.t"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1380295827
+  },
+  {
+    "message": "fixed coding style",
+    "id": "1956f28bedd87a229fdc7840f3b98c8ffd815cf1",
+    "files": [
+      "src/http/modules/lua/ngx_http_lua_logby.c",
+      "CHANGES.te",
+      "src/http/modules/ngx_http_trim_filter_module.c",
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1379261392
+  },
+  {
+    "message": "Bugfix: the \"[alert] zero size buf\" error.",
+    "id": "6c3d57e7a53fb0940045e38163f035fff0ff66b5",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1377085076
+  },
+  {
+    "message": "fix bug in http_referer_module that using incorrect input string length in the regex matching process when header Referer starts with https://",
+    "id": "b105161001ece7e954edf586e3df52188a0bea93",
+    "files": [
+      "src/http/modules/ngx_http_referer_module.c"
+    ],
+    "committer": {
+      "name": "Li Liangbin",
+      "email": "lilb.edwin@gmail.com"
+    },
+    "date": 1376270135
+  },
+  {
+    "message": "bugfix when use chrome and safari.",
+    "id": "5db1b4d46aa1ad050331e60c7ac731295b053063",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c",
+      "tests/test-nginx/cases/trim.t"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1375098887
+  },
+  {
+    "message": "bugfix.",
+    "id": "5c0b1207e00e1d69b6f0f804fc4984d3c8250fc8",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1374504425
+  },
+  {
+    "message": "fixed a bug of trim module when javascript is a regular expression.",
+    "id": "cee2e727c03827987729e0ab3d62c77a6d9a7efb",
+    "files": [
+      "src/http/modules/ngx_http_trim_filter_module.c"
+    ],
+    "committer": {
+      "name": "taoyuanyuan",
+      "email": "linuxty@gmail.com"
+    },
+    "date": 1374165611
+  },
+  {
+    "message": "fixed coding style",
+    "id": "9e5646a2699ff6285b8be1cefcbe8cd12570e3c5",
+    "files": [
+      "src/http/ngx_http_special_response.c"
+    ],
+    "committer": {
+      "name": "Joshua Zhu",
+      "email": "zhuzhaoyuan@gmail.com"
+    },
+    "date": 1371202140
+  },
+  {
+    "message": "fixed coding style",
+    "id": "5f9a5bdac1d713c5cbb50508a4578c07da666d62",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_duplicate.c",
+      "src/os/unix/ngx_process_cycle.c",
+      "src/http/modules/tfs/ngx_http_tfs_module.c",
+      "src/core/ngx_segment_tree.c",
+      "src/http/modules/ngx_http_upstream_keepalive_module.c",
+      "src/core/ngx_palloc.c",
+      "src/http/modules/tfs/ngx_http_tfs.h",
+      "src/http/modules/ngx_http_geoip_module.c",
+      "src/http/modules/tfs/ngx_http_tfs.c"
+    ],
+    "committer": {
+      "name": "Joshua Zhu",
+      "email": "zhuzhaoyuan@gmail.com"
+    },
+    "date": 1371201765
+  },
+  {
+    "message": "bugfixed: \"buffer\" is disabled in access_log",
+    "id": "9122bf943196d8271bc7573ccdb03d9481ea91ba",
+    "files": [
+      "src/http/modules/ngx_http_log_module.c"
+    ],
+    "committer": {
+      "name": "cfsego",
+      "email": "crk_world@yahoo.com.cn"
+    },
+    "date": 1369628398
+  },
+  {
+    "message": "session_sticky_bugfix",
+    "id": "02e3cd14d3918e9d04b9e9720fc611b709fb433b",
+    "files": [
+      "tests/nginx-tests/cases/session_sticky.t",
+      "src/http/modules/ngx_http_upstream_session_sticky_module.c"
+    ],
+    "committer": {
+      "name": "dinic",
+      "email": "x.dinic@gmail.com"
+    },
+    "date": 1369214523
+  },
+  {
+    "message": "fixed proxy chunked response security problem\n\nhttp://mailman.nginx.org/pipermail/nginx-announce/2013/000114.html\n\nA security problem related to CVE-2013-2028 was identified,\naffecting some previous nginx versions if proxy_pass to\nuntrusted upstream HTTP servers is used.\n\nThe problem may lead to a denial of service or a disclosure of a\nworker process memory on a specially crafted response from an\nupstream proxied server.",
+    "id": "87ace477d66592d6d295629da7532e18c794f6ea",
+    "files": [
+      "src/http/modules/ngx_http_proxy_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1368505850
+  },
+  {
+    "message": "consistent_hash bugfix",
+    "id": "4e494530d0d08440f8aa0d086fc6ca2014067330",
+    "files": [
+      "src/http/modules/ngx_http_upstream_consistent_hash_module.c"
+    ],
+    "committer": {
+      "name": "dinic",
+      "email": "dinic@qingtan.(none)"
+    },
+    "date": 1367485898
+  },
+  {
+    "message": "fixed the missing with invalid character for ngx_unescape_uri",
+    "id": "ca58fa3a038cd932e8152d9307be07f7918b5260",
+    "files": [
+      "src/core/ngx_string.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1366171842
+  },
+  {
+    "message": "fixed for nginx standard",
+    "id": "26e19be4a499eef06d5ef5450a3ffa6a1441c67c",
+    "files": [
+      "src/os/unix/ngx_syslog.c",
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "MagicBear",
+      "email": "magicbearmo@gmail.com"
+    },
+    "date": 1365494810
+  },
+  {
+    "message": "1. fix read corrupted large file bug.\n2. remove some redundant code.",
+    "id": "05a4e445f4c0f09968acc36ef3900894b835e9c8",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_server_handler.c",
+      "src/http/modules/tfs/ngx_http_tfs_remote_block_cache.c",
+      "src/http/modules/tfs/ngx_http_tfs.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1361243127
+  },
+  {
+    "message": "bugfix\n\n1. \u5f53\u8bfb\u6587\u4ef6\u8bf7\u6c42\u8fd4\u56destatus_msg\u65f6\uff08\u5982ds\u6b63\u5728\u5347\u7ea7\u4e0d\u80fd\u63d0\u4f9b\u670d\u52a1\u65f6\uff09\u4ecd\u4f7f\u7528read_resp_msg\u53bb\u89e3\u6790\u4f1a\u5bfc\u81f4\u89e3\u6790\u9519\u8bef\uff0c\u6253\u5370\u9519\u8bef\u7684\u5185\u5b58\u6570\u636e\u5230log\u4e2d\uff0c\u5e76\u53ef\u80fd\u5bfc\u81f4\u8d85\u65f6\n2. \u4fee\u6539\u9ed8\u8ba4\u7684\u4ece\u540e\u7aef\u63a5\u6536buf\u5927\u5c0f\u4e3a2M\uff0c\u786e\u4fdd\u5728\u4e0b\u8f7d\u6587\u4ef6\u8fd4\u56de\u5e94\u7b54\u7684\u5934\u65f6\u80fd\u591f\u83b7\u5f97file_info\n3. \u5728\u4e0b\u8f7d\u539f\u751f\u6587\u4ef6\u65f6\u5982\u679c\u5f97\u5230\u4e86\u6587\u4ef6\u7684file_info\uff0c\u5c31\u5728\u5e94\u7b54\u5934\u91cc\u9762\u52a0\u4e0a\u6587\u4ef6\u7684last-modified\u65f6\u95f4\n4. \u4fee\u590d\u4e00\u4e9b\u9519\u8bef\u7684\u8fd4\u56de\u503c",
+    "id": "a7229e08d2762c6f321e3cb00cc7c4806f72d541",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_module.c",
+      "src/http/modules/tfs/ngx_tfs_common.h",
+      "src/http/modules/tfs/ngx_http_tfs_restful.c",
+      "src/http/modules/tfs/ngx_http_tfs_restful.h",
+      "src/http/modules/tfs/ngx_http_tfs_name_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_server_handler.c",
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_remote_block_cache.c",
+      "src/http/modules/tfs/ngx_http_tfs.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1359451306
+  },
+  {
+    "message": "fix client timed out bug.\nshould not return 500 when client timed out.",
+    "id": "581254366f0137ff2319d7678b59fa06ca0d517f",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs.h",
+      "src/http/modules/tfs/ngx_http_tfs.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1359026343
+  },
+  {
+    "message": "bugfix\n\nif hit invalid local block, should not select data server",
+    "id": "09ae5992b2d9ad3d121712e30b315a53b11f47dc",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1358668364
+  },
+  {
+    "message": "1. bugfix: read large file/custom file timeout or core\n2. buffix: close file may failed (crc error) when write retry occurs",
+    "id": "7b7b9e4569b850af4cf29ca5076729f5d689ad62",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_duplicate.c",
+      "src/http/modules/tfs/ngx_http_tfs_duplicate.h",
+      "src/http/modules/tfs/ngx_http_tfs.h",
+      "src/http/modules/tfs/ngx_http_tfs_server_handler.c",
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_remote_block_cache.c",
+      "src/http/modules/tfs/ngx_http_tfs.c"
+    ],
+    "committer": {
+      "name": "zhcn381",
+      "email": "mingyan.zc@gmail.com"
+    },
+    "date": 1358666617
+  },
+  {
+    "message": "fixed coding style",
+    "id": "d235e86a43f0bf0b7552287850e0c78bfad4a27b",
+    "files": [
+      "src/http/modules/tfs/ngx_http_tfs_json.c",
+      "src/http/modules/tfs/ngx_http_tfs_tair_helper.h",
+      "src/http/modules/tfs/ngx_http_tfs_server_handler.c",
+      "src/http/modules/tfs/ngx_http_tfs_local_block_cache.c",
+      "src/http/modules/tfs/ngx_http_tfs_block_cache.h",
+      "src/http/modules/tfs/ngx_tfs_common.c",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_info.h",
+      "src/http/modules/tfs/ngx_http_tfs_root_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_name_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs.h",
+      "src/http/modules/tfs/ngx_http_tfs_remote_block_cache.c",
+      "src/http/modules/tfs/ngx_http_connection_pool.h",
+      "src/http/modules/tfs/ngx_http_tfs_rc_server_info.c",
+      "src/http/modules/tfs/ngx_http_tfs_module.c",
+      "src/http/modules/tfs/ngx_http_tfs_restful.c",
+      "src/http/modules/tfs/ngx_http_tfs_meta_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_raw_fsname.c",
+      "src/http/ngx_http_variables.c",
+      "src/http/modules/tfs/ngx_http_tfs_block_cache.c",
+      "src/http/modules/tfs/ngx_http_tfs_tair_helper.c",
+      "src/http/modules/tfs/ngx_http_tfs.c",
+      "src/http/modules/tfs/ngx_http_tfs_duplicate.c",
+      "src/http/modules/tfs/ngx_http_tfs_timers.c",
+      "src/http/modules/tfs/ngx_http_tfs_data_server_message.c",
+      "src/http/modules/tfs/ngx_http_tfs_raw_fsname.h",
+      "src/http/modules/tfs/ngx_http_connection_pool.c"
+    ],
+    "committer": {
+      "name": "Joshua Zhu",
+      "email": "zhuzhaoyuan@gmail.com"
+    },
+    "date": 1358505765
+  },
+  {
+    "message": "Fixed segmentation fault in ngx_show_dso_directives() and ngx_is_dynamic_module().if we don't set dso block in nginx config, ctx->module is NULL, and then exec nginx -v, -m or -l will casuse nginx coredump.",
+    "id": "8f1989b7afd27f939af49d9419156e9a9b78db7f",
+    "files": [
+      "src/core/ngx_dso_module.c"
+    ],
+    "committer": {
+      "name": "Simon Liu",
+      "email": "simohayha.bobo@gmail.com"
+    },
+    "date": 1356318025
+  },
+  {
+    "message": "fix bug for dso module (start nginx and no dso block, and then add dso block and dso module, at last reload nginx, nginx will reload failed).",
+    "id": "a6e73bb5eb91711911ef32092482e87c66617cd5",
+    "files": [
+      "src/core/ngx_dso_module.c"
+    ],
+    "committer": {
+      "name": "Simon Liu",
+      "email": "simohayha.bobo@gmail.com"
+    },
+    "date": 1355979949
+  },
+  {
+    "message": "fixed coding style",
+    "id": "d6afd5556afe93a781740cfeb92890a141e6fe80",
+    "files": [
+      "src/os/unix/ngx_alloc.h",
+      "src/core/ngx_dso_module.c",
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1355457969
+  },
+  {
+    "message": "ngx_http_user_agent_module bugfix",
+    "id": "2d8f99afd4437036b1c1b04175f263ab3fe0963f",
+    "files": [
+      "src/http/modules/ngx_http_user_agent_module.c"
+    ],
+    "committer": {
+      "name": "dinic",
+      "email": "x.dinic@gmail.com"
+    },
+    "date": 1354516483
+  },
+  {
+    "message": "fixed a segment fault bug with upstream check module when check timeout is longer than the check interval",
+    "id": "1683a2df95c72beefb9feac0559c10324c1ef413",
+    "files": [
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1353987319
+  },
+  {
+    "message": "fixed the id prameter",
+    "id": "2a4c9f65dc01a30ec7f1bab274ed1730fb9552de",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1353337387
+  },
+  {
+    "message": "fix bug(the number of limit_req's parameters)\n\n    Thanks to LazyZhu",
+    "id": "2bede949791bb2bd08bb416b5531f39d05ff4337",
+    "files": [
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "Simon Liu",
+      "email": "simohayha.bobo@gmail.com"
+    },
+    "date": 1353303788
+  },
+  {
+    "message": "fixed wrong log format with upstream check module",
+    "id": "f22d3c49b2bd632829f44eaaba8ce78b28482fad",
+    "files": [
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1346859271
+  },
+  {
+    "message": "fixed an bug with wrong array index\nThis could cause the connection left in old work process when reloading",
+    "id": "d2455e868306854bfb5ddb580a97c5ea4f550174",
+    "files": [
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1345709227
+  },
+  {
+    "message": "bugfix: range mode of the geo module caused the coredump, when not set the default value",
+    "id": "ecac4a10dc77182954278bc13c736892625462c4",
+    "files": [
+      "src/http/modules/ngx_http_geo_module.c"
+    ],
+    "committer": {
+      "name": "yzprofile",
+      "email": "yzprofiles@gmail.com"
+    },
+    "date": 1345093526
+  },
+  {
+    "message": "fixed the wrong log format type",
+    "id": "073a153c2262e4ad6e76fb8b31d1f0b7ea1bb33c",
+    "files": [
+      "src/os/unix/ngx_syslog.c",
+      "src/os/unix/ngx_posix_init.c",
+      "src/http/ngx_http_core_module.c",
+      "src/os/unix/ngx_pipe.c",
+      "src/http/ngx_http_variables.c",
+      "src/http/modules/ngx_http_stub_status_module.c",
+      "src/proc/ngx_proc.c",
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1343112721
+  },
+  {
+    "message": "fixed wrong format type with error log in upstream check module",
+    "id": "ef72ec1c8f81987f57288f33dbb689259870f3ff",
+    "files": [
+      "src/http/ngx_http_upstream_check_module.c"
+    ],
+    "committer": {
+      "name": "Weibin Yao",
+      "email": "yaoweibin@gmail.com"
+    },
+    "date": 1343060387
+  },
+  {
+    "message": "set delay_start default value.\nbugfix:msleep after process init.",
+    "id": "1812d22afeee93d81694750184dfee817dfa6b40",
+    "files": [
+      "src/proc/ngx_proc.h",
+      "src/proc/ngx_proc.c"
+    ],
+    "committer": {
+      "name": "yzprofile",
+      "email": "yzprofiles@gmail.com"
+    },
+    "date": 1341300553
+  },
+  {
+    "message": "bugfix:priority of procs module is useless",
+    "id": "1a2622dcafde49518101de84da2eb13b9c12c301",
+    "files": [
+      "src/proc/ngx_proc.h",
+      "src/proc/ngx_proc.c"
+    ],
+    "committer": {
+      "name": "yzprofile",
+      "email": "yzprofiles@gmail.com"
+    },
+    "date": 1341282555
+  },
+  {
+    "message": "1 fix bugs of the limit_req module(please read this issue https://github.com/taobao/tengine/pull/1).\n\n2 add test case for limit_req module.\n\n3 refactor some code and fixed code style.",
+    "id": "7a6ec41d8bc104e8bf2bb2f2950a3a8d567b0447",
+    "files": [
+      "tests/nginx-tests/cases/limit_req_enhance.t",
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "Simon Liu",
+      "email": "simohayha.bobo@gmail.com"
+    },
+    "date": 1339411152
+  },
+  {
+    "message": "fixed some minor coding styles\nhttp://rb.corp.taobao.com/r/30255/\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@66 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "6fcf470464a83c9dd6b13b8a93dba3686cbdb965",
+    "files": [
+      "src/http/ngx_http_upstream_round_robin.c",
+      "src/http/ngx_http_upstream_check_module.c",
+      "auto/cc/conf",
+      "src/http/modules/ngx_http_upstream_ip_hash_module.c"
+    ],
+    "committer": {
+      "name": "shudu",
+      "email": "shudu@taobao.com"
+    },
+    "date": 1336536394
+  },
+  {
+    "message": "bugfixed: coredump occurs when using syslog for error log in http {},\nhttp://rb.corp.taobao.com/r/29590/\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@55 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "1406807fddc07bdc8b502ac984e53226ee93dad2",
+    "files": [
+      "src/http/ngx_http_core_module.c",
+      "src/http/ngx_http_request.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1335606615
+  },
+  {
+    "message": "bugfixed: fix a bug for nginx \"log\" compatibility.\n          for now, \"access_log logs/access.log main buffer=8k;\" is OK\nhttp://rb.corp.taobao.com/r/27631/\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@54 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "eacde00f09d272166108b1be261c07a1c9432193",
+    "files": [
+      "src/http/modules/ngx_http_log_module.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1335491990
+  },
+  {
+    "message": "rb: http://rb.corp.taobao.com/r/27547/\n\nchangelog:\n\nuse scan-build(http://clang-analyzer.llvm.org/) check and find a little warnning, so fixed it.\n\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@53 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "dbe6e9fb711878d70a627d2eca9126d9d7cf0263",
+    "files": [
+      "src/http/ngx_http_core_module.c",
+      "src/http/modules/ngx_http_user_agent_module.c",
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "diaoliang",
+      "email": "diaoliang@taobao.com"
+    },
+    "date": 1334555876
+  },
+  {
+    "message": "bugfix for user_agent_module\nrb:http://rb.corp.taobao.com/r/26613/\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@48 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "3e4295b350128e08eed11b412cae0cbe4e409e10",
+    "files": [
+      "src/http/modules/ngx_http_user_agent_module.c"
+    ],
+    "committer": {
+      "name": "xiongjunmin",
+      "email": "xiongjunmin.pt@taobao.com"
+    },
+    "date": 1333165748
+  },
+  {
+    "message": "fixed the 32bit problem of the 'user_agent' module\nhttp://rb.corp.taobao.com/r/27015/\n\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@45 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "6b4b17b1450ebc7bc624956358b0a00553365154",
+    "files": [
+      "src/http/modules/ngx_http_user_agent_module.c"
+    ],
+    "committer": {
+      "name": "shudu",
+      "email": "shudu@taobao.com"
+    },
+    "date": 1333095417
+  },
+  {
+    "message": "repair a bug in upstream, process_header and process_body_in_memory\nhttp://rb.corp.taobao.com/r/23292/\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@24 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "54f6b040ac8a22f3e48f33414afaa0a96ea20182",
+    "files": [
+      "src/http/ngx_http_upstream.c"
+    ],
+    "committer": {
+      "name": "lizi",
+      "email": "lizi@taobao.com"
+    },
+    "date": 1328839420
+  },
+  {
+    "message": "bugfix in expires_by_types of headers module\nhttp://rb.corp.taobao.com/r/22896\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@21 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "79efcab4229c06dfe901bb87d22f8efe93648b5e",
+    "files": [
+      "src/http/modules/ngx_http_headers_filter_module.c",
+      "tests/nginx-tests/cases/expires_by_types.t"
+    ],
+    "committer": {
+      "name": "lizi",
+      "email": "lizi@taobao.com"
+    },
+    "date": 1326781638
+  },
+  {
+    "message": "bugfix for syslog:\n1) when used for error log in http block, it causes core dump\n2) the last char of hostname is lost\nhttp://rb.corp.taobao.com/r/22130/\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@15 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "645b45e8724c0b24fca0cea0bfae22db05edb0c9",
+    "files": [
+      "src/core/ngx_log.c",
+      "src/os/unix/ngx_syslog.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1325755903
+  },
+  {
+    "message": "fix a bug of footer_filter_module,the bug will lead to be \"empty reply\" when nginx send a response with 0 byte\nhttp://rb.corp.taobao.com/r/21649/\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@14 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "5383ac6fc499a8b0041f7c4445625dd333a229f6",
+    "files": [
+      "src/http/modules/ngx_http_footer_filter_module.c",
+      "tests/test-nginx/cases/footer.t"
+    ],
+    "committer": {
+      "name": "xiongjunmin",
+      "email": "xiongjunmin.pt@taobao.com"
+    },
+    "date": 1325158210
+  },
+  {
+    "message": "review url: http://rb.corp.taobao.com/r/20078\n\nchangelog:\n\nfix two bugs:\n\n1 forbid_action option is always invalid in limit_req directive.\n\n2 backtrace_max_stack_size directive report duplicated in backtrace module.\n\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@9 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "cde7ca879b3cfda8145f9dfe33d5d8f961a6f38d",
+    "files": [
+      "src/misc/ngx_backtrace_module.c",
+      "src/http/modules/ngx_http_limit_req_module.c"
+    ],
+    "committer": {
+      "name": "diaoliang",
+      "email": "diaoliang@taobao.com"
+    },
+    "date": 1323422324
+  },
+  {
+    "message": "http://rb.corp.taobao.com/r/20116\nbugfix:\n1. http log will record error with the its log file name, while it is NULL when using a pipe\n2. when a pipe process is down, the backup file opened by the master can not be written by workers\n\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@6 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "b7671636f2cc91cb73e0843ea315d691995c4c03",
+    "files": [
+      "src/os/unix/ngx_pipe.c",
+      "src/http/modules/ngx_http_log_module.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1323344200
+  },
+  {
+    "message": "http://rb.corp.taobao.com/r/20048\nbugfix: fixes the segmentation fault in case of using default error log or access log of tengine.\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@5 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "6573be58f9e80ce2a229558b35491852fd05e252",
+    "files": [
+      "src/core/ngx_cycle.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1323162836
+  },
+  {
+    "message": "http://rb.corp.taobao.com/r/20039\nbugfix: fixes the segmentation fault in case of using default error log or access log of tengine.\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@4 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "61d3ba65e6ba782018290cf645c62577d869e878",
+    "files": [
+      "src/core/ngx_cycle.c"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1323158610
+  },
+  {
+    "message": "http://rb.corp.taobao.com/r/20013\nbugfix: fixes the segmentation fault in case of using default error log or access log of tengine.\n\ngit-svn-id: http://code.taobao.org/svn/tengine/trunk@3 8a6cbc4f-5610-49f6-9325-3f9afe71ff98",
+    "id": "74a81d5654a16701efedbb935adfc6e973391697",
+    "files": [
+      "CHANGES.te",
+      "src/core/ngx_cycle.c",
+      "src/core/nginx.h"
+    ],
+    "committer": {
+      "name": "weiyue",
+      "email": "weiyue@taobao.com"
+    },
+    "date": 1323150867
+  }
+]

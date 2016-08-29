@@ -1,0 +1,258 @@
+[
+  {
+    "date": 1471551172,
+    "id": "7302be64b6d0b3afdabd334a6b736d3f195ade9a",
+    "files": [
+      "cmds/find.c",
+      "cmds/subscribe.c",
+      "spawn.c",
+      "cmds/query.c",
+      "watcher/fsevents.c",
+      "cmds/since.c",
+      "root.c",
+      "cmds/info.c",
+      "watchman.h",
+      "cmds/debug.c",
+      "watchman_cmd.h",
+      "listener-user.c",
+      "watchman_query.h",
+      "cmds/watch.c",
+      "query/eval.c",
+      "cmds/state.c",
+      "cmds/trigger.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "locking: introduce unlocked_watchman_root type\n\nThis is used to indicate a root that is not locked.\nThis commit just tackles the first order dependencies/fan out from\nconverting the resolve_root_or_err function to populate an\nunlocked_watchman_root type.\n\nThis found 1 previously undiscovered bug in the initial subscription\nresults: we should have been locking for the query that was being run\nthere, and this may account for the occasional report of getting over\nnotified around the time that we initiate making a subscription."
+  },
+  {
+    "date": 1468015538,
+    "id": "05dd2660bb0b06059a2a712bd3f32dc9867562e9",
+    "files": [
+      "string.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "Fixed a bug in w_string_compare due to assuming that the strings are null-terminated."
+  },
+  {
+    "date": 1466443372,
+    "id": "381a5da3fb09633bc8552d7e7734d194d5f33e64",
+    "files": [
+      "root.c",
+      "watchman.h",
+      "watcher/kqueue.c",
+      "watcher/portfs.c",
+      "watcher/inotify.c",
+      "website/_docs/configuration.markdown"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "make HINT_NUM_DIRS configurable\n\nI noticed that this was still a fixed #define in the header.\nTurn it into a `.watchmanconfig` option with the same default value.\n\nThis allows us to better match the value for our various repos."
+  },
+  {
+    "date": 1464382885,
+    "id": "b931559d254b9a6f75dcad4a4a382941b136f932",
+    "files": [
+      "root.c",
+      "watchman.h"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "fix exponential time complexity during deep tree delete\n\nSummary: we've seen this crop up a couple of times, but not enough\nthat it warranted digging in.  While testing the new ART-based\noptimizations for the pending tree, I found this pretty easy to\nreproduce:\n\nThe steps in the Test Plan cause the tree to be recursively removed and\nthen recreated.\n\nThe problem is that we can recursively call either `w_root_mark_deleted`\nto walk down the tree, or in a couple of cases `stat_path` to look up\nthe tree.  In the delete case this can cause some wasted and repetitive\nwalking up and down the tree.\n\nThis diff adds a simple `exists` field to the `dir` structure that we\ncan use to indicate whether we have processed a delete on the dir or\nnot.  This defaults to true and is used to gate recursion in\n`w_root_mark_deleted` (and is set there on the first time through), and\nis cleared in `stat_path` when we have observed the directory as\nexisting.\n\nThis flag is also used to gate the upwards recursion into `stat_path`\nthat occurs in the case of a canonical path miss, and in another case\nwhere we need to observe an mtime update on a parent dir.  Both of these\ncases should really be adding to the pending list anyway, so I've fixed\nthose in this diff too.\n\nTest Plan:\nIn a mercurial checkout of a big repo:\n\n`hg sparse -X foooid`\n\n(where foooid is a deep tree with many tens of thousands of files)\n\nfollowed by:\n\n`hg sparse --reset`\n\nBefore this change, I would observe watchman spinning away in the\nactivity monitor.  Instruments and a process sample showed that we were\nsticking in the functions listed above.\n\nAfter this change, this behavior is resolved."
+  },
+  {
+    "date": 1457134196,
+    "id": "b8f5cd0d652e3fc5a27705868306f98906c7c451",
+    "files": [
+      "json.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "fix longstanding `watchman -p --server-encoding=json` bug\n\nWhen using the watchman CLI in persistent mode, we'd hit an error\nidentifying the PDU.  The workaround was to specify json encoding.\n\nI finally got around to looking into this and the cause is quite simple:\nwe're hitting an EAGAIN error and not setting a very good error message\n(we skip formatting it because we consider it to be a frequent and\nuninteresting condition).\n\nWe get EAGAIN because the bser PDU reader unconditionally enables and\ndisables non-blocking at certain phases, so even though we started out\nin blocking mode, after reading the initial response from the server we\nend up in non-blocking and fall over.\n\nThe resolution is simply to fixup the passthru mode of the CLI to reset\nus back to blocking mode just prior to decoding the next PDU header."
+  },
+  {
+    "date": 1445680257,
+    "id": "97d997940640e0c95e368e8f6d3f349a2375984d",
+    "files": [
+      "winbuild/Makefile",
+      "checksock.c",
+      "listener.c",
+      "Makefile.am",
+      "watchman.h"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "Add periodic socket liveness check\n\nSummary: since we're using unix domain sockets, it is possible for a\ncouple of funky situations to happen:\n\n* Someone can remove the socket file.  Perhaps they are being\n  overzealous in fixing some issue, or perhaps the socket gets\n  nuked by something like tmpwatch\n\n* It's conceivable that there could be a race condition with multiple\n  clients trying to start the service at the same time.\n\nThe latter is a bug that we should also try to run down and resolve,\nbut it is worthwhile to detect and auto remediate if we detect that\nthe unix socket is broken.\n\nThis diff will periodically (every 60 seconds, or each time `poll(2)`\nerrors out), schedule a thread that will connect and sanity check\nthat `watchman get-pid` returns our own pid.  If we have any failure\nto connect or a mismatch in the result then we'll self terminate.\n\nWhile working on this I realized that we broke W_LOG_FATAL at some\npoint; we were just skipping FATAL level messages because the value\nwas outside the interesting range(!).   That might explain some\nof the weird CPU spins we've seen in a couple of weird cases, where\nwe should have terminated but are still trying hard.\n\nThis fixes the value so that it is below the \"off\" threshold.\n\nTest Plan:\n\nRun this in one window:\n\n`./watchman --logfile=/dev/stdout --foreground -U /tmp/foow`\n\nThen run the same thing in another window.\n\nThe first one will output:\n\n```\n./watchman --logfile=/dev/stdout --foreground -U /tmp/foow\n2015-10-20T13:16:03,838: [listener] Watchman 4.0.0 93e07ce578178c781981960cd7ff0047626f4e19 starting up on wez-mbp\n2015-10-20T13:16:03,838: [listener] Using watcher mechanism fsevents\n2015-10-20T13:16:03,838: [listener] file limit is 2560 kern.maxfilesperproc=10240\n2015-10-20T13:16:03,838: [listener] raised file limit to 10240\n2015-10-20T13:16:03,838: [listener] launchd checkin failed: No such process\n2015-10-20T13:16:43,853: [sockcheck] remote pid from get-pid (51812) doesn't match my pid (51718)\n2015-10-20T13:16:43,854: [sockcheck] Fatal error detected at:\n2015-10-20T13:16:43,854: [sockcheck] 0   watchman                            0x00000001045796d0 w_log + 672\n2015-10-20T13:16:43,854: [sockcheck] 1   watchman                            0x00000001045790b0 check_my_sock + 432\n2015-10-20T13:16:43,854: [sockcheck] 2   libsystem_pthread.dylib             0x00007fff909259b1 _pthread_body + 131\n2015-10-20T13:16:43,854: [sockcheck] 3   libsystem_pthread.dylib             0x00007fff9092592e _pthread_body + 0\n2015-10-20T13:16:43,854: [sockcheck] 4   libsystem_pthread.dylib             0x00007fff90923385 thread_start + 13\n[1]    51718 abort      ./watchman --logfile=/dev/stdout --foreground -U /tmp/foow\n```\n\nI also tried removing `/tmp/foow` with a similar result."
+  },
+  {
+    "date": 1443912333,
+    "id": "ad778894bb6c0b1bf6af7a9c7eca4e8926cd01ee",
+    "files": [
+      "cmds/watch.c",
+      "tests/integration/clock.php"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "integration test with resultant bug fix"
+  },
+  {
+    "date": 1439052556,
+    "id": "e1c85c3aceaf9bf189f37bc5a718a6b2037e7371",
+    "files": [
+      "winbuild/Makefile",
+      "listener.c",
+      "main.c",
+      "stream.c",
+      "winbuild/config.h",
+      "winbuild/pthread.c",
+      "tests/integration/node_basic.js",
+      "winbuild/posix_spawn.c",
+      "watchman.h",
+      "root.c",
+      "stream_unix.c",
+      "winbuild/errmap.c",
+      "stream_stdout.c",
+      "runtests.py",
+      "winbuild/spawn.h",
+      "tests/integration/NodeTests.py",
+      "watchman_stream.h",
+      "node/index.js",
+      "watcher/win32.c",
+      "stream_win.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "add nodejs tests to python harness, fix various win issues\n\nAdded a basic nodejs client test.\n\nFix up a number of issues that manifest on Windows:\n\n* Use Vista API to limit handle inheritance.  This avoids\n  leaking handles from the node or python clients in the case\n  where the watchman CLI needs to spawn the service.  This\n  would result in a hang when the parent process waits for\n  the pipe handles to close.\n\n* Ensure that we shutdown and flush out buffers that we want\n  to send to the client.  Added a shutdown function to the\n  stream API for this.  On Windows, since we manage async\n  IO buffers, we're responsible for making sure that they\n  get sent to the client before we close the pipe.  This is\n  important because some rapid client connect/query/close\n  requests could cause us to snip the connection in response\n  to the read end going away before we've sent the response.\n\n* Loop around cookie sync timedwait in case of spurious wakeup\n\n* Avoid leaking references to the root in a couple of error\n  code paths.\n\n* Add --keep-if-fail option to test harness, useful for doing:\n  `while ./runtests.py --concurrency=12 --keep-if-fail ; do echo ; done`\n\n* When connecting to a named pipe, ensure that we recompute\n  the timeout on retries, to avoid infinite wait\n\n* More safely deal with the condition signalling in the win32\n  watcher; there was a bug where the root could be cancelled\n  before our initial ReadDirectoryChangesW call was issued\n  and we'd terminate the loop and add another lock to state->mtx.\n  This would break the condition variable and leave the notify\n  thread waiting on a condidtion that would never be fulfilled.\n  This in turn caused shutdown to hang.\n\n* Fixup up posix_file_actions in the win32 posix_spawn implementation.\n  We now track the operations in the order they were added and that\n  allows us to properly dup and manage the descriptors we send\n  to the child."
+  },
+  {
+    "date": 1427669676,
+    "id": "ed148a4fac7ea9cf32d28751c78126e414bd60e3",
+    "files": [
+      "main.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "launchd: fix permissions on the plist file\n\nDon't rely on the user have the same umask as me, force the permissions\nto be correct.\n\nI'm guessing that the ownership is something that gets fixed on reboot,\nwhich would explain why things start working for folks that reboot.\n\nRefs https://github.com/facebook/watchman/issues/90"
+  },
+  {
+    "date": 1422913229,
+    "id": "6ba993a07521edf95c8a77903337b5001c425be6",
+    "files": [
+      "configure.ac",
+      "main.c",
+      "Makefile.am"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "osx: fixup some launchd warts\n\nSummary:\nOn OSX, and perhaps some other environments, the TMPDIR\nenvironment is randomized by default.  This means that in the default\ninstall the watchman socket will be in a random location when you first\nrun it.  Since we capture this path in the launchd plist this can\nresult in not being able to communicate with watchman in cases where you\nlog in again and have a new randomized TMPDIR.\n\nTo avoid this issue we now default to always setting WATCHMAN_STATE_DIR\nto a fixed and known default.  If not set explicitly at configure time,\nwe'll default to `$prefix/var/run/watchman` so that the default is\ngenerally either `/usr/local/var/run/watchman` or `/var/run/watchman`\ndepending on whether this is a local or a system install.\n\nThe install rule for creating this dir has to make this dir world\nwritable so that any user can create their socket there.  This should be\nno less secure than putting these files in `$TMPDIR`.\n\nWe also need to take some extra measures to ensure that launchd can pick\nup these fixed paths; when we decide that we need to spawn watchman; we\nrepair it by first unloading an existing plist, then writing out the new\none with the newly configured settings.  This allows the repaired plist\nto be loaded and the service to be started.  Without this, we would\nrewrite the plist only, and launchd would punt on loading it since it\nwas already loaded.\n\nhttps://github.com/facebook/watchman/issues/69\n\nTest Plan:\n`make integration` to prove that this didn't impact the integration\nenvironment.  ad-hoc tests locally; `/usr/local/bin/watchman watch-list` to\nstart a pre-existing version of watchman without these changes, then\n`./watchman watch-list` to run a version from this installation.\n\nThe local build is always able to replace and re-launch itself.  The old build\nwas not able to do this; it would get stuck for the timeout before reporting\nthat it was unable to talk to watchman.\n\nReviewers: durham, sid0\n\nReviewed By: sid0\n\nDifferential Revision: https://reviews.facebook.net/D32253"
+  },
+  {
+    "date": 1398015611,
+    "id": "32b9528d78bffcb1f4dfce66ee2debe119a31491",
+    "files": [
+      "main.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "default CLI to json-compact server encoding\n\nAvoid using BSER in the CLI because we have some issues with it for\npersistent connections.\n\nAddresses https://github.com/facebook/watchman/issues/11\n\nLonger term, I'd like to default BSER on again, but I'll do that once\nwe're running with libphenom.\n\nNote that 88c84d6597227d71bfca3136e4567fa08048af2c works around this by\ndocumentation.  We'll keep those docs in place for a couple of releases\nbefore taking them out to allow folks some time to upgrade to the newer\n\"fixed\" version."
+  },
+  {
+    "date": 1389143158,
+    "id": "5aea055f642863fb7e093f26309a83f558a67438",
+    "files": [
+      "README.markdown",
+      "hash.c",
+      "arcanist/lib/WatchmanInstance.php",
+      "BSER.markdown"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "Fixed typos\n\nResolves https://github.com/facebook/watchman/pull/18\n\napplied using `hub am https://github.com/facebook/watchman/pull/18`"
+  },
+  {
+    "date": 1378157188,
+    "id": "33578dee4d6c38f0e38e695d8c1c5cd316d11b97",
+    "files": [
+      "root.c"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "Fix printf format character for 32-bit machines\n\nOn my 32-bit machine, I got this error while compiling:\n\n  root.c: In function 'try_read_inotify':\n  root.c:1809:9: error: format '%lu' expects argument of type 'long\n    unsigned int', but argument 4 has type 'unsigned int'\n    [-Werror=format]\n\nChanging the length modifier from 'l' to 'z' fixed this. C99 defines\nthe 'z' length modifier as the platform-independent modifier for\nsize_t arguments."
+  },
+  {
+    "date": 1376113087,
+    "id": "12dd7ad2f7717a119701f99803c77ef269ceaedc",
+    "files": [
+      "root.c"
+    ],
+    "committer": {
+      "email": "sid0@fb.com",
+      "name": "Siddharth Agarwal"
+    },
+    "message": "check that we're removing the right root from watched_roots\n\nSummary:\nThere was a race where:\n\n1. `watch-del` is called on a root, which causes it to be removed from `watched_roots`\n2. `watch` is called immediately afterwards on the same root, which causes it to be\nre-added to `watched_roots`.\n3. The notify thread for the first root completes, after which the *new* root gets\nremoved from the `watched_roots` list.\n\nFix this by checking before deleting.\n\nTest Plan:\nAdded a `usleep(100000);` call right before the removal in\n`root.c:run_notify_thread`, and a `usleep(200000);` right after the second `watch` in\n`tests/integration/since.php:testReaddWatchFreshInstance`. This was enough to make the\nbug trigger reliably while running the test. With the fix it doesn't.\n\nReviewers: wez\n\nReviewed By: wez\n\nDifferential Revision: https://phabricator.fb.com/D922818\n\n--HG--\nextra : rebase_source : 33ad24440d9b244f809ceddd746d6773352caa15\nextra : amend_source : f218a450281b17eba03ac3788c3f35e51a902621"
+  },
+  {
+    "date": 1375044068,
+    "id": "45d45c00a9ec22b8b4592398fc017d93b05cf842",
+    "files": [
+      "root.c"
+    ],
+    "committer": {
+      "email": "sid0@fb.com",
+      "name": "Siddharth Agarwal"
+    },
+    "message": "When opening directories, don't follow symlinks\n\nSummary:\nDepends on D903726.\n\nThere has been at least one instance of a bug where watchman has decided to traverse a symlink. It is likely that this is a TOCTOU bug between checking that it's a symlink and actually\nopening the directory. To deal with that, use a combination of `open` with `O_NOFOLLOW` and `fdopendir`.\n\nAlso fix up the handling for when the target is indeed a symlink.\n\nTest Plan: `arc unit --everything` and the Mercurial test suite with `-j32`. This is a relatively obscure race, so it's hard to write a test specifically for this.\n\nReviewers: wez\n\nReviewed By: wez\n\nDifferential Revision: https://phabricator.fb.com/D903841\n\n--HG--\nextra : rebase_source : fc83622e4806ac8a87751c695b3d45f63f6f06ca\nextra : amend_source : 89a8390452bc207bfc9d92d2c1c8211fd8eaf357"
+  },
+  {
+    "date": 1374989653,
+    "id": "5c21fc0b3b8854c71c5a7a5151f21fcff9eba5ed",
+    "files": [
+      "root.c"
+    ],
+    "committer": {
+      "email": "sid0@fb.com",
+      "name": "Siddharth Agarwal"
+    },
+    "message": "Handle some nasty TOCTOU bugs\n\nSummary:\nThere are some circumstances under which watchman can miss events. The prime suspect is TOCTOU bugs. This attempts to fix some of them.\n\n- On Linux: We've found that our internal map sometimes preserves stale watch descriptors. To fix this, call `inotify_add_watch` unconditionally and see if the descriptor is stale. If it\nis, schedule a recrawl.\n- On Linux: add a state called `dir_pending_ignored`. This is set in the `wd_to_dir` map when we know that a directory doesn't exist, yet might not have processed all the inotify events leading up to it going away.\n- On Linux: Call `opendir` after calling `inotify_add_watch`. This means we hopefully won't miss events that happen between the two.\n- On BSD: Double check that we're dealing with the same directory across `opendir` and `open`.\n- On Solaris: Use `fstat(2)` on the directory's file descriptor instead of `lstat(2)`.\n\nTest Plan: `arc unit --everything`, `WATCHMAN_VALGRIND=1 arc unit --everything`, and the Mercurial test suite with `-j32` and checking the logs to see that nothing strange happened.\n\nReviewers: wez\n\nReviewed By: wez\n\nDifferential Revision: https://phabricator.fb.com/D903726\n\n--HG--\nextra : rebase_source : 13dcff85c8302d875c370b4afb4c02e0f8d7c847\nextra : amend_source : 3993c428d1c5b7714f385c8e1b9ef01c07f4844f"
+  },
+  {
+    "date": 1355351819,
+    "id": "dc4021aac4f0de662aa80d6a71f2fed70e4f0ab6",
+    "files": [
+      "root.c",
+      "tests/integration/basic.php"
+    ],
+    "committer": {
+      "email": "wez@fb.com",
+      "name": "Wez Furlong"
+    },
+    "message": "Add integration test for renaming dirs and files\n\nThis caught a bug with tracking the files correctly."
+  }
+]

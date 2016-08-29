@@ -1,0 +1,434 @@
+[
+  {
+    "id": "69838084f1388ef63673e4dfd908333d5da8fc24",
+    "message": "pause-tube should check tube name is ok\n\nThis change updates pause-tube to return BAD_FORMAT when an\r\ninvalid tube name is supplied. At present pause-tube will return\r\nNOT_FOUND after it fails to find an invalid tube.\r\n\r\nThis is more of a consistency thing than a bug, per se.",
+    "date": 1459668189,
+    "files": [
+      "prot.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "0db458bbdb1cc48fdfb6e424022cfcff971f09a5",
+    "message": "properly timeout reserve-with-timeout; fixes #78\n\nFailing to initialize tickpos was causing heapremove to remove the wrong\nconn from the heap. (This would be more thoroughly fixed by redesigning\nHeap so that zero is used for an item that's not in the heap.)",
+    "date": 1326598417,
+    "files": [
+      "integ-test.c",
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "66222a7a03ddab07539c61f7b3ffbaf3e57245d3",
+    "message": "minor bug report\n\nHi,\n\nI traced a minor bug. If I set a large time out value, e.g. 3000s, in\n\"reserved-with-timeout\" command, the queue will return back to the\nclient immediately with \"TIMED_OUT\",  just the same effect as\n\"reserved-with-timeout 0\".\n\nI took some time to trace it. Seems like there is an overflow during\ntype conversion.   Here is a simple patch which can fix it\n(pending_timeout is 'int', where overflow occurs after it multiplies\nagainst SECOND):",
+    "date": 1279398676,
+    "files": [
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "f305a98217436ba4b935d7ca1d6167de52bac35d",
+    "message": "Allow writing buried jobs to the binlog.\n\nThanks to Erwan A. for the bug report.",
+    "date": 1259407568,
+    "files": [
+      "binlog.c",
+      "sh-tests/binlog-bury.sh"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "c072d7f53ba74b69b68c0623c20f539cea43e90f",
+    "message": "Refactor. Use fixed-size types where size matters.\n\nAnd, just to be paranoid, we increment binlog_version.",
+    "date": 1254364395,
+    "files": [
+      "job.h",
+      "pq.c",
+      "binlog.c",
+      "tests/test_job.c",
+      "job.c",
+      "prot.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "b782d6f187257e852c30a9eff76a9cbbfd6bfce8",
+    "message": "Add a disk full test; fix the bug it exposed.",
+    "date": 1254356680,
+    "files": [
+      "sh-tests/binlog-diskfull.sh",
+      "binlog.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "db48dd1869ac89877ed5150ce2e60f787c5b41b3",
+    "message": "Test binlog file size; fix the bugs it exposed.",
+    "date": 1254354204,
+    "files": [
+      "beanstalkd.c",
+      "binlog.h",
+      "sh-tests/binlog-sizelimit.sh",
+      "binlog.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "ccfe32a71447e66d19695a71472cd0a592b83360",
+    "message": "Reinitialize the event base after forking.\n\nThis is needed on some systems, particularly BSD (including Mac OS). See\nhttp://groups.google.com/group/beanstalk-talk/t/bdda1e5ebf2b1d7a for more info.\n\nThanks to Alex MacCaw and Yun Huang Yong for the bug report and fix.",
+    "date": 1240452612,
+    "files": [
+      "beanstalkd.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "c14d46db0ee31692c8e28c0d302dc14bf52c4dd6",
+    "message": "Initialize the addr struct to zero.\n\nThanks to Jeethu Rao <jeethurao@gmail.com> for the bug report and a preliminary\npatch.",
+    "date": 1240190736,
+    "files": [
+      "net.c"
+    ],
+    "committer": {
+      "email": "kr@xph.us",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "d2d211b545ce1af085c851cff651ba8e1332faf4",
+    "message": "Fix bug with large delays + test",
+    "date": 1226636710,
+    "files": [
+      "prot.c",
+      "shell_tests/no_large_delays.expected",
+      "shell_tests/no_large_delays.commands"
+    ],
+    "committer": {
+      "email": "kristjan@causes.com",
+      "name": "Kristjan"
+    }
+  },
+  {
+    "id": "c6c16b428855e05fca1323a3e6292946973b833e",
+    "message": "Test and fix for negative delay/priority bug",
+    "date": 1226615854,
+    "files": [
+      "shell_tests/test_proc.expected",
+      "prot.c",
+      "shell_tests/test_proc.sh"
+    ],
+    "committer": {
+      "email": "kristjan@causes.com",
+      "name": "Kristjan"
+    }
+  },
+  {
+    "id": "942283b00cb29d8659a846bae36c620911b27679",
+    "message": "Free the *exact* job from a hash.\n\nThis fixes a bug where a peek free which copies a job doesn't end up\nunregistering the original job.",
+    "date": 1213254604,
+    "files": [
+      "job.c"
+    ],
+    "committer": {
+      "email": "dustin@spy.net",
+      "name": "Dustin Sallings"
+    }
+  },
+  {
+    "id": "2f2bac57c36f1e64f569d64dc682d02c64be1180",
+    "message": "Fix segfault bug in the kick command.\n\nThis crash happens if you issue \"kick N\" in a tube with no buried jobs and\nfewer than N delayed jobs while another tube has at least one delayed job.",
+    "date": 1209426420,
+    "files": [
+      "prot.c"
+    ],
+    "committer": {
+      "email": "kr@causes.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "60c0cb72ec50f9b4ed072d753ae134ee1d9f3159",
+    "message": "Properly ref count tubes; fixes crash.\n\nSee\nhttp://groups.google.com/group/beanstalk-talk/browse_thread/thread/fab6a15697b01edb\nfor the initial bug report.",
+    "date": 1208380432,
+    "files": [
+      "job.c"
+    ],
+    "committer": {
+      "email": "kr@causes.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "e40c07b8ff248129b018534e1828cc9889933d68",
+    "message": "Fix a bug in option parsing.",
+    "date": 1196123271,
+    "files": [
+      "beanstalkd.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "e1e0abdd65ffaa439b47100261d3f21286d63f11",
+    "message": "Fix memory leak described in bug #915.\n\nIf a job timed out while the ready queue was full, that job was\nleaked. This is now fixed.",
+    "date": 1194827964,
+    "files": [
+      "beanstalkd.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "992d7a3da339a49fb47dc4c059a4e26e8981a525",
+    "message": "Bugfix with closing a busy, waiting connection.\n\nBe sure to process reserved jobs after removing the connection from\nany list it is in, especially the waiting list.\n\nThere was a problem while closing a connection that both has reserved\njobs and is waiting for a job. Processing the reserved jobs before\nremoving the closing connection from the wait list (i.e. in the wrong\norder) was causing us to try to assign a reserved job to the same\nconnection that is in the process of being closed, possibly failing to\nassign a job to another valid connection, closing this connection\ntwice, and corrupting the stats.",
+    "date": 1194470869,
+    "files": [
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "60b790387b54b3ee56ae33dc92a897785a73b12c",
+    "message": "Bug #882 - put uptime in beanstalk stats.",
+    "date": 1194465425,
+    "files": [
+      "beanstalkd.h",
+      "beanstalkd.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "11ef0b932b715bf1f4bc8a07517562bab0f6a093",
+    "message": "Workaround for libevent strangeness. See comment.\n\nAlso for bug #587.",
+    "date": 1194419745,
+    "files": [
+      "beanstalkd.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "ec812a1e2435cf8909d67f446300324ceaf1649c",
+    "message": "Be more graceful with too many connections.\n\nFixes bug #587.",
+    "date": 1194419468,
+    "files": [
+      "beanstalkd.c",
+      "net.h",
+      "net.c",
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "516f4ddd4f8ac43a3bc108f9e378988cbde7715d",
+    "message": "Add a release command. Fixes bug #650.",
+    "date": 1191288424,
+    "files": [
+      "beanstalkd.h",
+      "beanstalkd.c",
+      "conn.h"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "99add0f44f830a870c954f5179db04dcdfc773fd",
+    "message": "Bug #648 - reserve more than one job at a time.",
+    "date": 1191282828,
+    "files": [
+      "job.h",
+      "beanstalkd.c",
+      "reserve.h",
+      "job.c",
+      "conn.h",
+      "conn.c",
+      "reserve.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "8b2df8addad391844ed3fed484556eedb74c1831",
+    "message": "Bugfix: include the job body size in the response.",
+    "date": 1190847214,
+    "files": [
+      "prot.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "6f8d34ae5f2dc96549f8e389f14dedf12ed822a4",
+    "message": "Bugfix for current connection count stat.",
+    "date": 1190785911,
+    "files": [
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "235b8e66aac3b97f7c7d68d744a7e6b5c51a629f",
+    "message": "Fix a name and a bug.\n\nFunction conn_list_empty_p() should have been conn_list_any_p().\n\nNewly-allocated conns should be empty lists, as should newly-removed\nconns. So set their prev and next pointers to themselves.",
+    "date": 1190762988,
+    "files": [
+      "prot.c",
+      "conn.h",
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "42ee60603b9340491b5130ec12c37132daa80975",
+    "message": "Collect most stats. This is for bug #595.",
+    "date": 1190760925,
+    "files": [
+      "beanstalkd.c",
+      "conn.h",
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "85f8c716c700ae4fe9381325cce622253fc03510",
+    "message": "Bugfixes for closing and setting up connections.\n\n1. Remove a connection from the wait queue when we close it. This\nrequires a doubly-linked list.\n\n2. Always set the handler and event_add() new connections, even if\nwe're reusing the event struct from a previous connection that had the\nsame event mask.",
+    "date": 1190709133,
+    "files": [
+      "beanstalkd.c",
+      "prot.c",
+      "net.h",
+      "conn.h",
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "07846f308b2df0e421fd316079f76e51bd23153e",
+    "message": "Fix a bug transferring job data.\n\nWe must reset the data_xfer value or the job can never be transferred\nmore than once.",
+    "date": 1190701105,
+    "files": [
+      "beanstalkd.c",
+      "prot.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "6ea4e1855d29dc92b988df76ac1635ee79c01603",
+    "message": "Hook up the delete command and fix a bug.\n\nIf we read in a complete command as the trailing bytes of another command, be\nsure to execute it.\n\nPreallocate connection structs and keep a list of them. That way it's easy to\ntell if a given conn pointer is valid or has been freed.",
+    "date": 1190686611,
+    "files": [
+      "beanstalkd.h",
+      "beanstalkd.c",
+      "prot.c",
+      "conn.h",
+      "conn.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "6aa01193f00fbe9cbc0276d7d456d07aa8ab0971",
+    "message": "Queue up waiting connections and give them jobs.\n\nPart of bug #583. Need to make connections block when they try to reserve a job\nfrom an empty queue. When a job comes in, see if there are any waiting\nconnections and serve them.",
+    "date": 1190662420,
+    "files": [
+      "beanstalkd.c",
+      "conn.h"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "7ca3b341b8023d5728657b38212e7916b349a21a",
+    "message": "Simplification because of fixed-size queue.\n\nSince the queue can't grow there's no need for indirection. We can just\nallocate the min heap along with the queue header struct in one big chunk.",
+    "date": 1190444991,
+    "files": [
+      "pq.c",
+      "pq.h",
+      "tests/test_pq.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  },
+  {
+    "id": "d73e4f30bd214095e72ad174fbb7c7db4c607665",
+    "message": "Unit tests and bug fixes for the priority queue.",
+    "date": 1190444674,
+    "files": [
+      "job.h",
+      "pq.c",
+      "pq.h",
+      "tests/test_job.c",
+      "job.c",
+      "tests/test_pq.c"
+    ],
+    "committer": {
+      "email": "kr@essembly.com",
+      "name": "Keith Rarick"
+    }
+  }
+]

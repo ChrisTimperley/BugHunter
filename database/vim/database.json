@@ -1,0 +1,321 @@
+[
+  {
+    "files": [
+      "src/eval.c",
+      "src/version.c"
+    ],
+    "date": 1459197890,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.1681\nProblem:    Coverity warns for fixed size buffer length (false positive).\nSolution:   Add a check for the name length.",
+    "id": "ef9d9b94a8803c405884bb6914ed745ede57c596"
+  },
+  {
+    "files": [
+      "src/channel.c",
+      "src/version.c"
+    ],
+    "date": 1459167641,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.1667\nProblem:    Win32: waiting on a pipe with fixed sleep time.\nSolution:   Start with a short delay and increase it when looping.",
+    "id": "84e1d2b21a424f2687b61daaf84f5fc4f1ab0abe"
+  },
+  {
+    "files": [
+      "src/testdir/test_alot.vim",
+      "src/testdir/test_help_tagjump.vim",
+      "src/version.c"
+    ],
+    "date": 1458056139,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.1571\nProblem:    No test for \":help\".\nSolution:   Add a test for what 7.4.1568 fixed. (Higashi Higashi)",
+    "id": "8e15ffcde757ffc6cfe8b5e384948b3278e9af33"
+  },
+  {
+    "files": [
+      "src/testdir/test_channel.vim",
+      "src/version.c"
+    ],
+    "date": 1457449615,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.1515\nProblem:    Channel test is a bit flaky.\nSolution:   Instead of a fixed sleep time wait until an expression evaluates\n            to true.",
+    "id": "9fe885e49ade94e6277db0dd18a5bbc1c94c60c4"
+  },
+  {
+    "files": [
+      "src/testdir/test_increment.vim",
+      "src/version.c"
+    ],
+    "date": 1454619213,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.1259\nProblem:    No test for what patch 7.3.414 fixed.\nSolution:   Add a test. (Elias Diem)",
+    "id": "3fc3e14282c182c046d1335f3d576bc0eeb605c5"
+  },
+  {
+    "files": [
+      "src/testdir/Make_ming.mak",
+      "src/version.c"
+    ],
+    "date": 1448997566,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.947\nProblem:    Test_listchars fails with MingW. (Michael Soyka)\nSolution:   Add the test to the ones that need the fileformat fixed.\n            (Christian Brabandt)",
+    "id": "5311c02f25eed8f34e8a80becb98e86264f371c3"
+  },
+  {
+    "files": [
+      "src/testdir/test39.ok",
+      "src/version.c",
+      "src/testdir/test39.in"
+    ],
+    "date": 1438096593,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.802\nProblem:    Using \"A\" in Visual mode while 'linebreak' is set is not tested.\nSolution:   Add a test for this, verifies the problem is fixed. (Ingo Karkat)",
+    "id": "52e21cf057e313a867b0f529c8e4d52ad5ae740d"
+  },
+  {
+    "files": [
+      "src/testdir/test55.ok",
+      "src/structs.h",
+      "src/eval.c",
+      "src/testdir/test55.in",
+      "src/version.c"
+    ],
+    "date": 1428934598,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "patch 7.4.698\nProblem:    Various problems with locked and fixed lists and dictionaries.\nSolution:   Disallow changing locked items, fix a crash, add tests. (Olaf\n            Dabrunz)",
+    "id": "9bc174b69d2775b0f27ed74bf372608d18c9f3d4"
+  },
+  {
+    "files": [
+      "src/os_win32.c",
+      "src/version.c"
+    ],
+    "date": 1386424090,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "updated for version 7.4.113\nProblem:    MSVC static analysis gives warnings.\nSolution:   Avoid the warnings and avoid possible bugs. (Ken Takata)",
+    "id": "73c61633b6c0387333f208afb11a0a00bed09ef0"
+  },
+  {
+    "files": [
+      "src/if_python.c",
+      "src/if_py_both.h",
+      "src/version.c",
+      "src/if_python3.c"
+    ],
+    "date": 1371985878,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "updated for version 7.3.1228\nProblem:    Python: various inconsistencies and problems.\nSolution:   StringToLine now supports both bytes() and unicode() objects.\n            Make function names consistant.  Fix memory leak fixed in\n            StringToLine. (ZyX)",
+    "id": "808c2bc8bf435917b792e172a22dc5f8c0e7066a"
+  },
+  {
+    "files": [
+      "src/screen.c",
+      "src/version.c"
+    ],
+    "date": 1371330030,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "updated for version 7.3.1203\nProblem:    Matches from matchadd() might be highlighted incorrectly when they\n            are at a fixed position and inserting lines. (John Szakmeister)\nSolution:   Redraw all lines below a change if there are highlighted matches.\n            (idea by Christian Brabandt)",
+    "id": "4ce239b0b167cbbce1fbbaeced2133bcd69ee90e"
+  },
+  {
+    "files": [
+      "src/if_python.c",
+      "src/if_py_both.h",
+      "src/version.c",
+      "src/if_python3.c"
+    ],
+    "date": 1369910439,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "updated for version 7.3.1059\nProblem:    Python: Using fixed size buffers.\nSolution:   Python patch 18: Use python's own formatter. (ZyX)",
+    "id": "1a3b56953e22f9e50d34c50edb5c24292741eb3d"
+  },
+  {
+    "files": [
+      "src/version.c",
+      "src/regexp_nfa.c"
+    ],
+    "date": 1369340715,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "updated for version 7.3.1006\nProblem:    NFA engine not used for \"\\_[0-9]\".\nSolution:   Enable this, fixed in patch 1005.",
+    "id": "307d10a2fb15879cf34f7ecfdcaca551991014a8"
+  },
+  {
+    "files": [
+      "src/fileio.c",
+      "runtime/doc/todo.txt"
+    ],
+    "date": 1281285966,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed: on MS-Windows sometimes files with number 4913 or higher are left\nbehind.",
+    "id": "3479c5dc48b192a7c8c2089c4ba0de5538ea8129"
+  },
+  {
+    "files": [
+      "src/ex_docmd.c",
+      "src/structs.h",
+      "runtime/doc/todo.txt"
+    ],
+    "date": 1281193641,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed: on MS-Windows completion of shell commands didn't work.",
+    "id": "c0cba4d9b1d8a5218fd46c4ad4659177deebe503"
+  },
+  {
+    "files": [
+      "src/ops.c",
+      "runtime/doc/todo.txt"
+    ],
+    "date": 1280591969,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed: CTRL-R in Insert mode doesn't insert composing characters.",
+    "id": "3b1c48569d98597ac0539609c9a922bedba0e081"
+  },
+  {
+    "files": [
+      "src/misc1.c"
+    ],
+    "date": 1279573887,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed: crash with \":find \" completion, using uninitialized count.",
+    "id": "9e193ac7321e566b8157ed0e4204a34fd48ff6ab"
+  },
+  {
+    "files": [
+      "src/ex_cmds.c",
+      "runtime/doc/pattern.txt",
+      "runtime/doc/version7.txt",
+      "runtime/doc/todo.txt",
+      "runtime/doc/options.txt",
+      "runtime/doc/mbyte.txt",
+      "runtime/doc/eval.txt",
+      "src/normal.c"
+    ],
+    "date": 1278762733,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed \":s\" message.  Docs updates.",
+    "id": "0bc380a96b87ee02b01a7d4677ad4d973563a84e"
+  },
+  {
+    "files": [
+      "src/ex_cmds.c",
+      "src/syntax.c",
+      "runtime/doc/todo.txt",
+      "src/window.c",
+      "src/buffer.c",
+      "src/proto/syntax.pro"
+    ],
+    "date": 1275833469,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed: after \":ownsyntax perl\" and \":e\" syntax was cleared in other window.",
+    "id": "fd29f4628ed53eef3d96a09ad2d0fa504edfcdfc"
+  },
+  {
+    "files": [
+      "src/window.c",
+      "src/eval.c",
+      "runtime/doc/eval.txt",
+      "src/syntax.c"
+    ],
+    "date": 1275830470,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed memory leak in \":ownsyntax\".",
+    "id": "1950c3529b16acd21ee5770b422d633f24d192a3"
+  },
+  {
+    "files": [
+      "src/structs.h",
+      "src/Make_mvc.mak",
+      "src/undo.c",
+      "runtime/doc/todo.txt"
+    ],
+    "date": 1275415088,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Don't use pointers to store numbers, use a union.\nFixed MSVC makefile use of /Wp64 flag.",
+    "id": "83d09bb85e471135222f79b15de549f435e73fae"
+  },
+  {
+    "files": [
+      "runtime/doc/tags",
+      "src/netbeans.c",
+      "src/configure.in",
+      "src/sha256.c",
+      "runtime/doc/options.txt",
+      "src/config.h.in",
+      "src/structs.h",
+      "src/auto/configure",
+      "runtime/doc/todo.txt",
+      "runtime/doc/editing.txt",
+      "src/blowfish.c",
+      "src/option.c"
+    ],
+    "date": 1274121175,
+    "committer": {
+      "email": "Bram@vim.org",
+      "name": "Bram Moolenaar"
+    },
+    "message": "Fixed encryption big/little endian test.\nUse uint32_t to avoid crash on 64 bit machines.\nAdded error numbers for Blowfish errors.\nFixed the tiny version not building.",
+    "id": "0bbabe80800bd80b245b6e8b2fff4d3a908c5ded"
+  }
+]

@@ -1,3 +1,4 @@
+from utility import *
 import shutil
 import git
 import json
@@ -199,7 +200,7 @@ class Fix(object):
         if self.modifies_header_file():
             print("Skipping fix: %s (modifies header file)" % self.identifier())
             return
-        if self.modifiers_multiple_source_files():
+        if self.modifies_multiple_source_files():
             print("Skipping fix: %s (modifiers multiple source files)" % self.identifier())
             return
         print("preprocessing fix: %s" % self.identifier())
