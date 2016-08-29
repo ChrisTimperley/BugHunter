@@ -5,6 +5,11 @@ import os.path
 import cgum.program
 import cgum.diff
 
+# Any commit containing a bug marker will be treated as a bug fix, unless the
+# commit also contains an anti-marker
+BUG_MARKERS = ['fixed', 'bug']
+BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
+
 def compile_source(src_dir, threads=1):
     # attempt to configure
     has_file = lambda f: os.path.exists(os.path.join(src_dir, f))

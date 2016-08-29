@@ -9,11 +9,6 @@ DESCRIPTION = "BugHunter - a small, but mighty bug mining tool for extracting" +
     " and analysing bugs from offline Git repositories for projects using C;" + \
     " source code available at [http://github.com/ChrisTimperley/BugHunter]."
 
-# Any commit containing a bug marker will be treated as a bug fix, unless the
-# commit also contains an anti-marker
-BUG_MARKERS = ['fixed', 'bug']
-BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog='bughunter', description=DESCRIPTION)
     parser.add_argument('mode', type=str, action='store',\

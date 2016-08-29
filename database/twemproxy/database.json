@@ -1,0 +1,220 @@
+[
+  {
+    "files": [
+      "src/proto/nc_redis.c"
+    ],
+    "date": 1470204086,
+    "committer": {
+      "name": "GitHub",
+      "email": "noreply@github.com"
+    },
+    "message": "fix a memory leak bug for mset command",
+    "id": "558e0d40ad79f423c4784565648e6c83cf035777"
+  },
+  {
+    "files": [
+      "src/proto/nc_redis.c"
+    ],
+    "date": 1440422820,
+    "committer": {
+      "name": "Tom Dalton",
+      "email": "tom.dalton@fanduel.com"
+    },
+    "message": "Fix parsing bug when error body contains no spaces",
+    "id": "ee48b75e7898ef3dfe2eec2c0ff6356afe8e5521"
+  },
+  {
+    "files": [
+      "src/nc_util.c"
+    ],
+    "date": 1435339412,
+    "committer": {
+      "name": "Manju Rajashekhar",
+      "email": "manj@cs.stanford.edu"
+    },
+    "message": "fixed formatting",
+    "id": "6d1fc92dd27d6810c6bbc1917a3b1ec589451325"
+  },
+  {
+    "files": [
+      "src/hashkit/nc_ketama.c"
+    ],
+    "date": 1434603514,
+    "committer": {
+      "name": "Manju Rajashekhar",
+      "email": "manj@cs.stanford.edu"
+    },
+    "message": "fixed log message",
+    "id": "ea7190b2956795035ed3304665e5273cbaa13316"
+  },
+  {
+    "files": [
+      "src/proto/nc_redis.c"
+    ],
+    "date": 1432054721,
+    "committer": {
+      "name": "clark.kang",
+      "email": "clark.kang@kakao.com"
+    },
+    "message": "fix bug mset has invalid pair",
+    "id": "f1645b04fcdab568c374dca459f1ebb74a1c02ae"
+  },
+  {
+    "files": [
+      "src/proto/nc_redis.c"
+    ],
+    "date": 1425487489,
+    "committer": {
+      "name": "clark.kang",
+      "email": "clark.kang@kakao.com"
+    },
+    "message": "fix redis parse rsp bug",
+    "id": "4d5ff8f24ad3f6502c067777f0972b5569892edd"
+  },
+  {
+    "files": [
+      "src/proto/nc_redis.c",
+      "src/proto/nc_memcache.c"
+    ],
+    "date": 1419298041,
+    "committer": {
+      "name": "Manju Rajashekhar",
+      "email": "manj@cs.stanford.edu"
+    },
+    "message": "fixed formatting",
+    "id": "0da2d99d1451e72f260d72d59792a5f8338f697c"
+  },
+  {
+    "files": [
+      "src/nc_connection.h",
+      "src/nc_connection.c",
+      "src/proto/nc_proto.h",
+      "src/nc_server.c",
+      "src/nc_request.c",
+      "src/proto/nc_redis.c",
+      "src/nc_server.h",
+      "src/nc_message.h"
+    ],
+    "date": 1418813101,
+    "committer": {
+      "name": "Arne Claus",
+      "email": "arne.claus@trivago.com"
+    },
+    "message": "Adjusted code based on recommedations:\n- server_conn_init moved to redis plugin (redis_conn_init)\n- renamed conn->initialize to conn->init\n- fixed typos and comments\n- removed a now obsolete check from #217 in nc_request.c",
+    "id": "74d0bb1183eb25274b362473daf4a2132838f643"
+  },
+  {
+    "files": [
+      "src/nc_server.c"
+    ],
+    "date": 1418717924,
+    "committer": {
+      "name": "Arne Claus",
+      "email": "arne.claus@trivago.com"
+    },
+    "message": "- Fixed select message type\n- Added log notice for triggering a select\n- Fixed a missing prototype warning",
+    "id": "cb9f6418618d82cdaabfe38126be2426256218f3"
+  },
+  {
+    "files": [
+      "src/nc_message.c",
+      "src/nc_server.c"
+    ],
+    "date": 1404482201,
+    "committer": {
+      "name": "idning",
+      "email": "idning@gmail.com"
+    },
+    "message": "fix bug on msg_fragment_argx when key_len=mbuf_size-1",
+    "id": "68860c98df3c41fa966e94aac883faddc30771fb"
+  },
+  {
+    "files": [
+      "scripts/test_mget.py",
+      "src/proto/nc_redis.c",
+      "src/nc_message.c",
+      "src/proto/nc_proto.h"
+    ],
+    "date": 1404481969,
+    "committer": {
+      "name": "idning",
+      "email": "idning@gmail.com"
+    },
+    "message": "fix multi DEL, a bug on parse key, and remove assert on conn_sendv",
+    "id": "3064dc29e01646ba4eb4715946610cbaf6c735cd"
+  },
+  {
+    "files": [
+      "src/nc_string.c"
+    ],
+    "date": 1388930780,
+    "committer": {
+      "name": "andy",
+      "email": "andyqzb86@gmail.com"
+    },
+    "message": "fix the bug in string_compare",
+    "id": "a6b28c610d386837da24a59f0768b89a4ad22265"
+  },
+  {
+    "files": [
+      "src/nc_response.c"
+    ],
+    "date": 1382132788,
+    "committer": {
+      "name": "John Irwin",
+      "email": "jirwin@tagged.com"
+    },
+    "message": "Refixed in a simpler way by just closing the server connection on any stray response",
+    "id": "40872afac7d56959d9af5ef9849c7f5da8d63fef"
+  },
+  {
+    "files": [
+      "src/proto/nc_redis.c"
+    ],
+    "date": 1359562360,
+    "committer": {
+      "name": "ferenyx",
+      "email": "tlawrence85@gmail.com"
+    },
+    "message": "Fix off-by-one bug when ensuring that there is at least 1 byte to parse for the number of keys in an EVAL/EVALSHA invocation.",
+    "id": "319dd87043ce244a2ed20d06ee9061682da8715f"
+  },
+  {
+    "files": [
+      "src/proto/nc_redis.c"
+    ],
+    "date": 1359119150,
+    "committer": {
+      "name": "ferenyx",
+      "email": "tlawrence85@gmail.com"
+    },
+    "message": "Fix bug in redis parsing protocol when we're parsing the arguments to the EVAL/EVALSHA command.",
+    "id": "9fc3606b4f6b0599d573e3b911ed90b6bab396f1"
+  },
+  {
+    "files": [
+      "src/nc_kqueue.c",
+      "src/nc_event.h"
+    ],
+    "date": 1358977914,
+    "committer": {
+      "name": "ferenyx",
+      "email": "tlawrence85@gmail.com"
+    },
+    "message": "Fix bug in nc_kqueue.\n\nBecause of the way kqueue works, the returned event list can contain multiple entries for one connection/fd (e.g. one kevent for EVFILT_READ and one kevent for EVFILT_WRITE). This can result in a segfault where you first process the EVFILT_READ, decide that the client is sending bad data and close the connection (and freeing resources). Subsequently when you return to process the next kevent (the EVFILT_WRITE), you attempt to use the (freed) conn object pointed to by udata which fails.\n\nThe way we fix this is to walk the list of kevents waiting to be processed and zeroing out events that belong to connections we're about to close.",
+    "id": "9ade3ae94cf3badc3ccdf11c129b867d71c381c3"
+  },
+  {
+    "files": [
+      "src/nc_response.c",
+      "src/nc_message.c"
+    ],
+    "date": 1343722722,
+    "committer": {
+      "name": "Manju Rajashekhar",
+      "email": "manj@twitter.com"
+    },
+    "message": "close server connection on a stray response and send \"SERVER_ERROR Invalid argument\" to all outstanding client requests on the given server connection. Bug found by yashh and bmatheny",
+    "id": "a799fb906a224ce9f3d5a771605127370d8ecd3c"
+  }
+]
