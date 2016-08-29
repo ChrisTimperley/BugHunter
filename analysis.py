@@ -24,7 +24,7 @@ def analyse(fix, db_dir):
         print("Skipping fix: %s (modifies header file)" % fix.identifier())
         return False
     if fix.modifies_multiple_source_files():
-        print("Skipping fix: %s (modifiers multiple source files)" % fix.identifier())
+        print("Skipping fix: %s (modifies multiple source files)" % fix.identifier())
         return False
     if not fix.is_preprocessed(db_dir):
         print("skipping fix: %s (not preprocessed)" % fix.identifier())
@@ -41,19 +41,33 @@ def analyse(fix, db_dir):
         print("skipping fix: %s (no diff; added or removed file)" % fix.identifier())
         return False
 
-    # Q) Were any function names changed?
+    # Find the affected nodes
+    deleted_nodes = \
+        [deletion.deleted(ast_faulty, ast_fixed) for deletion in ast_diff.deletions()]
+    inserted_nodes = \
+        [insertion.inserted(ast_faulty, ast_fixed) for insertion in ast_diff.insertions()]
+    updated_nodes = \
+        [update.updated(ast_faulty, ast_fixed) for update in ast_diff.updates()]
+    removed_nodes = \
+        [removal.removed(ast_faulty, ast_fixed) for removal in ast_diff.removals()]
+    moved_nodes = \
+        [move.to(ast_faulty, ast_fixed) for move in ast_diff.moves()]
+    affected_nodes = \
+        deleted_nodes + inserted_nodes + updated_nodes + removed_nodes + moved_nodes
 
-    # Q) Were any function parameters changed?
-    # - for each edit, are any of its ancestors FunctionParameter?
-    #any(isinstance(FunctionParameter, an) for an in affected.ancestors())
+    # Q) Were any function parameters added, removed, or changed?
+    any_function_parameters_modified = \
+        any(isinstance(FunctionParameter, edit.ancestors()) for node in affected_nodes)
 
     # Q) Were any functions added?
     any_functions_added = \
-        any(isinstance(FunctionDefinition, edit.added()) for edit in ast_diff.insertions())
+        any(isinstance(FunctionDefinition, added) for added in inserted_nodes)
 
     # Q) Were any functions removed?
     any_functions_removed = \
-        any(isinstance(FunctionDefinition, edit.deleted()) for edit in ast_diff.deletions())
+        any(isinstance(FunctionDefinition, deletion) for deletion in deleted_nodes)
+
+    # Q) Were any statements removed?
 
     # Put together all the analysis
 
