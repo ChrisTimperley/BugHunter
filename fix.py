@@ -11,6 +11,8 @@ import cgum.diff
 BUG_MARKERS = ['fixed', 'bug']
 BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
 
+# Compiles the project rooted at a given directory, across a specified number
+# of threads
 def compile_source(src_dir, threads=1):
     # attempt to configure
     has_file = lambda f: os.path.exists(os.path.join(src_dir, f))
@@ -38,7 +40,7 @@ def compile_source(src_dir, threads=1):
     make_cmd = "make" if configured else "make 'CFLAGS=-save-temps' -j%d" % threads
     assert exec_from_dir('make clean && %s' % make_cmd, src_dir), "failed to make"
 
-# Preprocesses a given set of files belonging to a given source code directory
+# Preprocesses a given source file belonging to a given source code directory
 # and writes the result to a specified directory
 def preprocess_files(files, src_dir, dest_dir, threads=1):
     compile_source(src_dir, threads=threads)
