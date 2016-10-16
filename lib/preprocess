@@ -1,0 +1,11 @@
+#!/bin/bash
+#
+# Used by the host to issue a pre-process request, which is then forwarded onto
+# the appropriate Docker instance, via this script. The pre-processed files,
+# together with all other compilation artefacts, are left in the repository
+# directory. It is the responsibility of the host to fetch the particular
+# pre-processed in which it is interested in, and not that of this script.
+#
+# USAGE:
+# ./preprocess [repository-url] [commit-short-sha] [dockerfile]
+#
