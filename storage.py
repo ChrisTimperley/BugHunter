@@ -19,3 +19,9 @@ class Storage(object):
     # Copies the file from the provided source into this storage.
     def add_source_file_from(self, repo, fix, version, fn, src_fn):
         pass
+
+class FlatStorage(object):
+    pass
+
+class ZippedStorage(object):
+    pass
