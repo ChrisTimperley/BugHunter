@@ -1,7 +1,8 @@
 #!/bin/bash
 #
 # Preprocesses the code at a given path, relative to the (shared) repositories
-# directory.
+# directory. This script is intended to be executed on a Docker instance, and
+# not on the host machine (lib/preprocess should be used for that purpose).
 #
 fail_msg(){
   echo "FAILED: $1"
