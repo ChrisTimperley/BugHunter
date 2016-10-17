@@ -2,8 +2,9 @@ import hashlib as hsh
 
 # Used to provide access to a Git repository and its mined edits
 class Repository(object):
-    def __init__(self, storage, address):
+    def __init__(self, storage, scanner, address):
         self.__storage = storage
+        self.__scanner = scanner
         self.__address = address
 
     # Returns a short, file-name friendly identifier for this repository.
@@ -18,7 +19,8 @@ class Repository(object):
     def repository(self):
         return self.__storage.git(self)
 
-    # Returns a list of all bug fixes for this repository, using a provided
-    # scanner to generate them (if they aren't already saved to disk).
-    def fixes(self, scanner):
-        return self.__storage.databaseFile(self).read(scanner)
+    # Returns a list of all bug fixes for this repository, using the scanner
+    # provided to this repository to generate them (if they aren't already
+    # saved to disk).
+    def fixes(self):
+        return self.__storage.database(self).read(self.__scanner)

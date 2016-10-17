@@ -1,3 +1,5 @@
+import fix
+
 # Responsible for traversing through a Git repository and finding all bug
 # fixes.
 #
@@ -9,7 +11,6 @@ class Scanner(object):
 
     # Determines whether a given commit is a fix
     def is_fix(self, commit):
-        files = XYZ
         msg = commit.message.strip().lower()
         files = list(commit.stats.files.keys())
         return  any(s in msg for s in Scanner.BUG_MARKERS) and \
@@ -18,5 +19,6 @@ class Scanner(object):
 
     # Finds all bug fixes within a given repository
     def scan(self, repo):
+        print("scanning for fixes: %s" % repo.address())
         commits = repo.repository().iter_commits()
-        return [Fix(c) for c in commits if self.is_fix(c)]
+        return [fix.Fix(c) for c in commits if self.is_fix(c)]

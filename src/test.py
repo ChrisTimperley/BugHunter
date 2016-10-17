@@ -5,4 +5,5 @@ bh = BugHunter()
 repo = bh.repository("https://github.com/stedolan/jq")
 git = repo.repository()
 
-print(repo.id())
+fixes = repo.fixes()
+print(fixes)

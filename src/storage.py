@@ -3,6 +3,8 @@ import cgum
 import git
 import hashlib
 import os
+import json
+import fix
 
 # The Storage class is responsible for abstracting away the details of how and
 # where BugHunter's artefacts are stored, including pre-processed, parsed, and
@@ -16,19 +18,19 @@ class Storage(object):
 
     # Returns a handler for a given diff
     def diff(self, repo, fix, fn):
-        return DiffFile(repo, fix, fn)
+        return DiffFile(self, repo, fix, fn)
 
     # Returns a handler for the AST of a given (pre-processed) file
     def ast(self, repo, fix, ver, fn):
-        return AstFile(repo, fix, ver, fn)
+        return AstFile(self, repo, fix, ver, fn)
 
     # Returns a handler for a given (pre-processed) source code file
     def source(self, repo, fix, ver, fn):
-        return SourceFile(repo, fix, ver, fn)
+        return SourceFile(self, repo, fix, ver, fn)
 
     # Returns a handler for a given database file.
     def database(self, repo):
-        return DatabaseFile(repo)
+        return DatabaseFile(self, repo)
 
     # Returns a GitPython repository object for a given repository. Clones the
     # repository to disk, if necessary.
@@ -61,45 +63,56 @@ class Storage(object):
     def writer(self, artefact):
         loc = self.locator(artefact)
         utility.ensure_dir(os.path.dirname(loc))
-        return open('w', loc)
+        return open(loc, 'w')
 
     # Returns a readable file for a given artefact.
     def reader(self, artefact):
         loc = self.locator(artefact)
         if not self.exists(artefact):
             raise Error("No physical file found on disk for artefact at location: %s" % loc)
-        return open('r', loc)
+        return open(loc, 'r')
         
 # Provides access to the database of mined bug fixes for a particular repo
 class DatabaseFile(object):
 
     # Constructs a new database file for a given Git repository.
-    def __init__(self, repository):
+    def __init__(self, storage, repository):
+        self.__storage = storage
         self.__repository = repository
+
+    # Returns the repository that this file belongs to
+    def repository(self):
+        return self.__repository
 
     # Determines whether this file exists on disk.
     def exists(self):
-        return storage.exists(self)
+        return self.__storage.exists(self)
 
     # Returns a list of the bug fixes contained within this database file.
     # If the file doesn't exist, then the provided Scanner is used to generate
     # it.
     def read(self, scanner):
         if not self.exists():
-            fixes = scanner.scan(self)
+            fixes = scanner.scan(self.repository())
             self.write(fixes)
         else:
-            f = storage.reader(self)
+            f = self.__storage.reader(self)
             fixes = json.load(f)
-            fixes = [Fix.from_json(fx) for fx in fixes]
+            fixes = [fix.Fix.from_json(fx) for fx in fixes]
             f.close()
         return fixes
 
     # Writes a list of bug fixes to this database file
     def write(self, fixes):
-        f = storage.writer(self)
-        json.dump([Fix.to_json(fx) for fx in fixes], f, indent=2)
-        f.close()
+        f = self.__storage.writer(self)
+        try:
+            json.dump([fix.Fix.to_json(fx) for fx in fixes], f, indent=2)
+            f.close()
+        # destroy any partially written files
+        except:
+            f.close()
+            os.isfile(f.name) and os.remove(f.name)
+            raise
 
 class SimpleDiffFile(object):
 
