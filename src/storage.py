@@ -1,6 +1,10 @@
+import cgum
+
 # The Storage class is responsible for abstracting away the details of how and
 # where BugHunter's artefacts are stored, including pre-processed, parsed, and
 # differenced files.
+#
+# TODO: Add zipped storage
 class Storage(object):
 
     # Returns a handler for a given (pre-processed) source code file
@@ -16,16 +20,22 @@ class Storage(object):
         raise NotImplementedError("No 'ast' implemented by this Storage class")
 
 class FlatStorage(object):
-    pass
+    
+    def source(self, repo, fix, ver, fn):
+        return SourceFile(repo, fix, ver, fn)
 
-class ZippedStorage(object):
-    pass
+    # Reads a file at a given location within this storage to a string
+    def read_at(self, loc):
+        s
+        pass
 
 class DiffFile(object):
     def __init__(self, repo, fix, fn):
         self.__repo = repo
         self.__fix = fix
         self.__fn = fn
+
+    def identifier(self):
 
     # Reads the contents of this difference file to a string and returns it
     def read(self):
@@ -39,8 +49,10 @@ class DiffFile(object):
     def diff(self):
         raise NotImplementedError("No 'diff' implemented by this DiffFile handler")
 
-class ZippedDiffFile(object):
-    pass
+class SimpleDiffFile(object):
+
+    def read(self):
+        return storage.read_at(self.location())
 
 class SourceFile(object):
     def __init__(self, repo, fix, version, fn):
@@ -49,6 +61,10 @@ class SourceFile(object):
         self.__version = version
         self.__fn = fn
 
+    # Checks whether this source file already exists within storage
+    def exists(self):
+        pass
+
     # Reads the contents of this source file to a string and returns it
     def read(self):
         raise NotImplementedError("No 'read' implemented by this SourceFile handler")
@@ -56,3 +72,20 @@ class SourceFile(object):
     # Writes to this source file using the contents of a given file
     def write_from(self, source_fn):
         raise NotImplementedError("No 'write_from' implemented by this SourceFile handler")
+
+class AstFile(object):
+    def __init__(self, repo, fix, version, fn):
+        self.__repo = repo
+        self.__fix = fix
+        self.__version = version
+        self.__fn = fn
+
+    def exists(self):
+
+    def ast(self):
+        if not self.exists():
+            f = XSDSAFSAFAS
+            src = storage.source(self.repo, self.fix, self.version, self.fn)
+            cgum.link.parse_to_file(src, f)
+            f.close()
+        return cgum.Program.from_json_file(storage.read_as_file(self))
