@@ -1,7 +1,4 @@
 import json
-import os.path
-import cgum.program
-import cgum.diff
 
 class FixVersion(object):
 
@@ -78,32 +75,14 @@ class Fix(object):
     def modifies_multiple_source_files(self):
         return len(list(self.source_files())) > 1
 
-    # Returns the AST for the faulty version of a given file for this fix
-    def ast_faulty(self, fn, db_dir):
-        fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'ast/faulty'),\
-                          ("%s.ast.json" % fn))
-        if os.path.isfile(fn):
-            return cgum.program.Program.from_file(fn)
-        else:
-            return None
+    def before(self):
+        raise NotImplementedError("before")
 
-    # Returns the AST for the fixed version of a given file for this fix
-    def ast_fixed(self, fn, db_dir):
-        fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'ast/fixed'),\
-                          ("%s.ast.json" % fn))
-        if os.path.isfile(fn):
-            return cgum.program.Program.from_file(fn)
-        else:
-            return None
+    def after(self):
+        raise NotImplementedError("after")
 
-    # Returns the diff for a given file from this fix
-    def diff(self, fn, db_dir):
-        fn = os.path.join(os.path.join(self.fix_dir(db_dir), 'diff'),\
-                          ("%s.diff.json" % fn))
-        if os.path.isfile(fn):
-            return cgum.diff.Diff.from_file(fn)
-        else:
-            return None
+    def diff(self, fn):
+        raise NotImplementedError("diff")
 
     # Returns a JSON description of this fix, in the form of a Dict
     def to_json(self):
