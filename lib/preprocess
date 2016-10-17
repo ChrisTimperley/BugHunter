@@ -7,5 +7,23 @@
 # pre-processed in which it is interested in, and not that of this script.
 #
 # USAGE:
-# ./preprocess [repository-url] [commit-short-sha] [dockerfile]
+# ./preprocess [repository-location] [dockerfile-location]
 #
+this_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
+support_dir="$this_dir/../docker"
+
+repository=$1
+#dockerfile=$2
+#dockerimage="bughunter:$1"
+dockerimage=$2
+
+# Ensure the image has been built from the dockerfile
+#docker build -t $dockerimage "$2" || exit 1
+
+# Mount the repository at /repository, and the pre-processing script at
+# /bughunter/preprocess, then execute the preprocess executable
+docker run --rm \
+  -v "$repository":/repository \
+  -v "$support_dir":/bughunter \
+  $dockerimage \
+  /bin/bash /bughunter/preprocessor.sh

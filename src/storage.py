@@ -25,8 +25,8 @@ class Storage(object):
         return AstFile(self, repo, fix, ver, fn)
 
     # Returns a handler for a given (pre-processed) source code file
-    def source(self, repo, fix, ver, fn):
-        return SourceFile(self, repo, fix, ver, fn)
+    def preprocessed(self, ver, fn):
+        return SourceFile(self, ver, fn)
 
     # Returns a handler for a given database file.
     def database(self, repo):
@@ -113,6 +113,29 @@ class DatabaseFile(object):
             f.close()
             os.isfile(f.name) and os.remove(f.name)
             raise
+
+class PreprocessedFile(object):
+    def __init__(self, version, name):
+        self.__version = version
+        self.__name = name
+
+    # Determines whether this file exists on disk
+    def exists(self):
+        return self.__storage.exists(self)
+
+    # Returns the program version that this preprocessed file belongs to
+    def version(self):
+        return self.__version
+
+    # Returns the name of the original source file, relative to its
+    # repository
+    def name(self):
+        return self.__name
+
+    def readable(self):
+        if not self.exists():
+            self.__storage.preprocessor().preprocess(self.version())
+        return self.__storage.reader(self)
 
 class SimpleDiffFile(object):
 

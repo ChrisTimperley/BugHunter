@@ -6,11 +6,12 @@
 #
 
 # Fetch the provided user ID and the number of available threads
-USER_ID=$1
-THREADS=$2
+#USER_ID=$1
+#THREADS=$2
 
 reset_ownership(){
-  chown -R $USER_ID /repository
+  #chown -R $USER_ID /repository
+  return 0
 }
 
 fail(){
@@ -21,6 +22,8 @@ fail(){
 
 # Jump to the correct location
 cd /repository || fail "failed to jump to source directory"
+
+echo "Preprocessing!"
 
 # Generate configure, if necessary
 #test -f autogen.sh && ./autogen.sh || fail "autogen"
