@@ -23,23 +23,32 @@ fail(){
 # Jump to the correct location
 cd /repository || fail "failed to jump to source directory"
 
-echo "Preprocessing!"
+echo "Preprocessing wabble wabble"
 
 # Generate configure, if necessary
-#test -f autogen.sh && ./autogen.sh || fail "autogen"
-#test -f buildconf.sh && ./buildconf.sh || fail "buildconf"
-#test -f Makefile.am && autoreconf -i || fail "autoreconf"
-#
+if [ -f autogen.sh ] ; then
+  ./autogen.sh || fail "autogen"
+fi
+if [ -f buildconf.sh ] ; then
+  ./buildconf.sh || fail "buildconf"
+fi
+if [ -f Makefile.am ] ; then
+  autoreconf -i || fail "autoreconf"
+fi
+
 # Avoids Redis bugs
-#test -f Makefile && make distclean || fail "make distclean"
-#
+if [ -f Makefile ] ; then
+  make distclean || fail "make distclean"
+fi
+
 ## Attempt to configure
-#if [ -f configure ]; then
-#  ./configure "CFLAGS=-save-temps" || fail "configure"
-#  configured=0
-#else
-#  configure=1
-#fi
+if [ -f configure ]; then
+  ./configure "CFLAGS=-save-temps" || fail "configure"
+  configured=0
+else
+  configured=1
+fi
+
 #
 ## Attempt to make
 #if [ ! -f Makefile ]; then
