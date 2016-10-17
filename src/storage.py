@@ -57,14 +57,12 @@ class SimpleDiffFile(object):
         return storage.read_at(self.location())
 
     def writable_file(self, artefact):
-        loc = os.path.join(f.repo.identifier(),\
-                           f.fix.identifier(),\
-                           f.version.identifier(),\
-                           hashlib.sha1(artefact.file_name).hexdigest())
+        src_fn = hashlib.sha1(artefact.file_name).hexdigest()
+        src_fn = "%s.%s.c" % (src_fn, version.id())
+        loc = os.path.join(f.repo.id(), f.fix.id(), src_fn)
 
-        locator = ({
-            SourceFile: lambda f: [f.repo, f.fix, f.version, ]
-        }[type(artefact)])(artefact)
+        # ensure the path exists
+        return open(loc, 'w')
 
 
 class SourceFile(object):
