@@ -8,7 +8,7 @@ class Repository(object):
 
     # Returns a short, file-name friendly identifier for this repository.
     def id(self):
-        return hsh.sha1(self.__url)
+        return hsh.sha1(self.__address.encode('utf-8')).hexdigest()
 
     # Returns the remote address of this repository
     def address(self):
