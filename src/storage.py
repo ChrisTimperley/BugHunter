@@ -9,27 +9,56 @@ import os
 # TODO: Add zipped storage
 class Storage(object):
 
-    # Returns a handler for a given (pre-processed) source code file
-    def source(self, repo, fix, ver, fn):
-        raise NotImplementedError("No 'source' implemented by this Storage class")
-
     # Returns a handler for a given diff
-    def diff(self, repo, fix, fn):
-        raise NotImplementedError("No 'diff' implemented by this Storage class")
+    #def diff(self, repo, fix, fn):
+    #    raise NotImplementedError("No 'diff' implemented by this Storage class")
 
     # Returns a handler for the AST of a given (pre-processed) file
-    def ast(self, repo, fix, ver, fn):
-        raise NotImplementedError("No 'ast' implemented by this Storage class")
+    #def ast(self, repo, fix, ver, fn):
+    #    raise NotImplementedError("No 'ast' implemented by this Storage class")
 
-class FlatStorage(object):
-    
+    # Returns a handler for a given (pre-processed) source code file
     def source(self, repo, fix, ver, fn):
         return SourceFile(repo, fix, ver, fn)
 
-    # Reads a file at a given location within this storage to a string
-    def read_at(self, loc):
-        s
-        pass
+    # Returns the absolute path to the root of this storage on disk
+    def root(self):
+        return self.__root
+
+    # Returns the absolute path to an artefact
+    def locator(self, artefact):
+        if isinstance(artefact, DatabaseFile):
+            rel = os.path.join(artefact.repository().id(), "fixes.json")
+        return os.path.join(self.root(), "artefacts", rel)
+
+    # Returns a writable file for a given artefact. Any writes to this file
+    # will be reflected in the actual storage after the file has been
+    # closed.
+    def writer(self, artefact):
+        loc = self.locator(artefact)
+        utility.ensure_dir(os.path.dirname(loc))
+        return open('w', loc)
+
+    # Returns a readable file for a given artefact.
+    def reader(self, artefact):
+        loc = self.locator(artefact)
+        if not os.path.isfile(loc):
+            raise Error("No physical file found on disk for artefact at location: %s" % loc)
+        return open('r', loc)
+        
+# Provides access to the database of mined bug fixes for a particular repo
+class DatabaseFile(object):
+
+    # Returns a list of the bug fixes contained within this database file
+    def read(self):
+        jsn = json.load(storage.reader(self))
+        return [Fix.from_json(fx) for fx in fixes]
+
+    # Writes a list of bug fixes to this database file
+    def write(self, fixes):
+        f = storage.writer(self)
+        json.dump([Fix.to_json(fx) for fx in fixes], f, indent=2)
+        f.close()
 
 class DiffFile(object):
     def __init__(self, repo, fix, fn):
