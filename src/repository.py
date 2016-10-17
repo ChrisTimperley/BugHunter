@@ -16,7 +16,7 @@ class Repository(object):
 
     # Returns a GitPython object for this Git repository
     def repository(self):
-        return storage.git(self)
+        return self.__storage.git(self)
 
     # Returns a list of all bug fixes for this repository, using a provided
     # scanner to generate them (if they aren't already saved to disk).
