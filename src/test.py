@@ -1,2 +1,4 @@
 #!/usr/bin/env python3
-import bughunter
+from bughunter import BugHunter
+
+bh = BugHunter()

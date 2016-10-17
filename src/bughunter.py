@@ -15,7 +15,4 @@ class BugHunter(object):
 
 # examples
 #
-# import bughunter
-#
-# bh = bughunter.BugHunter()
 # bh.repository("https://github.com/php/php-src", docker_file)
