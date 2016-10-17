@@ -16,9 +16,16 @@ class ProgramVersion(object):
         return self.__storage.preprocessed(self, fn).readable()
 
 class FaultyVersion(FixVersion):
-    pass
+    def is_fixed(self):
+        return False
+    def is_faulty(self):
+        return True
+
 class FixedVersion(FixVersion):
-    pass
+    def is_fixed(self):
+        return True
+    def is_faulty(self):
+        return False
 
 class Fix(object):
     def __init__(self, commit, jsn=None):
