@@ -20,8 +20,36 @@ class Storage(object):
     def add_source_file_from(self, repo, fix, version, fn, src_fn):
         pass
 
+    def diff(self, repo, fix, fn):
+        # Do we have the 
+        return ZippedDiffFile(repo, fix, fn)
+
 class FlatStorage(object):
     pass
 
 class ZippedStorage(object):
     pass
+
+class DiffFile(object):
+    def __init__(self, repo, fix, fn):
+        self.__repo = repo
+        self.__fix = fix
+        self.__fn = fn
+
+    # Writes to this difference file from a provided file
+    def write_from(self, source_fn):
+        raise NotImplementedError("No 'write_from' implemented by this DiffFile handler")
+
+class ZippedDiffFile(object):
+    pass
+
+class SourceFile(object):
+    def __init__(self, repo, fix, version, fn):
+        self.__repo = repo
+        self.__fix = fix
+        self.__version = version
+        self.__fn = fn
+
+    # Reads the contents of this source file to a string and returns it
+    def read(self):
+        raise NotImplementedError("No 'read' implemented by this SourceFile handler")
