@@ -11,6 +11,15 @@ class Parser(object):
         source = storage.preprocessed(fix, fn)
         cgum.source_file_to_json(source_fn)
 
+        # Generate a 
+        f = PhysicalJsonDiffFile(repo, fix, fn, loc)
+
+        # Commit it to storage
+        storage.store(f)
+
+        # Return the result
+        return f
+
     def parse_files_to_json_files(source_files):
         pass
     

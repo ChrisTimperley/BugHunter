@@ -3,6 +3,21 @@ import os.path
 import cgum.program
 import cgum.diff
 
+class FixVersion(object):
+
+    # Returns the pre-processed form of this fix.
+    def preprocessed(self):
+        pass
+
+    # Returns the AST for a file modified by this edit, with a given name
+    def ast(self, fn):
+        pass
+
+    # Returns the source code of a file (in string form) modified by this edit,
+    # given its name.
+    def source(self, fn):
+        pass
+
 class Fix(object):
     def __init__(self, commit, jsn=None):
         self.__commit = commit
