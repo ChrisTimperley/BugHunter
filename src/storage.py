@@ -1,4 +1,5 @@
 import cgum
+import git
 import hashlib
 import os
 
@@ -23,6 +24,16 @@ class Storage(object):
     # Returns a handler for a given database file.
     def database(self, repo):
         return DatabaseFile(repo)
+
+    # Returns a GitPython repository object for a given repository. Clones the
+    # repository to disk, if necessary.
+    def git(self, repo):
+        loc = os.path.join(self.root(), "repositories", repo.id())
+        if not os.path.exists(loc):
+            return git.Repo.clone_from(repo.address(),\
+                                       loc,\
+                                       odbt=git.GitCmdObjectDB)
+        return git.Repo(loc, odbt=git.GitCmdObjectDB)
 
     # Returns the absolute path to the root of this storage on disk
     def root(self):
