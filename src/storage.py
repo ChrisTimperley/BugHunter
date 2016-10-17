@@ -20,6 +20,10 @@ class Storage(object):
     def source(self, repo, fix, ver, fn):
         return SourceFile(repo, fix, ver, fn)
 
+    # Returns a handler for a given database file.
+    def database(self, repo):
+        return DatabaseFile(repo)
+
     # Returns the absolute path to the root of this storage on disk
     def root(self):
         return self.__root
@@ -63,16 +67,15 @@ class DatabaseFile(object):
     # Returns a list of the bug fixes contained within this database file.
     # If the file doesn't exist, then the provided Scanner is used to generate
     # it.
-    def read(self):
+    def read(self, scanner):
         if not self.exists():
-            fixes = self.generate()
-
+            fixes = scanner.scan(self)
+            self.write(fixes)
         else:
             f = storage.reader(self)
             fixes = json.load(f)
             fixes = [Fix.from_json(fx) for fx in fixes]
             f.close()
-
         return fixes
 
     # Writes a list of bug fixes to this database file
