@@ -9,8 +9,18 @@ and the AST differences between the two versions.
 Usage
 ============
 
+To start using BugHunter, just install the package via easy_install, using the
+instructions given below, and then import the `bughunter` module into your code.
+
 ```
-./bughunter.py [path_to_repository] [*options]
+import bughunter
+
+bh = BugHunter()
+repo = bh.repository("https://github.com/php/php-src")
+
+for fix in repo.fixes():
+  print(fix)
+
 ```
 
 Requirements
@@ -18,10 +28,6 @@ Requirements
 
 At a minimum, BugHunter requires Python 3 and the `gitpython` package to operate
 correctly. This package may be installed using `pip`, by executing the following
-command: `pip install gitpython`.
-
-In addition to these minimum requirements, the host machine must be capable of
-compiling the source code of the project(s) under investigation. Failing this,
-BugHunter will be unable to produce the pre-processed form of the modified
-source code files, and thus, will be unable to perform an analysis of the
-repair.
+command: `pip install gitpython`. In order to pre-process files correctly, and
+to generate ASTs, BugHunter also requires Docker to be installed on the machine,
+and that the user is a member of the `docker` usergroup.
