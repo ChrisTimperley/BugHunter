@@ -35,6 +35,7 @@ class Storage(object):
     def git(self, repo):
         loc = os.path.join(self.root(), "repositories", repo.id())
         if not os.path.exists(loc):
+            print("cloning remote repository: %s" % repo.address())
             return git.Repo.clone_from(repo.address(),\
                                        loc,\
                                        odbt=git.GitCmdObjectDB)
