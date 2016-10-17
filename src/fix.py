@@ -1,19 +1,24 @@
 import json
 
-class FixVersion(object):
-
-    # Returns the pre-processed form of this fix.
-    def preprocessed(self):
-        pass
+# Represents a version of a program for a particular bug fix, where the two
+# versions are Faulty and Fixed
+class ProgramVersion(object):
+    def __init__(self, fix):
+        self.__fix = fix
 
     # Returns the AST for a file modified by this edit, with a given name
     def ast(self, fn):
         pass
 
-    # Returns the source code of a file (in string form) modified by this edit,
-    # given its name.
-    def source(self, fn):
-        pass
+    # Returns the pre-processed source code for a given file that was modified
+    # by this edit, as a readable file.
+    def preprocessed(self, fn):
+        return self.__storage.preprocessed(self, fn).readable()
+
+class FaultyVersion(FixVersion):
+    pass
+class FixedVersion(FixVersion):
+    pass
 
 class Fix(object):
     def __init__(self, commit, jsn=None):
@@ -75,11 +80,13 @@ class Fix(object):
     def modifies_multiple_source_files(self):
         return len(list(self.source_files())) > 1
 
+    # Returns a pointer to the version of the program before the fix
     def before(self):
-        raise NotImplementedError("before")
+        return FaultyVersion(self)
 
+    # Returns a pointer to the version of the program after the fix
     def after(self):
-        raise NotImplementedError("after")
+        return FixedVersion(self)
 
     def diff(self, fn):
         raise NotImplementedError("diff")
