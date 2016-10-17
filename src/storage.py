@@ -36,9 +36,17 @@ class DiffFile(object):
         self.__fix = fix
         self.__fn = fn
 
-    # Writes to this difference file from a provided file
+    # Reads the contents of this difference file to a string and returns it
+    def read(self):
+        raise NotImplementedError("No 'read' implemented by this DiffFile handler")
+
+    # Writes to this difference file using the contents of a provided file
     def write_from(self, source_fn):
         raise NotImplementedError("No 'write_from' implemented by this DiffFile handler")
+
+    # Returns the difference encoded by this file
+    def diff(self):
+        raise NotImplementedError("No 'diff' implemented by this DiffFile handler")
 
 class ZippedDiffFile(object):
     pass
@@ -53,3 +61,7 @@ class SourceFile(object):
     # Reads the contents of this source file to a string and returns it
     def read(self):
         raise NotImplementedError("No 'read' implemented by this SourceFile handler")
+
+    # Writes to this source file using the contents of a given file
+    def write_from(self, source_fn):
+        raise NotImplementedError("No 'write_from' implemented by this SourceFile handler")
