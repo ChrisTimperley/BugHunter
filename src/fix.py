@@ -1,6 +1,3 @@
-from utility import *
-import shutil
-import git
 import json
 import os.path
 import cgum.program
