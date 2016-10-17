@@ -64,7 +64,7 @@ class Fix(object):
 
     # Returns a list of all the C source files that were modified by this fix.
     # Does not include files that were added or deleted.
-    def modified_source_files(self);
+    def modified_source_files(self):
         raise NotImplementedError("modified_source_files")
     
     # Determines whether this fix modifies a header file
