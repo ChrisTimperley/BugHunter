@@ -4,14 +4,20 @@
 # directory. This script is intended to be executed on a Docker instance, and
 # not on the host machine (lib/preprocess should be used for that purpose).
 #
-fail(){
-  echo "FAILED: $1"
-  exit 1
-}
 
 # Fetch the provided user ID and the number of available threads
-userid=$1
-threads=$2
+USER_ID=$1
+THREADS=$2
+
+reset_ownership(){
+  chown -R $USER_ID /repository
+}
+
+fail(){
+  echo "FAILED: $1"
+  reset_ownership $USER_ID
+  exit 1
+}
 
 # Jump to the correct location
 cd /repository || fail "failed to jump to source directory"
@@ -42,3 +48,6 @@ if $configured; then
 else
 
 fi
+
+# Reset file ownership
+reset_ownership && exit 0
