@@ -9,6 +9,10 @@ import os
 #
 # TODO: Add zipped storage
 class Storage(object):
+    def __init__(self, root=None):
+        self.__root = os.path.join(os.path.expanduser('~'), 'bughunter')
+        utility.ensure_dir(self.__root)
+
     # Returns a handler for a given diff
     def diff(self, repo, fix, fn):
         return DiffFile(repo, fix, fn)
