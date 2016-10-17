@@ -1,4 +1,6 @@
 import cgum
+import hashlib
+import os
 
 # The Storage class is responsible for abstracting away the details of how and
 # where BugHunter's artefacts are stored, including pre-processed, parsed, and
@@ -54,6 +56,17 @@ class SimpleDiffFile(object):
     def read(self):
         return storage.read_at(self.location())
 
+    def writable_file(self, artefact):
+        loc = os.path.join(f.repo.identifier(),\
+                           f.fix.identifier(),\
+                           f.version.identifier(),\
+                           hashlib.sha1(artefact.file_name).hexdigest())
+
+        locator = ({
+            SourceFile: lambda f: [f.repo, f.fix, f.version, ]
+        }[type(artefact)])(artefact)
+
+
 class SourceFile(object):
     def __init__(self, repo, fix, version, fn):
         self.__repo = repo
@@ -74,17 +87,21 @@ class SourceFile(object):
         raise NotImplementedError("No 'write_from' implemented by this SourceFile handler")
 
 class AstFile(object):
-    def __init__(self, repo, fix, version, fn):
+    def __init__(self, storage, repo, fix, version, fn):
+        self.__storage = storage
         self.__repo = repo
         self.__fix = fix
         self.__version = version
         self.__fn = fn
 
+
+    # we could pass an actual file for flattened storage classes?
+
     def exists(self):
 
     def ast(self):
         if not self.exists():
-            f = XSDSAFSAFAS
+            f = storage.as_writable_file(self)
             src = storage.source(self.repo, self.fix, self.version, self.fn)
             cgum.link.parse_to_file(src, f)
             f.close()
