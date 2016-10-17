@@ -8,14 +8,13 @@ import os
 #
 # TODO: Add zipped storage
 class Storage(object):
-
     # Returns a handler for a given diff
-    #def diff(self, repo, fix, fn):
-    #    raise NotImplementedError("No 'diff' implemented by this Storage class")
+    def diff(self, repo, fix, fn):
+        return DiffFile(repo, fix, fn)
 
     # Returns a handler for the AST of a given (pre-processed) file
-    #def ast(self, repo, fix, ver, fn):
-    #    raise NotImplementedError("No 'ast' implemented by this Storage class")
+    def ast(self, repo, fix, ver, fn):
+        return AstFile(repo, fix, ver, fn)
 
     # Returns a handler for a given (pre-processed) source code file
     def source(self, repo, fix, ver, fn):
@@ -31,6 +30,10 @@ class Storage(object):
             rel = os.path.join(artefact.repository().id(), "fixes.json")
         return os.path.join(self.root(), "artefacts", rel)
 
+    # Determines whether a given artefact exists on disk.
+    def exists(self, artefact):
+        return os.path.isfile(self.locator(artefact))
+
     # Returns a writable file for a given artefact. Any writes to this file
     # will be reflected in the actual storage after the file has been
     # closed.
@@ -42,17 +45,35 @@ class Storage(object):
     # Returns a readable file for a given artefact.
     def reader(self, artefact):
         loc = self.locator(artefact)
-        if not os.path.isfile(loc):
+        if not self.exists(artefact):
             raise Error("No physical file found on disk for artefact at location: %s" % loc)
         return open('r', loc)
         
 # Provides access to the database of mined bug fixes for a particular repo
 class DatabaseFile(object):
 
-    # Returns a list of the bug fixes contained within this database file
+    # Constructs a new database file for a given Git repository.
+    def __init__(self, repository):
+        self.__repository = repository
+
+    # Determines whether this file exists on disk.
+    def exists(self):
+        return storage.exists(self)
+
+    # Returns a list of the bug fixes contained within this database file.
+    # If the file doesn't exist, then the provided Scanner is used to generate
+    # it.
     def read(self):
-        jsn = json.load(storage.reader(self))
-        return [Fix.from_json(fx) for fx in fixes]
+        if not self.exists():
+            fixes = self.generate()
+
+        else:
+            f = storage.reader(self)
+            fixes = json.load(f)
+            fixes = [Fix.from_json(fx) for fx in fixes]
+            f.close()
+
+        return fixes
 
     # Writes a list of bug fixes to this database file
     def write(self, fixes):
@@ -120,7 +141,6 @@ class AstFile(object):
         self.__fix = fix
         self.__version = version
         self.__fn = fn
-
 
     # we could pass an actual file for flattened storage classes?
 
