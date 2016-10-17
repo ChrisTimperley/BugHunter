@@ -1,6 +1,7 @@
 import storage
 import os
 import repository
+import fix
 
 class BugHunter(object):
     def __init__(self):
