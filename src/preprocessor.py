@@ -12,7 +12,6 @@ import utility as util
 class Preprocessor(object):
     def __init__(self, threads = 8):
         self.__threads = threads
-        self.__script = os.path.dirname(os.path.realpath(__file__))
 
     def preprocess(self, version):
         repo = version.repository().repository()
@@ -47,5 +46,17 @@ class Preprocessor(object):
 
         # Save each of the modified source files to storage
         for fn in fix.modified_source_files():
-            pass
+
+            # Find where the file resides. For some projects, it will be in the
+            # same directory as the original source code file; for others, it
+            # may reside at the root of the repository.
+            pp_fn = '%s.i' % fn[:-2]
+            if os.path.isfile(os.path.join(repo.working_dir,\
+                                           os.path.basename(pp_fn))):
+                cp_from = os.path.join(repo.working_dir, os.path.basename(pp_fn)) 
+            elif os.path.isfile(os.path.join(repo.working_dir, pp_fn)):
+                cp_from = os.path.join(repo.working_dir, pp_fn)
+            else:
+                cp_from = None
+
             # shutil.copyfile(cp_from, cp_to)
