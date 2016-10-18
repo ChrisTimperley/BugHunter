@@ -23,7 +23,7 @@ fail(){
 # Jump to the correct location
 cd /repository || fail "failed to jump to source directory"
 
-echo "Preprocessing wabble wabble"
+echo "Preprocessing..."
 
 # Generate configure, if necessary
 if [ -f autogen.sh ] ; then
@@ -49,17 +49,18 @@ else
   configured=1
 fi
 
-#
 ## Attempt to make
-#if [ ! -f Makefile ]; then
-#  fail "Makefile missing" && exit 1
-#fi
-#
-#if $configured; then
-#  
-#else
-#
-#fi
+if [ ! -f Makefile ]; then
+  fail "Makefile missing" && exit 1
+fi
+
+if [[ $configured -eq "0" ]]; then
+  make
+else
+  make CFLAGS="--save-temps"
+fi
+
+echo "SUCCESS: Preprocessed"
 
 # Reset file ownership
 reset_ownership && exit 0
