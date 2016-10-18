@@ -131,11 +131,21 @@ class PreprocessedFile(object):
     # repository
     def name(self):
         return self.__name
-
+    
+    # Returns a readable file for this preprocessed file, which may or may
+    # not represent the physical file on disk
     def readable(self):
         if not self.exists():
             self.__storage.preprocessor().preprocess(self.version())
         return self.__storage.reader(self)
+
+    # Writes to the preprocessed file, using another file as source
+    def write_from(self, src_fn):
+        assert not self.exists(), "pre-processed file already exists"
+        writer = self.__storage.writer(self)
+        with open(src_fn, 'r') as src:
+            writer.write(src.read())
+        writer.close()
 
 class SimpleDiffFile(object):
 

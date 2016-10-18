@@ -36,6 +36,24 @@ class Preprocessor(object):
             with open(os.devnull, "w") as f:
                 subprocess.call(cmd, stdout=f)
 
+            # Save each of the modified source files to storage
+            for fn in fix.modified_source_files():
+
+                # Find where the file resides. For some projects, it will be in the
+                # same directory as the original source code file; for others, it
+                # may reside at the root of the repository.
+                pp_fn = '%s.i' % fn[:-2]
+                if os.path.isfile(os.path.join(repo.working_dir,\
+                                               os.path.basename(pp_fn))):
+                    cp_from = os.path.join(repo.working_dir, os.path.basename(pp_fn)) 
+                elif os.path.isfile(os.path.join(repo.working_dir, pp_fn)):
+                    cp_from = os.path.join(repo.working_dir, pp_fn)
+                else:
+                    cp_from = None
+
+                # If the file can be found, save it to storage
+                print("SAVE TO STORAGE")
+
         # Ensure the repository is returned to its original state, prior to
         # pre-processing
         finally:
@@ -43,20 +61,3 @@ class Preprocessor(object):
             repo.git.reset('--hard')
             repo.git.checkout(current_branch_name)
             repo.git.branch('-D', 'preprocessing')
-
-        # Save each of the modified source files to storage
-        for fn in fix.modified_source_files():
-
-            # Find where the file resides. For some projects, it will be in the
-            # same directory as the original source code file; for others, it
-            # may reside at the root of the repository.
-            pp_fn = '%s.i' % fn[:-2]
-            if os.path.isfile(os.path.join(repo.working_dir,\
-                                           os.path.basename(pp_fn))):
-                cp_from = os.path.join(repo.working_dir, os.path.basename(pp_fn)) 
-            elif os.path.isfile(os.path.join(repo.working_dir, pp_fn)):
-                cp_from = os.path.join(repo.working_dir, pp_fn)
-            else:
-                cp_from = None
-
-            # shutil.copyfile(cp_from, cp_to)
