@@ -15,13 +15,13 @@ class ProgramVersion(object):
     def preprocessed(self, fn):
         return self.__storage.preprocessed(self, fn).readable()
 
-class FaultyVersion(FixVersion):
+class FaultyVersion(ProgramVersion):
     def is_fixed(self):
         return False
     def is_faulty(self):
         return True
 
-class FixedVersion(FixVersion):
+class FixedVersion(ProgramVersion):
     def is_fixed(self):
         return True
     def is_faulty(self):
