@@ -9,6 +9,9 @@ class Scanner(object):
     BUG_MARKERS = ['fixed', 'bug']
     BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
 
+    def __init__(self, master):
+        self.__master = master
+
     # Determines whether a given commit is a fix
     def is_fix(self, commit):
         msg = commit.message.strip().lower()
@@ -21,4 +24,4 @@ class Scanner(object):
     def scan(self, repo):
         print("scanning for fixes: %s" % repo.address())
         commits = repo.repository().iter_commits()
-        return [fix.Fix(c) for c in commits if self.is_fix(c)]
+        return [fix.Fix(self.__master, c) for c in commits if self.is_fix(c)]

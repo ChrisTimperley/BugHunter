@@ -3,8 +3,7 @@ import json
 # Represents a version of a program for a particular bug fix, where the two
 # versions are Faulty and Fixed
 class ProgramVersion(object):
-    def __init__(self, master, fix):
-        self.__master = master
+    def __init__(self, fix):
         self.__fix = fix
 
     # Returns the AST for a file modified by this edit, with a given name
@@ -14,7 +13,7 @@ class ProgramVersion(object):
     # Returns the pre-processed source code for a given file that was modified
     # by this edit, as a readable file.
     def preprocessed(self, fn):
-        return self.__master.storage().preprocessed(self, fn).readable()
+        return self.__fix.master().storage().preprocessed(self, fn).readable()
 
 class FaultyVersion(ProgramVersion):
     def is_fixed(self):
@@ -29,7 +28,8 @@ class FixedVersion(ProgramVersion):
         return False
 
 class Fix(object):
-    def __init__(self, commit, jsn=None):
+    def __init__(self, master, commit, jsn=None):
+        self.__master = master
         self.__commit = commit
         self.__files = None
 
@@ -48,9 +48,12 @@ class Fix(object):
             self.__date = jsn['date']
             self.__files = jsn['files']
 
+    def master(self):
+        return self.__master
+
     @staticmethod
-    def from_json(jsn):
-        return Fix(None, jsn=jsn)
+    def from_json(master, jsn):
+        return Fix(master, None, jsn=jsn)
 
     def identifier(self):
         return self.__identifier

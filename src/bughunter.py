@@ -8,7 +8,7 @@ import fix
 class BugHunter(object):
     def __init__(self):
         self.__storage = storage.Storage(self)
-        self.__scanner = scanner.Scanner()
+        self.__scanner = scanner.Scanner(self)
         self.__preprocessor = preprocessor.Preprocessor()
 
     # We could have a shared pool of repository (and fix) instances, but

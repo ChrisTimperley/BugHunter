@@ -97,7 +97,7 @@ class DatabaseFile(object):
         else:
             f = self.__master.storage().reader(self)
             fixes = json.load(f)
-            fixes = [fix.Fix.from_json(fx) for fx in fixes]
+            fixes = [fix.Fix.from_json(self.__master, fx) for fx in fixes]
             f.close()
         return fixes
 
@@ -105,7 +105,7 @@ class DatabaseFile(object):
     def write(self, fixes):
         f = self.__master.storage().writer(self)
         try:
-            json.dump([fix.Fix.to_json(fx) for fx in fixes], f, indent=2)
+            json.dump([fix.to_json(fx) for fx in fixes], f, indent=2)
             f.close()
         # destroy any partially written files
         except:
