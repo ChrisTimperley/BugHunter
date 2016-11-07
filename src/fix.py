@@ -90,8 +90,15 @@ class Fix(object):
 
     # Returns a list of all the C source files that were modified by this fix.
     # Does not include files that were added or deleted.
+    #
+    # TODO: precompute and cache
     def modified_source_files(self):
-        raise NotImplementedError("modified_source_files")
+        repo = self.repository().repository()
+        before = repo.commit('%s~1' % self.__identifier)
+        after = repo.commit(self.__identifier)
+        diff = before.diff(after)
+        modified = [d.a_path for d in diff if d.change_type == 'M']
+        return modified
     
     # Determines whether this fix modifies a header file
     def modifies_header_file(self):
