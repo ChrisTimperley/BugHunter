@@ -6,6 +6,14 @@ class ProgramVersion(object):
     def __init__(self, fix):
         self.__fix = fix
 
+    # Returns the commit ID for this version of the program
+    def identifier(self):
+        NotImplementedError("unimplemented")
+
+    # Rerturns the fix that this program version belongs to
+    def fix(self):
+        return self.__fix
+
     # Returns the AST for a file modified by this edit, with a given name
     def ast(self, fn):
         pass
@@ -28,8 +36,8 @@ class FixedVersion(ProgramVersion):
         return False
 
 class Fix(object):
-    def __init__(self, master, commit, jsn=None):
-        self.__master = master
+    def __init__(self, repo, commit, jsn=None):
+        self.__repo = repo
         self.__commit = commit
         self.__files = None
 
@@ -49,7 +57,9 @@ class Fix(object):
             self.__files = jsn['files']
 
     def master(self):
-        return self.__master
+        return self.__repo.master()
+    def repository(self):
+        return self.__repo
 
     @staticmethod
     def from_json(master, jsn):

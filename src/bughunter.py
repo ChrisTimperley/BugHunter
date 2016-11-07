@@ -15,12 +15,12 @@ class BugHunter(object):
     # since we're writing to disk directly, and contents are lazily fetched,
     # there shouldn't be any synchronisation issues.
     def repository(self, address):
-        return repository.Repository(self.__storage, self.__scanner, address)
+        return repository.Repository(self, address)
 
-    # Returns the storage handler for this BugHunter server
     def storage(self):
         return self.__storage
-
+    def scanner(self):
+        return self.__scanner
     def preprocessor(self):
         return self.__preprocessor
 

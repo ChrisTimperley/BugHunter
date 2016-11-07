@@ -14,7 +14,7 @@ class Preprocessor(object):
         self.__threads = threads
 
     def preprocess(self, version):
-        repo = version.repository().repository()
+        repo = version.fix().repository().repository()
 
         # Find the commit ID for this program version
         fix = version.fix()

@@ -7,4 +7,7 @@ git = repo.repository()
 fixes = repo.fixes()
 
 f = fixes[0]
-print(f.before())
+
+print(f.files())
+
+f.before().preprocessed("src/util.c")

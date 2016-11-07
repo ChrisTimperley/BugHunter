@@ -25,7 +25,7 @@ class Storage(object):
 
     # Returns a handler for a given (pre-processed) source code file
     def preprocessed(self, ver, fn):
-        return SourceFile(self.__master, ver, fn)
+        return PreprocessedFile(self.__master, ver, fn)
 
     # Returns a handler for a given database file.
     def database(self, repo):
@@ -50,6 +50,14 @@ class Storage(object):
     def locator(self, artefact):
         if isinstance(artefact, DatabaseFile):
             rel = os.path.join(artefact.repository().id(), "fixes.json")
+        elif isinstance(artefact, PreprocessedFile):
+            fn = artefact.name()[:-2] # remove ".c" suffix
+            suffix = "after" if artefact.version().is_fixed() else "before"
+            fn = "%s.%s.c" % (fn, suffix)
+            fix = artefact.version().fix()
+            rel = os.path.join(fix.repository().id(),\
+                               fix.identifier(),\
+                               fn)
         return os.path.join(self.root(), "artefacts", rel)
 
     # Determines whether a given artefact exists on disk.
@@ -97,7 +105,7 @@ class DatabaseFile(object):
         else:
             f = self.__master.storage().reader(self)
             fixes = json.load(f)
-            fixes = [fix.Fix.from_json(self.__master, fx) for fx in fixes]
+            fixes = [fix.Fix.from_json(self.__repository, fx) for fx in fixes]
             f.close()
         return fixes
 
@@ -135,7 +143,9 @@ class PreprocessedFile(object):
     # Returns a readable file for this preprocessed file, which may or may
     # not represent the physical file on disk
     def readable(self):
+        print("cool")
         if not self.exists():
+            print("generating")
             self.__master.preprocessor().preprocess(self.version())
         return self.__master.storage().reader(self)
 

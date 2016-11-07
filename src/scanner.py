@@ -24,4 +24,4 @@ class Scanner(object):
     def scan(self, repo):
         print("scanning for fixes: %s" % repo.address())
         commits = repo.repository().iter_commits()
-        return [fix.Fix(self.__master, c) for c in commits if self.is_fix(c)]
+        return [fix.Fix(repo, c) for c in commits if self.is_fix(c)]
