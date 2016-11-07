@@ -53,6 +53,8 @@ class Storage(object):
         elif isinstance(artefact, PreprocessedFile):
             fn = artefact.name()[:-2] # remove ".c" suffix
             suffix = "after" if artefact.version().is_fixed() else "before"
+
+            # TODO: collapse path
             fn = "%s.%s.c" % (fn, suffix)
             fix = artefact.version().fix()
             rel = os.path.join(fix.repository().id(),\
@@ -76,7 +78,7 @@ class Storage(object):
     def reader(self, artefact):
         loc = self.locator(artefact)
         if not self.exists(artefact):
-            raise Error("No physical file found on disk for artefact at location: %s" % loc)
+            raise Exception("No physical file found on disk for artefact at location: %s" % loc)
         return open(loc, 'r')
         
 # Provides access to the database of mined bug fixes for a particular repo
