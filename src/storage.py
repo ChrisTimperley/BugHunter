@@ -9,28 +9,27 @@ import fix
 # The Storage class is responsible for abstracting away the details of how and
 # where BugHunter's artefacts are stored, including pre-processed, parsed, and
 # differenced files.
-#
-# TODO: Add zipped storage
 class Storage(object):
-    def __init__(self, root=None):
+    def __init__(self, master, root=None):
+        self.__master = master
         self.__root = os.path.join(os.path.expanduser('~'), 'bughunter')
         utility.ensure_dir(self.__root)
 
     # Returns a handler for a given diff
-    def diff(self, repo, fix, fn):
-        return DiffFile(self, repo, fix, fn)
+    #def diff(self, repo, fix, fn):
+    #    return DiffFile(self, repo, fix, fn)
 
     # Returns a handler for the AST of a given (pre-processed) file
-    def ast(self, repo, fix, ver, fn):
-        return AstFile(self, repo, fix, ver, fn)
+    #def ast(self, repo, fix, ver, fn):
+    #    return AstFile(self, repo, fix, ver, fn)
 
     # Returns a handler for a given (pre-processed) source code file
     def preprocessed(self, ver, fn):
-        return SourceFile(self, ver, fn)
+        return SourceFile(self.__master, ver, fn)
 
     # Returns a handler for a given database file.
     def database(self, repo):
-        return DatabaseFile(self, repo)
+        return DatabaseFile(self.__master, repo)
 
     # Returns a GitPython repository object for a given repository. Clones the
     # repository to disk, if necessary.
@@ -76,8 +75,8 @@ class Storage(object):
 class DatabaseFile(object):
 
     # Constructs a new database file for a given Git repository.
-    def __init__(self, storage, repository):
-        self.__storage = storage
+    def __init__(self, master, repository):
+        self.__master = master
         self.__repository = repository
 
     # Returns the repository that this file belongs to
@@ -86,7 +85,7 @@ class DatabaseFile(object):
 
     # Determines whether this file exists on disk.
     def exists(self):
-        return self.__storage.exists(self)
+        return self.__master.storage().exists(self)
 
     # Returns a list of the bug fixes contained within this database file.
     # If the file doesn't exist, then the provided Scanner is used to generate
@@ -96,7 +95,7 @@ class DatabaseFile(object):
             fixes = scanner.scan(self.repository())
             self.write(fixes)
         else:
-            f = self.__storage.reader(self)
+            f = self.__master.storage().reader(self)
             fixes = json.load(f)
             fixes = [fix.Fix.from_json(fx) for fx in fixes]
             f.close()
@@ -104,7 +103,7 @@ class DatabaseFile(object):
 
     # Writes a list of bug fixes to this database file
     def write(self, fixes):
-        f = self.__storage.writer(self)
+        f = self.__master.storage().writer(self)
         try:
             json.dump([fix.Fix.to_json(fx) for fx in fixes], f, indent=2)
             f.close()
@@ -115,13 +114,14 @@ class DatabaseFile(object):
             raise
 
 class PreprocessedFile(object):
-    def __init__(self, version, name):
+    def __init__(self, master, version, name):
+        self.__master = master
         self.__version = version
         self.__name = name
 
     # Determines whether this file exists on disk
     def exists(self):
-        return self.__storage.exists(self)
+        return self.__master.storage().exists(self)
 
     # Returns the program version that this preprocessed file belongs to
     def version(self):
@@ -136,42 +136,42 @@ class PreprocessedFile(object):
     # not represent the physical file on disk
     def readable(self):
         if not self.exists():
-            self.__storage.preprocessor().preprocess(self.version())
-        return self.__storage.reader(self)
+            self.__master.preprocessor().preprocess(self.version())
+        return self.__master.storage().reader(self)
 
     # Writes to the preprocessed file, using another file as source
     def write_from(self, src_fn):
         assert not self.exists(), "pre-processed file already exists"
-        writer = self.__storage.writer(self)
+        writer = self.__master.storage().writer(self)
         with open(src_fn, 'r') as src:
             writer.write(src.read())
         writer.close()
 
-class SimpleDiffFile(object):
+#class SimpleDiffFile(object):
+#
+#    def read(self):
+#        return storage.read_at(self.location())
+#
+#    def writable_file(self, artefact):
+#        src_fn = hashlib.sha1(artefact.file_name).hexdigest()
+#        src_fn = "%s.%s.c" % (src_fn, version.id())
+#        loc = os.path.join(f.repo.id(), f.fix.id(), src_fn)
+#
+#        # ensure the path exists
+#        return open(loc, 'w')
 
-    def read(self):
-        return storage.read_at(self.location())
-
-    def writable_file(self, artefact):
-        src_fn = hashlib.sha1(artefact.file_name).hexdigest()
-        src_fn = "%s.%s.c" % (src_fn, version.id())
-        loc = os.path.join(f.repo.id(), f.fix.id(), src_fn)
-
-        # ensure the path exists
-        return open(loc, 'w')
-
-class AstFile(object):
-    def __init__(self, storage, repo, fix, version, fn):
-        self.__storage = storage
-        self.__repo = repo
-        self.__fix = fix
-        self.__version = version
-        self.__fn = fn
-
-    def ast(self):
-        if not self.exists():
-            f = storage.as_writable_file(self)
-            src = storage.source(self.repo, self.fix, self.version, self.fn)
-            cgum.link.parse_to_file(src, f)
-            f.close()
-        return cgum.Program.from_json_file(storage.read_as_file(self))
+#class AstFile(object):
+#    def __init__(self, storage, repo, fix, version, fn):
+#        self.__storage = storage
+#        self.__repo = repo
+#        self.__fix = fix
+#        self.__version = version
+#        self.__fn = fn
+#
+#    def ast(self):
+#        if not self.exists():
+#            f = storage.as_writable_file(self)
+#            src = storage.source(self.repo, self.fix, self.version, self.fn)
+#            cgum.link.parse_to_file(src, f)
+#            f.close()
+#        return cgum.Program.from_json_file(storage.read_as_file(self))
