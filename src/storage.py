@@ -143,9 +143,7 @@ class PreprocessedFile(object):
     # Returns a readable file for this preprocessed file, which may or may
     # not represent the physical file on disk
     def readable(self):
-        print("cool")
         if not self.exists():
-            print("generating")
             self.__master.preprocessor().preprocess(self.version())
         return self.__master.storage().reader(self)
 
