@@ -27,12 +27,17 @@ class Preprocessor(object):
             repo.git.reset('--hard')
             repo.git.checkout(commit, b='preprocessing')
 
+            # TODO: For now, use the "bh" docker image
+            DOCKER_IMAGE = "bh"
+
             # Compute and execute the pre-process command
             cmd = os.path.join(os.path.dirname(os.path.realpath(__file__)),\
                                "../lib/preprocess")
-            cmd  = "%s '%s'" % (cmd, repo.working_dir)
+            cmd  = "%s '%s' '%s'" % (cmd, repo.working_dir, DOCKER_IMAGE)
+
+            # TODO: docker is failing, shouldn't be hard to fix
             with open(os.devnull, "w") as f:
-                subprocess.call(cmd, stdout=f)
+                subprocess.call(cmd, stdout=f, stderr=f, shell=True)
 
             # Save each of the modified source files to storage
             for fn in fix.modified_source_files():
