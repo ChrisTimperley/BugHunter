@@ -9,7 +9,7 @@ class BugHunter(object):
     def __init__(self):
         self.__storage = storage.Storage(self)
         self.__scanner = scanner.Scanner(self)
-        self.__preprocessor = preprocessor.Preprocessor()
+        self.__preprocessor = preprocessor.Preprocessor(self)
 
     # We could have a shared pool of repository (and fix) instances, but
     # since we're writing to disk directly, and contents are lazily fetched,

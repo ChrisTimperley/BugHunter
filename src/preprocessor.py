@@ -10,7 +10,8 @@ import utility as util
 # We need to run a whole bunch of things on our Docker instance, then save
 # it using the Storage handler.
 class Preprocessor(object):
-    def __init__(self, threads = 8):
+    def __init__(self, master, threads = 8):
+        self.__master = master
         self.__threads = threads
 
     def preprocess(self, version):
@@ -56,6 +57,7 @@ class Preprocessor(object):
 
                 # If the file can be found, save it to storage
                 print("SAVE TO STORAGE")
+            
 
         # Ensure the repository is returned to its original state, prior to
         # pre-processing
