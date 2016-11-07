@@ -6,10 +6,6 @@ class ProgramVersion(object):
     def __init__(self, fix):
         self.__fix = fix
 
-    # Returns the commit ID for this version of the program
-    def identifier(self):
-        NotImplementedError("unimplemented")
-
     # Rerturns the fix that this program version belongs to
     def fix(self):
         return self.__fix
@@ -24,12 +20,16 @@ class ProgramVersion(object):
         return self.__fix.master().storage().preprocessed(self, fn).readable()
 
 class FaultyVersion(ProgramVersion):
+    def identifier(self):
+        return "%s~1" % self.fix().identifier()
     def is_fixed(self):
         return False
     def is_faulty(self):
         return True
 
 class FixedVersion(ProgramVersion):
+    def identifier(self):
+        return self.fix().identifier()
     def is_fixed(self):
         return True
     def is_faulty(self):

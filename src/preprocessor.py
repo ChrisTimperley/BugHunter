@@ -19,8 +19,6 @@ class Preprocessor(object):
         # Find the commit ID for this program version
         fix = version.fix()
         commit = version.identifier()
-        if version.is_faulty():
-            commit = "%s~1" % commit
 
         # Switch the repository's preprocessing branch to point at the
         # correct commit for this program version.
