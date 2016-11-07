@@ -22,7 +22,7 @@ class Preprocessor(object):
 
         # Switch the repository's preprocessing branch to point at the
         # correct commit for this program version.
-        current_branch_name = repo.active_branch_name
+        current_branch_name = repo.active_branch.name
         try:         
             repo.git.reset('--hard')
             repo.git.checkout(commit, b='preprocessing')
@@ -30,7 +30,7 @@ class Preprocessor(object):
             # Compute and execute the pre-process command
             cmd = os.path.join(os.path.dirname(os.path.realpath(__file__)),\
                                "../lib/preprocess")
-            cmd  = "%s '%s'" % repo.working_dir
+            cmd  = "%s '%s'" % (cmd, repo.working_dir)
             with open(os.devnull, "w") as f:
                 subprocess.call(cmd, stdout=f)
 
