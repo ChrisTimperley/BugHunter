@@ -10,4 +10,5 @@ f = fixes[0]
 
 print(f.files())
 
-f.before().preprocessed("src/util.c")
+pp = f.before().preprocessed("src/util.c")
+print(pp.read())

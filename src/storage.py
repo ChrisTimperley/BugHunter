@@ -55,7 +55,7 @@ class Storage(object):
             suffix = "after" if artefact.version().is_fixed() else "before"
 
             # TODO: collapse path
-            fn = "%s.%s.c" % (fn, suffix)
+            fn = "%s.%s.c" % (fn.replace('/', '-'), suffix)
             fix = artefact.version().fix()
             rel = os.path.join(fix.repository().id(),\
                                fix.identifier(),\

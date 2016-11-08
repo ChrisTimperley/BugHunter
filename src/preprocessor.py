@@ -16,6 +16,7 @@ class Preprocessor(object):
 
     def preprocess(self, version):
         repo = version.fix().repository().repository()
+        storage = self.__master.storage()
 
         # Find the commit ID for this program version
         fix = version.fix()
@@ -56,8 +57,8 @@ class Preprocessor(object):
                     cp_from = None
 
                 # If the file can be found, save it to storage
-                print("SAVE TO STORAGE")
-            
+                f = storage.preprocessed(version, fn)
+                f.write_from(cp_from)
 
         # Ensure the repository is returned to its original state, prior to
         # pre-processing
