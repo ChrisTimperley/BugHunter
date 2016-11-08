@@ -1,5 +1,6 @@
 import utility
 import cgum
+import cgum.program
 import git
 import hashlib
 import os
@@ -20,8 +21,8 @@ class Storage(object):
     #    return DiffFile(self, repo, fix, fn)
 
     # Returns a handler for the AST of a given (pre-processed) file
-    #def ast(self, repo, fix, ver, fn):
-    #    return AstFile(self, repo, fix, ver, fn)
+    def ast(self, ver, fn):
+        return AstFile(self.__master, ver, fn)
 
     # Returns a handler for a given (pre-processed) source code file
     def preprocessed(self, ver, fn):
@@ -56,6 +57,14 @@ class Storage(object):
 
             # TODO: collapse path
             fn = "%s.%s.c" % (fn.replace('/', '-'), suffix)
+            fix = artefact.version().fix()
+            rel = os.path.join(fix.repository().id(),\
+                               fix.identifier(),\
+                               fn)
+        elif isinstance(artefact, AstFile):
+            fn = artefact.name()[:-2] # remove ".c" suffix
+            suffix = "after" if artefact.version().is_fixed() else "before"
+            fn = "%s.%s.cgum.json" % (fn.replace('/', '-'), suffix)
             fix = artefact.version().fix()
             rel = os.path.join(fix.repository().id(),\
                                fix.identifier(),\
@@ -170,18 +179,29 @@ class PreprocessedFile(object):
 #        # ensure the path exists
 #        return open(loc, 'w')
 
-#class AstFile(object):
-#    def __init__(self, storage, repo, fix, version, fn):
-#        self.__storage = storage
-#        self.__repo = repo
-#        self.__fix = fix
-#        self.__version = version
-#        self.__fn = fn
-#
-#    def ast(self):
-#        if not self.exists():
-#            f = storage.as_writable_file(self)
-#            src = storage.source(self.repo, self.fix, self.version, self.fn)
-#            cgum.link.parse_to_file(src, f)
-#            f.close()
-#        return cgum.Program.from_json_file(storage.read_as_file(self))
+class AstFile(object):
+    def __init__(self, master, version, fn):
+        self.__master = master
+        self.__version = version
+        self.__fn = fn
+
+    # Returns the name of the associated source file
+    def name(self):
+        return self.__fn
+
+    def version(self):
+        return self.__version
+
+    # Determines whether this file exists on disk.
+    def exists(self):
+        return self.__master.storage().exists(self)
+
+    def ast(self):
+        storage = self.__master.storage()
+        if not self.exists():
+            f = storage.writer(self)
+            src = storage.preprocessed(self.version, self.__fn)
+            cgum.link.parse_to_file(src, f)
+            f.close()
+        f = storage.reader(self).name
+        return cgum.program.Program.from_json_file(f)
