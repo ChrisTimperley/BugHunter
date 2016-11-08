@@ -17,6 +17,9 @@ repository=$1
 #dockerimage="bughunter:$1"
 dockerimage=$2
 
+echo "Repository: $repository"
+echo "Docker image: $dockerimage"
+
 # Ensure the image has been built from the dockerfile
 #docker build -t $dockerimage "$2" || exit 1
 
@@ -26,4 +29,4 @@ docker run --rm \
   -v "$repository":/repository \
   -v "$support_dir":/bughunter \
   $dockerimage \
-  /bin/bash /bughunter/preprocessor.sh
+  /bughunter/preprocessor.sh
