@@ -97,7 +97,8 @@ class Fix(object):
         before = repo.commit('%s~1' % self.__identifier)
         after = repo.commit(self.__identifier)
         diff = before.diff(after)
-        modified = [d.a_path for d in diff if d.change_type == 'M']
+        modified = [d.a_path for d in diff if   d.change_type == 'M' and\
+                                                d.a_path.endswith('.c')]
         return modified
     
     # Determines whether this fix modifies a header file
