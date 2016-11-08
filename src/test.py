@@ -6,9 +6,10 @@ repo = bh.repository("https://github.com/stedolan/jq")
 git = repo.repository()
 fixes = repo.fixes()
 
-f = fixes[0]
-
-pp = f.before().preprocessed("src/util.c")
-ast = f.before().ast("src/util.c")
-
-print(ast)
+for fix in fixes:
+    print(fix.identifier())
+    before = fix.before()
+    after = fix.after()
+    for fn in fix.modified_source_files():
+        before.ast(fn)
+        print(fn)
