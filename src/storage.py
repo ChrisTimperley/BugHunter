@@ -199,9 +199,14 @@ class AstFile(object):
     def ast(self):
         storage = self.__master.storage()
         if not self.exists():
-            f = storage.writer(self)
-            src = storage.preprocessed(self.version, self.__fn)
-            cgum.link.parse_to_file(src, f)
-            f.close()
+            try:
+                f = storage.writer(self)
+                src = storage.preprocessed(self.version, self.__fn)
+                cgum.link.parse_to_file(src, f)
+            except:
+                os.unlink(f.name)
+                raise
+            finally:
+                f.close()
         f = storage.reader(self).name
         return cgum.program.Program.from_json_file(f)
