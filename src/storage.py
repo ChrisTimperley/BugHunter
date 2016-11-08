@@ -54,8 +54,6 @@ class Storage(object):
         elif isinstance(artefact, PreprocessedFile):
             fn = artefact.name()[:-2] # remove ".c" suffix
             suffix = "after" if artefact.version().is_fixed() else "before"
-
-            # TODO: collapse path
             fn = "%s.%s.c" % (fn.replace('/', '-'), suffix)
             fix = artefact.version().fix()
             rel = os.path.join(fix.repository().id(),\
@@ -201,12 +199,14 @@ class AstFile(object):
         if not self.exists():
             try:
                 f = storage.writer(self)
-                src = storage.preprocessed(self.version, self.__fn)
-                cgum.link.parse_to_file(src, f)
+                src = storage.preprocessed(self.__version, self.__fn)
+                src = storage.reader(src)
+                cgum.program.Program.parse_to_json_file(src.name, f)
             except:
                 os.unlink(f.name)
                 raise
             finally:
                 f.close()
+                src.close()
         f = storage.reader(self).name
         return cgum.program.Program.from_json_file(f)

@@ -12,7 +12,7 @@ class ProgramVersion(object):
 
     # Returns the AST for a file modified by this edit, with a given name
     def ast(self, fn):
-        pass
+        return self.__fix.master().storage().ast(self, fn).ast()
 
     # Returns the pre-processed source code for a given file that was modified
     # by this edit, as a readable file.

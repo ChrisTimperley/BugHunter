@@ -8,7 +8,7 @@ fixes = repo.fixes()
 
 f = fixes[0]
 
-print(f.files())
-
 pp = f.before().preprocessed("src/util.c")
-print(pp.read())
+ast = f.before().ast("src/util.c")
+
+print(ast)
