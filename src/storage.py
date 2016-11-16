@@ -199,19 +199,18 @@ class AstFile(object):
 
     def ast(self):
         storage = self.__master.storage()
+        f = src_h = None
         if not self.exists():
             try:
                 f = storage.writer(self)
-                print("getting preprocessed")
                 src = storage.preprocessed(self.__version, self.__fn)
-                print(src)
-                src = src.readable()
-                cgum.program.Program.parse_to_json_file(src.name, f)
+                src_h = src.readable()
+                cgum.program.Program.parse_to_json_file(src_h.name, f)
             except:
                 os.unlink(f.name)
                 raise
             finally:
-                if not f is None: f.close()
-                if not src is None: src.close()
+                if f: f.close()
+                if src_h: src_h.close()
         f = storage.reader(self).name
         return cgum.program.Program.from_json_file(f)
