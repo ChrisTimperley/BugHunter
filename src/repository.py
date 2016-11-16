@@ -19,6 +19,9 @@ class Repository(object):
     def address(self):
         return self.__address
 
+    def preprocessor(self):
+        return self.__preprocessor
+
     # Returns a GitPython object for this Git repository
     def repository(self):
         return self.__master.storage().git(self)

@@ -38,6 +38,7 @@ class Preprocessor(object):
             # TODO: log std. err and std. out to a temporary file to improve
             # debugging
             with open(os.devnull, "w") as f:
+                print(cmd)
                 rc = subprocess.call(cmd, stdout=f, stderr=f, shell=True)
                 assert rc == 0, ("preprocessor failure: %s" % cmd)
 

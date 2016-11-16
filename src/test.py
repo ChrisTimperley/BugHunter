@@ -2,9 +2,11 @@
 from bughunter import BugHunter
 
 bh = BugHunter()
-repo = bh.repository("https://github.com/stedolan/jq", "bughunter:jq")
+#repo = bh.repository("https://github.com/stedolan/jq", "bughunter:jq")
+repo = bh.repository("https://github.com/curl/curl", "bughunter::curl")
 git = repo.repository()
 fixes = repo.fixes()
+fixes = fixes[0:10]
 
 for fix in fixes:
     try:

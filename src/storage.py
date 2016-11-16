@@ -127,7 +127,7 @@ class DatabaseFile(object):
         # destroy any partially written files
         except:
             f.close()
-            os.isfile(f.name) and os.remove(f.name)
+            os.path.isfile(f.name) and os.remove(f.name)
             raise
 
 class PreprocessedFile(object):
@@ -154,9 +154,8 @@ class PreprocessedFile(object):
     def readable(self):
         print("getting readable")
         if not self.exists():
-            print("preprocessing")
-            self.__master.preprocessor().preprocess(self.version())
-            print("preprocessed")
+            pp = self.__version.fix().repository().preprocessor()
+            pp.preprocess(self.version())
         return self.__master.storage().reader(self)
 
     # Writes to the preprocessed file, using another file as source
@@ -206,7 +205,8 @@ class AstFile(object):
                 src = storage.preprocessed(self.__version, self.__fn)
                 src_h = src.readable()
                 cgum.program.Program.parse_to_json_file(src_h.name, f)
-            except:
+            except Exception as e:
+                print(e)
                 os.unlink(f.name)
                 raise
             finally:
