@@ -152,8 +152,11 @@ class PreprocessedFile(object):
     # Returns a readable file for this preprocessed file, which may or may
     # not represent the physical file on disk
     def readable(self):
+        print("getting readable")
         if not self.exists():
+            print("preprocessing")
             self.__master.preprocessor().preprocess(self.version())
+            print("preprocessed")
         return self.__master.storage().reader(self)
 
     # Writes to the preprocessed file, using another file as source
@@ -199,14 +202,16 @@ class AstFile(object):
         if not self.exists():
             try:
                 f = storage.writer(self)
+                print("getting preprocessed")
                 src = storage.preprocessed(self.__version, self.__fn)
-                src = storage.reader(src)
+                print(src)
+                src = src.readable()
                 cgum.program.Program.parse_to_json_file(src.name, f)
             except:
                 os.unlink(f.name)
                 raise
             finally:
-                f.close()
-                src.close()
+                if not f is None: f.close()
+                if not src is None: src.close()
         f = storage.reader(self).name
         return cgum.program.Program.from_json_file(f)
