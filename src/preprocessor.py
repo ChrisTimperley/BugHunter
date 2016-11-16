@@ -37,9 +37,11 @@ class Preprocessor(object):
                                "../lib/preprocess")
             cmd  = "%s '%s' '%s'" % (cmd, repo.working_dir, DOCKER_IMAGE)
 
-            # TODO: docker is failing, shouldn't be hard to fix
+            # TODO: log std. err and std. out to a temporary file to improve
+            # debugging
             with open(os.devnull, "w") as f:
-                subprocess.call(cmd, stdout=f, stderr=f, shell=True)
+                rc = subprocess.call(cmd, stdout=f, stderr=f, shell=True)
+                assert rc == 0, ("preprocessor failure: %s" % cmd)
 
             # Save each of the modified source files to storage
             for fn in fix.modified_source_files():

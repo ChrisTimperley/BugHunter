@@ -11,5 +11,8 @@ for fix in fixes:
     before = fix.before()
     after = fix.after()
     for fn in fix.modified_source_files():
-        before.ast(fn)
         print(fn)
+        print("Loading before:")
+        before.ast(fn)
+        print("Loading after:")
+        after.ast(fn)
