@@ -122,7 +122,7 @@ class DatabaseFile(object):
     def write(self, fixes):
         f = self.__master.storage().writer(self)
         try:
-            json.dump([fix.to_json(fx) for fx in fixes], f, indent=2)
+            json.dump([fx.to_json() for fx in fixes], f, indent=2)
             f.close()
         # destroy any partially written files
         except:
