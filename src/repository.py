@@ -1,10 +1,12 @@
 import hashlib as hsh
+import preprocessor
 
 # Used to provide access to a Git repository and its mined edits
 class Repository(object):
-    def __init__(self, master, address):
+    def __init__(self, master, address, docker_image):
         self.__master = master
         self.__address = address
+        self.__preprocessor = preprocessor.Preprocessor(master, docker_image)
 
     # Returns a short, file-name friendly identifier for this repository.
     def id(self):

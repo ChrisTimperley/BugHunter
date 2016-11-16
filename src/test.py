@@ -2,17 +2,21 @@
 from bughunter import BugHunter
 
 bh = BugHunter()
-repo = bh.repository("https://github.com/stedolan/jq")
+repo = bh.repository("https://github.com/stedolan/jq", "bughunter:jq")
 git = repo.repository()
 fixes = repo.fixes()
 
 for fix in fixes:
-    print(fix.identifier())
-    before = fix.before()
-    after = fix.after()
-    for fn in fix.modified_source_files():
-        print(fn)
-        print("Loading before:")
-        before.ast(fn)
-        print("Loading after:")
-        after.ast(fn)
+    try:
+        print(fix.identifier())
+        before = fix.before()
+        after = fix.after()
+        for fn in fix.modified_source_files():
+                print("Loading file: %s" % fn)
+                before.ast(fn)
+                after.ast(fn)
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except:
+        print("Failed: %s" % fix.identifier())
+        pass

@@ -10,8 +10,9 @@ import utility as util
 # We need to run a whole bunch of things on our Docker instance, then save
 # it using the Storage handler.
 class Preprocessor(object):
-    def __init__(self, master, threads = 8):
+    def __init__(self, master, docker_image, threads = 8):
         self.__master = master
+        self.__docker_image = docker_image
         self.__threads = threads
 
     def preprocess(self, version):
@@ -29,13 +30,10 @@ class Preprocessor(object):
             repo.git.reset('--hard')
             repo.git.checkout(commit, b='preprocessing')
 
-            # TODO: For now, use the "bh" docker image
-            DOCKER_IMAGE = "bh"
-
             # Compute and execute the pre-process command
             cmd = os.path.join(os.path.dirname(os.path.realpath(__file__)),\
                                "../lib/preprocess")
-            cmd  = "%s '%s' '%s'" % (cmd, repo.working_dir, DOCKER_IMAGE)
+            cmd  = "%s '%s' '%s'" % (cmd, repo.working_dir, self.__docker_image)
 
             # TODO: log std. err and std. out to a temporary file to improve
             # debugging
