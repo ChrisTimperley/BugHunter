@@ -1,5 +1,4 @@
 FROM ubuntu:latest
-MAINTAINER Chris Timperley "christimperley@gmail.com"
 
 # install auto* tools
 RUN apt-get update --fix-missing
