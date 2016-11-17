@@ -2,7 +2,11 @@
 # modified by a given edit.
 import os
 import subprocess
-import utility as util
+import bughunter.utility as util
+
+# Calculate the path to the preprocess executable
+EXE_PREPROCESS = os.path.join(os.path.dirname(os.path.realpath(__file__)),\
+                              "../lib/preprocess")
 
 # Compiles the source code for a project, together with its pre-processed
 # files.
@@ -31,9 +35,7 @@ class Preprocessor(object):
             repo.git.checkout(commit, b='preprocessing')
 
             # Compute and execute the pre-process command
-            cmd = os.path.join(os.path.dirname(os.path.realpath(__file__)),\
-                               "../lib/preprocess")
-            cmd  = "%s '%s' '%s'" % (cmd, repo.working_dir, self.__docker_image)
+            cmd  = "%s '%s' '%s'" % (EXE_PREPROCESS, repo.working_dir, self.__docker_image)
 
             # TODO: log std. err and std. out to a temporary file to improve
             # debugging
