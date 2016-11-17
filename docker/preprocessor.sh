@@ -38,7 +38,8 @@ fi
 
 # Avoids Redis bugs
 if [ -f Makefile ] ; then
-  make distclean || fail "make distclean"
+  make distclean
+  # || fail "make distclean"
 fi
 
 ## Attempt to configure

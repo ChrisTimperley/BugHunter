@@ -1,6 +1,6 @@
 .PHONY: build-jq
 
-all: build-jq
+all: build-jq build-curl
 
 build-curl:
 	docker build -t bughunter:curl curl
