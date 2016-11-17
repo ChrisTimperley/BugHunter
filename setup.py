@@ -10,5 +10,9 @@ setup(
     author_email='christimperley@gmail.com',
     url='https://github.com/ChrisTimperley/BugHunter',
     license='MIT',
-    packages=find_packages()
+    packages=['bughunter'],
+    install_requires=[
+        'docker'
+    ],
+    include_package_data=True
 )
