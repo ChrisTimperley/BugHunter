@@ -1,4 +1,4 @@
-import fix
+import bughunter.fix as fix
 
 # Responsible for traversing through a Git repository and finding all bug
 # fixes.

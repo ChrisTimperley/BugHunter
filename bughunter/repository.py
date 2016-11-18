@@ -1,5 +1,5 @@
 import hashlib as hsh
-import preprocessor
+import bughunter.preprocessor as preprocessor
 
 # Used to provide access to a Git repository and its mined edits
 class Repository(object):

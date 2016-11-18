@@ -1,2 +1,1 @@
-include lib/preprocess
-include docker/preprocessor.sh
+graft bughunter/auxillary

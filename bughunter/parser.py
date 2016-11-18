@@ -1,4 +1,4 @@
-from utility import *
+from bughunter.utility import *
 import shutil
 import os.path
 import subprocess

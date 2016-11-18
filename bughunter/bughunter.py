@@ -1,9 +1,9 @@
-import storage
-import scanner
+import bughunter.storage as storage
+import bughunter.scanner as scanner
+import bughunter.repository as repository
+import bughunter.preprocessor as preprocesor
+import bughunter.fix as fix
 import os
-import repository
-import preprocessor
-import fix
 
 class BugHunter(object):
     def __init__(self):

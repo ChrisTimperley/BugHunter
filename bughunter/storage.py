@@ -1,11 +1,11 @@
-import utility
+import bughunter.utility as utility
+import bughunter.fix as fix
 import cgum
 import cgum.program
 import git
 import hashlib
 import os
 import json
-import fix
 
 # The Storage class is responsible for abstracting away the details of how and
 # where BugHunter's artefacts are stored, including pre-processed, parsed, and

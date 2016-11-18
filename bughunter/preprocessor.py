@@ -6,7 +6,7 @@ import bughunter.utility as util
 
 # Calculate the path to the preprocess executable
 EXE_PREPROCESS = os.path.join(os.path.dirname(os.path.realpath(__file__)),\
-                              "../lib/preprocess")
+                              "auxillary/preprocess")
 
 # Compiles the source code for a project, together with its pre-processed
 # files.

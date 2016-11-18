@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-from bughunter import BugHunter
+from bughunter.bughunter import BugHunter
 
 bh = BugHunter()
 #repo = bh.repository("https://github.com/stedolan/jq", "bughunter:jq")
 repo = bh.repository("https://github.com/curl/curl", "bughunter:curl")
+#repo = bh.repository("https://github.com/vim/vim", "bughunter:vim")
 git = repo.repository()
 fixes = repo.fixes()
-#fixes = fixes[0:10]
+fixes = fixes[0:10]
 
 for fix in fixes:
     try:

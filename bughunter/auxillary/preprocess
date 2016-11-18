@@ -10,7 +10,6 @@
 # ./preprocess [repository-location] [dockerfile-location]
 #
 this_dir=$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )
-support_dir="$this_dir/../docker"
 
 repository=$1
 #dockerfile=$2
@@ -27,6 +26,6 @@ echo "Docker image: $dockerimage"
 # /bughunter/preprocess, then execute the preprocess executable
 docker run --rm \
   -v "$repository":/repository \
-  -v "$support_dir":/bughunter \
+  -v "$this_dir":/bughunter \
   $dockerimage \
   /bughunter/preprocessor.sh
