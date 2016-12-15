@@ -274,7 +274,7 @@ class ReplaceSwitchExpression(RepairAction):
         modified = filter(lambda s: s is cgum.statement.Switch, modified)
        
         l = map(lambda s: (patch.is_was(s), s), l)
-        l = filter(lambda (frm, to): frm.expr() != to.expr(), l)
+        l = filter(star(lambda frm,to: frm.expr() != to.expr()), l)
         actions['ReplaceSwitchExpression'] =\
             [ReplaceSwitchExpression(frm, to, frm.expr(), to.expr()) for (frm, to) in l]
 
@@ -288,8 +288,10 @@ class ReplaceLoopGuard(RepairAction):
     @staticmethod
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         modified = map(lambda a: (a.frm(), a.to()), actions['ModifyStatement'])
-        modified = filter(lambda (frm, to): frm is cgum.stmt.Loop, modified) # TODO: subtype?
-        l = filter(lambda (frm, to): frm.guard() != to.guard(), modified)
+        modified = filter(star(lambda frm,to: isinstance(frm, cgum.stmt.Loop)),\
+                          modified) # TODO: subtype?
+        l = filter(star(lambda frm,to: frm.guard() != to.guard()),\
+                   modified)
         actions['ReplaceLoopGuard'] =\
             [ReplaceLoopGuard(frm, to, frm.guard(), to.guard()) for (frm, to) in l]
         
@@ -304,8 +306,8 @@ class ReplaceLoopBody(RepairAction):
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: s is cgum.statement.Loop, stmts_aft)
         l = map(lambda s: (patch.is_was(s), s), l)
-        l = filter(lambda (frm, to): not frm is None, l)
-        l = filter(lambda (frm, to): frm.body() != to.body(), l)
+        l = filter(star(lambda frm,to: not frm is None), l)
+        l = filter(star(lambda frm,to: frm.body() != to.body()), l)
         actions['ReplaceLoopBody'] =\
             [ReplaceLoopBody(frm, to, frm.body(), to.body()) for (frm, to) in l]
 
@@ -324,8 +326,8 @@ class ModifyAssignment(RepairAction):
     def detect_all_in_modified_statement(stmt, mp, actions):
         l = stmt.find_all(lambda n: type(n) is cgum.expression.Assignment)
         l = map(lambda c: (c, patch.was_is(c)), l)
-        l = filter(lambda (frm, to): not to is None, l)
-        l = filter(lambda (frm, to): frm != to, l)
+        l = filter(star(lambda frm,to: not to is None), l)
+        l = filter(star(lambda frm,to: frm != to), l)
 
         for call in calls:
             actions['ModifyAssignment'].append(ModifyAssignment(frm, to))
@@ -389,8 +391,8 @@ class ModifyCall(RepairAction):
     def detect_all_in_modified_statement(stmt, mp, actions):
         calls = stmt.find_all(lambda n: type(n) is cgum.expression.FunctionCall)
         calls = map(lambda c: (c, patch.was_is(c)), calls)
-        calls = filter(lambda (frm, to): not to is None, calls)
-        calls = filter(lambda (frm, to): frm != to, calls)
+        calls = filter(star(lambda frm,to: not to is None), calls)
+        calls = filter(star(lambda frm,to: frm != to), calls)
 
         for call in calls:
             actions['ModifyCall'].append(ModifyCall(frm, to))
