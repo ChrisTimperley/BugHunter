@@ -1,4 +1,6 @@
 import json
+import tempfile
+import cgum.diff
 
 # Represents a version of a program for a particular bug fix, where the two
 # versions are Faulty and Fixed
@@ -123,7 +125,29 @@ class Fix(object):
         return FixedVersion(self)
 
     def diff(self, fn):
-        raise NotImplementedError("diff")
+        f_from = f_to = None
+        try:
+            src_from = self.before().source(fn).contents()
+            src_to = self.after().source(fn).contents()
+
+            f_from = tempfile.NamedTemporaryFile(mode='w', suffix='.c')
+            f_from.write(src_from)
+            f_from.flush()
+
+            f_to = tempfile.NamedTemporaryFile(mode='w', suffix='.c')
+            f_to.write(src_to)
+            f_to.flush()
+
+            diff = cgum.diff.AnnotatedDiff.from_source_files(f_from.name,\
+                                                             f_to.name)
+        except Exception as e:
+            print(e)
+        finally:
+            if not f_from is None:
+                f_from.close()
+            if not f_to is None:
+                f_to.close()
+        return diff
 
     # Returns a JSON description of this fix, in the form of a Dict
     def to_json(self):

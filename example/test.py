@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from bughunter.bughunter import BugHunter
+from bughunter.miner import RepairActionMiner
 
 bh = BugHunter()
 #repo = bh.repository("https://github.com/stedolan/jq", "bughunter:jq")
@@ -7,7 +8,9 @@ repo = bh.repository("https://github.com/curl/curl", "bughunter:curl")
 #repo = bh.repository("https://github.com/vim/vim", "bughunter:vim")
 git = repo.repository()
 fixes = repo.fixes()
-fixes = fixes[0:10]
+fixes = fixes[0:1]#fixes[0:10]
+
+miner = RepairActionMiner()
 
 for fix in fixes:
     try:
@@ -18,8 +21,12 @@ for fix in fixes:
                 print("Loading file: %s" % fn)
 
                 s = before.source(fn)
+                #ast = s.ast()
 
-                print(s.ast())
+                diff = fix.diff(fn)
+
+                #miner.mine()
+
 
                 #before.source().ast()
 
