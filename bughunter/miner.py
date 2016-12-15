@@ -1,42 +1,51 @@
 #!/usr/bin/python3
+import cgum
+import cgum.diff
 
-#####
-# GROUP: Fundamental
-#####
+class RepairActionMiner(object):
+    def __init__(self):
+        self.__action_types = [DeleteStatement,
+                               InsertStatement,
+                               ModifyStatement]
+
+    # Returns a dict of all repair actions within a given AST, aggregated by
+    # type
+    def mine(self, patch):
+        stmts_bef =\
+            patch.before().find(lambda n: isinstance(n, cgum.statement.Statement))
+        stmts_aft =\
+            patch.after().find(lambda n: isinstance(n, cgum.statement.Statement))
+        actions = {}
+        for action_type in self.__action_types:
+            action_type.detect(patch, stmts_bef, stmts_aft, actions)
+        return actions
+
+# Detects a deleted statement
 class DeleteStatement(RepairAction):
     @staticmethod
-    def detect(patch, mp, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: mp.after(s) is None, stmts_bef) # all deletes
-        l = filter(lambda s: not mp.after(s.parent()) is None, l) # redundancy
+    def detect(patch, stmts_bef, stmts_aft, actions):
+        l = filter(lambda s: patch.was_is(s) is None, stmts_bef) # all deletes
+        l = filter(lambda s: not patch.was_is(s.parent()) is None, l) # redundancy
         actions['DeleteStatement'] = [DeleteStatement(s) for s in l]
     def __init__(self, stmt):
         self.__stmt = stmt
 
+# Detects an inserted statement
 class InsertStatement(RepairAction):
     @staticmethod
-    def detect(patch, mp, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: mp.before(s) is None, stmts_aft) # all inserts
+    def detect(patch, stmts_bef, stmts_aft, actions):
+        l = filter(lambda s: patch.is_was(s) is None, stmts_aft) # all inserts
         l = map(lambda s: (s, s.parent()), l) # get parents
-        l = filter(lambda (s, p): not mp.before(p) is None, l) # redundancy
+        l = filter(lambda (s, p): not patch.is_was(p) is None, l) # redundancy
         actions['InsertStatement'] = [InsertStatement(s, p) for (s, p) in l]
     def __init__(self, stmt, parent):
         self.__stmt = stmt
         self.__parent = parent
 
-# Action: modify statement
-
-# - find the nearest statement to the modified node in P'
-# - 
-
-# - group edits by their nearest ancestor in P
-# - from this grouping, find the nearest (upstream) statement for each node
-# - gives us a mapping from statements to their immediate edits
-# - exclude deleted and inserted statements
-# - generate a ModifyStatement action for each non-empty set in the map
-
+# Detects that a statement has been modified (but neither deleted nor inserted)
 class ModifyStatement(RepairAction):
     @staticmethod
-    def detect(patch, mp, stmts_bef, stmts_aft, actions):
+    def detect(patch, stmts_bef, stmts_aft, actions):
         groups = {}
         actions['ModifyStatement'] = []
         for edit in edits:
@@ -72,7 +81,7 @@ def nearest_stmt_to_subject(edit, mp, groups):
     if type(edit) is cgum.diff.Insert:
         stmt = nearest_stmt(edit.inserted())
         if not stmt is None:
-            stmts = [mp.before(stmt)]
+            stmts = [patch.is_was(stmt)]
 
     elif type(edit) is cgum.diff.Delete:
         stmts = [nearest_stmt(edit.deleted())]
@@ -84,7 +93,7 @@ def nearest_stmt_to_subject(edit, mp, groups):
         stmt_from = nearest_stmt(edit.moved_from())
         stmt_to = nearest_stmt(edit.moved_to())
         if stmt_to is None:
-            stmt_to = mp.before(stmt_to)
+            stmt_to = patch.is_was(stmt_to)
         stmts = [stmt_from, stmt_to]
 
     for stmt in stmts:
@@ -108,7 +117,7 @@ class WrapStatement(RepairAction):
         inserted = map(InsertStatement.statement, actions['InsertStatement'])
         l = filter(lambda s: s is cgum.statement.IfStatement, inserted) # if stmt
         l = filter(lambda s: s.els() is None, l) # no else branch
-        l = filter(lambda s: not mp.before(s.then()) is None, l) # then is in P
+        l = filter(lambda s: not patch.is_was(s.then()) is None, l) # then is in P
         l = filter(lambda s: s.then() is cgum.statement.Statement, l) # P must be a statement
         l = filter(lambda s: not s.then() in modified, l) # then wasn't modified
         actions['WrapStatement'] =\
@@ -138,7 +147,7 @@ class ReplaceIfCondition(RepairAction):
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
         modified = filter(lambda s: s is cgum.stmt.IfStatement, modified)
-        l = map(lambda s: (mp.before(s), s), modified)
+        l = map(lambda s: (patch.is_was(s), s), modified)
         l = filter(lambda (frm, to): frm.guard() != to.guard(), l)
         actions['ReplaceIfCondition'] =\
             [ReplaceIfCondition(frm, to, frm.guard(), to.guard())]
@@ -152,7 +161,7 @@ class ReplaceThenBranch(RepairAction):
     @staticmethod
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: s is cgum.statement.IfStatement, stmts_aft) # ifs in P 
-        l = map(lambda s: (mp.before(s), s), l)
+        l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(lambda (frm, to): not frm is None, l)
         l = filter(lambda (frm, to): frm.then() != to.then(), l)
         actions['ReplaceThenBranch'] =\
@@ -169,7 +178,7 @@ class ReplaceElseBranch(RepairAction):
     @staticmethod
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: s is cgum.statement.IfStatement, stmts_aft) # ifs in P'
-        l = map(lambda s: (mp.before(s), s), l)
+        l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(lambda (frm, to): not frm is None, l)
         l = filter(lambda (frm, to): frm.els() != to.els(), l) # else statements differ
         l = filter(lambda (frm, to): not frm.els() is None, l) # not an insertion
@@ -187,7 +196,7 @@ class RemoveElseBranch(RepairAction):
     @staticmethod
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: s is cgum.statement.IfStatement, stmts_aft) # ifs in P'
-        l = map(lambda s: (mp.before(s), s), l)
+        l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(lambda (frm, to): not frm is None, l)
         l = filter(lambda (frm, to): frm.els() != to.els(), l) # else statements differ
         l = filter(lambda (frm, to): frm.els() is None, l) # deleted else branch
@@ -243,7 +252,7 @@ class GuardElseBranch(RepairAction):
         inserted = actions['InsertStatement']
         l = filter(lambda s: s is cgum.statement.IfStatement, l) # add If
         l = filter(lambda s: s.els() is None, l) # no else branch
-        l = filter(lambda s: mp.before(s.then()) == s.parent(), l)
+        l = filter(lambda s: patch.is_was(s.then()) == s.parent(), l)
         actions['GuardElseBranch'] =\
             [GuardElseBranch(frm, to, to.guard()) for (frm, to) in l]
 
@@ -261,7 +270,7 @@ class ReplaceSwitchExpression(RepairAction):
          modified = map(ModifyStatement.to, actions['ModifyStatement'])
          modified = filter(lambda s: s is cgum.statement.Switch, modified)
        
-        l = map(lambda s: (mp.before(s), s), l)
+        l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(lambda (frm, to): frm.expr() != to.expr(), l)
         actions['ReplaceSwitchExpression'] =\
             [ReplaceSwitchExpression(frm, to, frm.expr(), to.expr()) for (frm, to) in l]
@@ -291,7 +300,7 @@ class ReplaceLoopBody(RepairAction):
     @staticmethod
     def detect(patch, mp, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: s is cgum.statement.Loop, stmts_aft)
-        l = map(lambda s: (mp.before(s), s), l)
+        l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(lambda (frm, to): not frm is None, l)
         l = filter(lambda (frm, to): frm.body() != to.body(), l)
         actions['ReplaceLoopBody'] =\
