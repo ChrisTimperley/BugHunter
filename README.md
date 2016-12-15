@@ -6,6 +6,13 @@ repository, tagged with relevant meta-data, together with a directory
 structure of the modified source code files, in their pre-processed form,
 and the AST differences between the two versions.
 
+Installation
+============
+
+```
+python3 setup.py install
+```
+
 Usage
 ============
 
