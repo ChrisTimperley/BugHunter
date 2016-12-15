@@ -2,6 +2,7 @@ import bughunter.utility as utility
 import bughunter.fix as fix
 import cgum
 import cgum.program
+import tempfile
 import git
 import hashlib
 import os
@@ -23,6 +24,10 @@ class Storage(object):
     # Returns a handler for the AST of a given (pre-processed) file
     def ast(self, ver, fn):
         return AstFile(self.__master, ver, fn)
+
+    # Returns a handler for a given source code file
+    def source(self, ver, fn):
+        return SourceFile(self.__master, ver, fn)
 
     # Returns a handler for a given (pre-processed) source code file
     def preprocessed(self, ver, fn):
@@ -130,6 +135,49 @@ class DatabaseFile(object):
             os.path.isfile(f.name) and os.remove(f.name)
             raise
 
+# Provides access to the original source code contained within a given file
+# belonging to a specified program version
+class SourceFile(object):
+    def __init__(self, master, version, name):
+        self.__master = master
+        self.__version = version
+        self.__name = name
+        self.__loc = None
+
+    # Returns the program version that this preprocessed file belongs to
+    def version(self):
+        return self.__version
+
+    # Returns the name of the original source file, relative to its
+    # repository
+    def name(self):
+        return self.__name
+
+    # Returns a readable file handler; responsibility of the requestee to close
+    def readable(self):
+        f = tempfile.NamedTemporaryFile(mode="w+")
+        f.write(self.contents())
+        f.flush()
+        f.seek(0)
+        return f
+
+    # Returns the contents of this source file as a string
+    def contents(self):
+        repo = self.__version.fix().repository().repository()
+        blob = repo.commit(self.__version.identifier()).tree[self.__name]
+        return str(blob.data_stream.read())
+
+    # Returns the abstract syntax tree for this file.
+    # NOTE: does not cache to disk, for now
+    # TODO: add caching to disk
+    def ast(self):
+        with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
+            f.write(self.contents())
+            f.flush()
+            return cgum.program.Program.from_source_file(f.name)
+
+# Provides access to the pre-processed form of a given source code file from
+# a particular program version
 class PreprocessedFile(object):
     def __init__(self, master, version, name):
         self.__master = master
@@ -165,52 +213,3 @@ class PreprocessedFile(object):
         with open(src_fn, 'r') as src:
             writer.write(src.read())
         writer.close()
-
-#class SimpleDiffFile(object):
-#
-#    def read(self):
-#        return storage.read_at(self.location())
-#
-#    def writable_file(self, artefact):
-#        src_fn = hashlib.sha1(artefact.file_name).hexdigest()
-#        src_fn = "%s.%s.c" % (src_fn, version.id())
-#        loc = os.path.join(f.repo.id(), f.fix.id(), src_fn)
-#
-#        # ensure the path exists
-#        return open(loc, 'w')
-
-class AstFile(object):
-    def __init__(self, master, version, fn):
-        self.__master = master
-        self.__version = version
-        self.__fn = fn
-
-    # Returns the name of the associated source file
-    def name(self):
-        return self.__fn
-
-    def version(self):
-        return self.__version
-
-    # Determines whether this file exists on disk.
-    def exists(self):
-        return self.__master.storage().exists(self)
-
-    def ast(self):
-        storage = self.__master.storage()
-        f = src_h = None
-        if not self.exists():
-            try:
-                f = storage.writer(self)
-                src = storage.preprocessed(self.__version, self.__fn)
-                src_h = src.readable()
-                cgum.program.Program.parse_to_json_file(src_h.name, f)
-            except Exception as e:
-                print(e)
-                os.unlink(f.name)
-                raise
-            finally:
-                if f: f.close()
-                if src_h: src_h.close()
-        f = storage.reader(self).name
-        return cgum.program.Program.from_json_file(f)
