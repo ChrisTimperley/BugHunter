@@ -165,7 +165,7 @@ class SourceFile(object):
     def contents(self):
         repo = self.__version.fix().repository().repository()
         blob = repo.commit(self.__version.identifier()).tree[self.__name]
-        return str(blob.data_stream.read())
+        return blob.data_stream.read().decode()
 
     # Returns the abstract syntax tree for this file.
     # NOTE: does not cache to disk, for now
