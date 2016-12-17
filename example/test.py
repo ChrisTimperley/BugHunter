@@ -8,7 +8,7 @@ repo = bh.repository("https://github.com/curl/curl", "bughunter:curl")
 #repo = bh.repository("https://github.com/vim/vim", "bughunter:vim")
 git = repo.repository()
 fixes = repo.fixes()
-fixes = fixes[0:1]#fixes[0:10]
+fixes = fixes[1:2]#fixes[0:10]
 
 miner = RepairActionMiner()
 
@@ -21,12 +21,10 @@ for fix in fixes:
                 print("Loading file: %s" % fn)
 
                 s = before.source(fn)
-                #ast = s.ast()
-
+                print("got src")
                 diff = fix.diff(fn)
-
-                #miner.mine()
-
+                print("got diff")
+                miner.mine(diff)
 
                 #before.source().ast()
 

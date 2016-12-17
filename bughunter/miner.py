@@ -18,9 +18,11 @@ class RepairActionMiner(object):
     # type
     def mine(self, patch):
         stmts_bef =\
-            patch.before().find(lambda n: isinstance(n, cgum.statement.Statement))
+            patch.before().collect(lambda n: isinstance(n, cgum.statement.Statement))
         stmts_aft =\
-            patch.after().find(lambda n: isinstance(n, cgum.statement.Statement))
+            patch.after().collect(lambda n: isinstance(n, cgum.statement.Statement))
+        patch.before().pp()
+        print(stmts_bef)
         actions = {}
         for action_type in self.__action_types:
             action_type.detect(patch, stmts_bef, stmts_aft, actions)

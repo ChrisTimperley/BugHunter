@@ -137,9 +137,10 @@ class Fix(object):
             f_to = tempfile.NamedTemporaryFile(mode='w', suffix='.c')
             f_to.write(src_to)
             f_to.flush()
-
+            print("reading diff")
             diff = cgum.diff.AnnotatedDiff.from_source_files(f_from.name,\
                                                              f_to.name)
+            print("read diff")
         except Exception as e:
             print(e)
         finally:
