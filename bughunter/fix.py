@@ -142,7 +142,7 @@ class Fix(object):
                                                              f_to.name)
             print("read diff")
         except Exception as e:
-            print(e)
+            raise
         finally:
             if not f_from is None:
                 f_from.close()
