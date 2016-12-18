@@ -3,7 +3,8 @@ MAINTAINER Chris Timperley "christimperley@gmail.com"
 
 ADD . /tmp/bughunter
 RUN apt-get update && \
-    apt-get install -y python3-setuptools && \
+    apt-get install -y python3-setuptools python3-pip && \
+    pip3 install gitpython && \
     cd /tmp && \
     git clone https://github.com/ChrisTimperley/PythonCGum pycgum && \
     cd /tmp/pycgum &&\
