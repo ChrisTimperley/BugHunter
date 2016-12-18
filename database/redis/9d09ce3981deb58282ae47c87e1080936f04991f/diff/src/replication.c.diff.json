@@ -1,7 +1,0 @@
-[
-  {
-    "action": "update",
-    "tree": 21637,
-    "label": "\"Failed enabling the AOF after successful master synchrnization! Trying it again in one second.\""
-  }
-]

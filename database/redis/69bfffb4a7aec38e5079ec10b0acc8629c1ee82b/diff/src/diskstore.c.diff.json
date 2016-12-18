@@ -1,7 +1,0 @@
-[
-  {
-    "action": "update",
-    "tree": 10141,
-    "label": "\"Error moving temp DB file on the final destination: %s\""
-  }
-]
