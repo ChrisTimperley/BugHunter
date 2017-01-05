@@ -58,10 +58,10 @@ class ModifyStatement(RepairAction):
     def detect(patch, stmts_bef, stmts_aft, actions):
         groups = {}
         actions['ModifyStatement'] = []
-        for edit in edits:
+        for edit in patch.actions():
             nearest_stmt_to_subject(edit, patch, groups)
         for (stmt_bef, edits) in groups.items():
-            stmt_aft = patch.was_is(stmt)
+            stmt_aft = patch.was_is(stmt_bef)
 
             # ensure the statement isn't deleted
             if stmt_aft is None:
