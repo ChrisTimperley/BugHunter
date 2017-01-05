@@ -25,6 +25,7 @@ class RepairActionMiner(object):
         print(stmts_bef)
         actions = {}
         for action_type in self.__action_types:
+            print("Finding actions of type: %s" % action_type)
             action_type.detect(patch, stmts_bef, stmts_aft, actions)
         return actions
 
@@ -44,7 +45,7 @@ class InsertStatement(RepairAction):
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: patch.is_was(s) is None, stmts_aft) # all inserts
         l = map(lambda s: (s, s.parent()), l) # get parents
-        l = filter(star(lambda s,p: not patch.is_was(p) is None, l)) # redundancy
+        l = filter(star(lambda s,p: not patch.is_was(p) is None), l) # redundancy
         actions['InsertStatement'] =\
             [InsertStatement(s, p) for (s, p) in l]
     def __init__(self, stmt, parent):

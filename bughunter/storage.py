@@ -14,7 +14,10 @@ import json
 class Storage(object):
     def __init__(self, master, root=None):
         self.__master = master
-        self.__root = os.path.join(os.path.expanduser('~'), 'bughunter')
+        if 'BUGHUNTER' in os.environ:
+            self.__root = os.environ['BUGHUNTER']
+        else:
+            self.__root = os.path.join(os.path.expanduser('~'), 'bughunter')
         utility.ensure_dir(self.__root)
 
     # Returns a handler for a given diff
