@@ -25,7 +25,10 @@ class RepairActionMiner(object):
                                ReplaceSwitchExpression,
                                ReplaceLoopGuard,
                                ReplaceLoopBody,
-                               ModifyAssignment]
+                               ModifyAssignment,
+                               ReplaceAssignmentRHS,
+                               ReplaceAssignmentLHS,
+                               ReplaceAssignmentOp]
 
     # Returns a dict of all repair actions within a given AST, aggregated by
     # type
@@ -372,6 +375,11 @@ class ModifyAssignment(RepairAction):
         self.__frm = frm
         self.__to = to
 
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
+
 class ReplaceAssignmentRHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -385,6 +393,11 @@ class ReplaceAssignmentRHS(RepairAction):
     def __init__(self, frm, to):
         self.__frm = frm
         self.__to = to
+
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
 
 class ReplaceAssignmentLHS(RepairAction):
     @staticmethod
@@ -400,6 +413,11 @@ class ReplaceAssignmentLHS(RepairAction):
         self.__frm = frm
         self.__to = to
 
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
+
 class ReplaceAssignmentOp(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -408,11 +426,16 @@ class ReplaceAssignmentOp(RepairAction):
         l = filter(lambda a: a.frm().op() != a.to().op(), l)
         l = filter(lambda a: a.frm().lhs() == a.to().lhs(), l)
         actions['ReplaceAssignmentOp'] = \
-            [ReplaceAssignmentOp(a.frm().op(), a.op().lhs()) for a in l]
+            [ReplaceAssignmentOp(a.frm().op(), a.to().op()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
         self.__to = to
+
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
 
 ## FUNCTION-CALL-RELATED ACTIONS
 class ModifyCall(RepairAction):
