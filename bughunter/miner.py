@@ -17,7 +17,8 @@ class RepairActionMiner(object):
                                UnwrapStatement,
                                ReplaceIfCondition,
                                ReplaceThenBranch,
-                               ReplaceElseBranch]
+                               ReplaceElseBranch,
+                               RemoveElseBranch]
 
     # Returns a dict of all repair actions within a given AST, aggregated by
     # type
