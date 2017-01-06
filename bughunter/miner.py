@@ -28,7 +28,8 @@ class RepairActionMiner(object):
                                ModifyAssignment,
                                ReplaceAssignmentRHS,
                                ReplaceAssignmentLHS,
-                               ReplaceAssignmentOp]
+                               ReplaceAssignmentOp,
+                               ModifyCall]
 
     # Returns a dict of all repair actions within a given AST, aggregated by
     # type
@@ -446,7 +447,7 @@ class ModifyCall(RepairAction):
         calls = filter(star(lambda frm,to: not to is None), calls)
         calls = filter(star(lambda frm,to: frm != to), calls)
 
-        for call in calls:
+        for (frm, to) in calls:
             actions['ModifyCall'].append(ModifyCall(frm, to))
 
     @staticmethod
@@ -459,6 +460,11 @@ class ModifyCall(RepairAction):
     def __init__(self, frm, to):
         self.__frm = frm
         self.__to = to
+
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
 
 class ReplaceCallTarget(RepairAction):
     @staticmethod
@@ -473,6 +479,11 @@ class ReplaceCallTarget(RepairAction):
         self.__frm = frm
         self.__to = to
 
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
+
 class ModifyCallArgs(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -485,6 +496,11 @@ class ModifyCallArgs(RepairAction):
     def __init__(self, frm, to):
         self.__frm = frm
         self.__to = to
+
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
 
 class InsertCallArg(RepairAction):
     # detects whether a single argument added to "before" yields "to"
