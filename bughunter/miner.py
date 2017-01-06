@@ -76,7 +76,7 @@ class ModifyStatement(RepairAction):
         self.__to = to
         self.__edits = edits
 
-    def from(self):
+    def frm(self):
         return self.__frm
     def to(self):
         return self.__to
