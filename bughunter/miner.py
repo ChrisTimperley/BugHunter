@@ -13,7 +13,8 @@ class RepairActionMiner(object):
         self.__action_types = [DeleteStatement,
                                InsertStatement,
                                ModifyStatement,
-                               WrapStatement]
+                               WrapStatement,
+                               UnwrapStatement]
 
     # Returns a dict of all repair actions within a given AST, aggregated by
     # type
@@ -39,6 +40,9 @@ class DeleteStatement(RepairAction):
         actions['DeleteStatement'] = [DeleteStatement(s) for s in l]
     def __init__(self, stmt):
         self.__stmt = stmt
+    
+    def statement(self):
+        return self.__stmt
 
 # Detects an inserted statement
 class InsertStatement(RepairAction):
