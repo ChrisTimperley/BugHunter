@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import pprint
+import traceback
 from bughunter.bughunter import BugHunter
 from bughunter.miner import RepairActionMiner
 
@@ -8,7 +10,7 @@ repo = bh.repository("https://github.com/curl/curl", "bughunter:curl")
 #repo = bh.repository("https://github.com/vim/vim", "bughunter:vim")
 git = repo.repository()
 fixes = repo.fixes()
-fixes = fixes[1:2]#fixes[0:10]
+fixes = fixes[1:20]#fixes[0:10]
 
 miner = RepairActionMiner()
 
@@ -21,17 +23,13 @@ for fix in fixes:
                 print("Loading file: %s" % fn)
 
                 s = before.source(fn)
-                print("got src")
                 diff = fix.diff(fn)
-                print("got diff")
-                miner.mine(diff)
+                actions = miner.mine(diff)
+                pprint.pprint(actions)
 
-                #before.source().ast()
-
-                #before.ast(fn)
-                #after.ast(fn)
     except (KeyboardInterrupt, SystemExit):
         raise
     except Exception as e:
         print("Failed [%s]: %s" % (fix.identifier(), e))
+        print(traceback.format_exc())
         pass

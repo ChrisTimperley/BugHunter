@@ -14,3 +14,6 @@ RUN apt-get update && \
     apt-get remove -y python3-setuptools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+ADD example /example
+RUN mkdir -p /bughunter
+ENV BUGHUNTER /bughunter

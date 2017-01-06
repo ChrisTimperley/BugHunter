@@ -21,12 +21,12 @@ class RepairActionMiner(object):
             patch.before().collect(lambda n: isinstance(n, cgum.statement.Statement))
         stmts_aft =\
             patch.after().collect(lambda n: isinstance(n, cgum.statement.Statement))
-        patch.before().pp()
-        print(stmts_bef)
+
         actions = {}
         for action_type in self.__action_types:
             print("Finding actions of type: %s" % action_type)
             action_type.detect(patch, stmts_bef, stmts_aft, actions)
+            print("- found %d actions of type: %s" % (len(actions[action_type.__name__]), action_type))
         return actions
 
 # Detects a deleted statement
@@ -78,9 +78,9 @@ class ModifyStatement(RepairAction):
 # Finds the nearest ancestor to a given node (including the node itself) that
 # satisfies a given predicate over an AST node
 def matching_ancestor(node, predicate):
-    while (not node is None) and (not predicate(node)):
+    while (not node is None) and not predicate(node):
         node = node.parent()
-    return None
+    return node
 
 def nearest_stmt(node):
     return matching_ancestor(node, lambda n: isinstance(n, cgum.statement.Statement))
@@ -101,9 +101,11 @@ def nearest_stmt_to_subject(edit, patch, groups):
 
     elif type(edit) is cgum.diff.Move:
         stmt_from = nearest_stmt(edit.moved_from())
+
         stmt_to = nearest_stmt(edit.moved_to())
-        if stmt_to is None:
+        if not stmt_to is None:
             stmt_to = patch.is_was(stmt_to)
+
         stmts = [stmt_from, stmt_to]
 
     for stmt in stmts:
