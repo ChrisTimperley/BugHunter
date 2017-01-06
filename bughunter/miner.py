@@ -18,7 +18,8 @@ class RepairActionMiner(object):
                                ReplaceIfCondition,
                                ReplaceThenBranch,
                                ReplaceElseBranch,
-                               RemoveElseBranch]
+                               RemoveElseBranch,
+                               InsertElseBranch]
 
     # Returns a dict of all repair actions within a given AST, aggregated by
     # type
@@ -239,7 +240,7 @@ class InsertElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
-        modified = filter(lambda s: s is cgum.stmt.IfElse, modified)
+        modified = filter(lambda s: s is cgum.statement.IfElse, modified)
         modified = map(lambda a: (a.frm(), a.to()), modified)
 
         l = filter(star(lambda frm,to: (frm.els() is None and (not to.els() is None))),\
@@ -257,7 +258,7 @@ class InsertElseIfBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
-        modified = filter(lambda s: s is cgum.stmt.IfElse, modified)
+        modified = filter(lambda s: s is cgum.statement.IfElse, modified)
         modified = map(lambda a: (a.frm(), a.to()), modified)
 
         l = filter(star(lambda frm,to: (frm.els() is None) and (not to.els() is None)),\
