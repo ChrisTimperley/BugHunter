@@ -233,11 +233,11 @@ class ReplaceIfCondition(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
-        modified = filter(lambda s: s is cgum.statement.IfElse, modified)
+        modified = filter(lambda s: isinstance(s, cgum.statement.IfElse), modified)
         l = map(lambda s: (patch.is_was(s), s), modified)
-        l = [(frm, to) for (frm, to) in l if frm.guard() != to.guard()]
+        l = [(frm, to) for (frm, to) in l if frm.condition() != to.condition()]
         actions['ReplaceIfCondition'] =\
-            [ReplaceIfCondition(frm, to, frm.guard(), to.guard()) for (frm, to) in l]
+            [ReplaceIfCondition(frm, to, frm.condition(), to.condition()) for (frm, to) in l]
     def __init__(self, from_stmt, to_stmt, from_guard, to_guard):
         self.__from_stmt = from_stmt
         self.__to_stmt = to_stmt
@@ -247,8 +247,10 @@ class ReplaceIfCondition(RepairAction):
 class ReplaceThenBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: s is cgum.statement.IfElse, stmts_aft) # ifs in P 
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P 
         l = map(lambda s: (patch.is_was(s), s), l)
+        l = list(l)
+        pprint.pprint(l)
         l = filter(star(lambda frm,to: not frm is None), l)
         l = filter(star(lambda frm,to: frm.then() != to.then()), l)
         actions['ReplaceThenBranch'] =\
@@ -264,7 +266,7 @@ class ReplaceThenBranch(RepairAction):
 class ReplaceElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: s is cgum.statement.IfElse, stmts_aft) # ifs in P'
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
         l = filter(star(lambda frm,to: frm.els() != to.els()), l) # else statements differ
