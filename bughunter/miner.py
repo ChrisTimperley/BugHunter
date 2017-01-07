@@ -57,7 +57,21 @@ class DeleteStatement(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: patch.was_is(s) is None, stmts_bef) # all deletes
-        l = filter(lambda s: not patch.was_is(s.parent()) is None, l) # redundancy
+
+        # remove redundant edits
+        tmp = []
+        for s in l:
+            if patch.was_is(s.parent()) is None: # parent was deleted
+                # if the parent is a block, and the parent of that block was NOT deleted,
+                # then mark this statement as a deleted statement (to counteract the
+                # annoying behaviour of MOVE)
+                if isinstance(s.parent(), cgum.statement.Block):
+                    if not patch.was_is(s.parent().parent()) is None:
+                        tmp.append(s)
+            else:
+                tmp.append(s)
+        l = tmp
+
         actions['DeleteStatement'] = [DeleteStatement(s) for s in l]
     def __init__(self, stmt):
         self.__stmt = stmt
@@ -166,12 +180,6 @@ class WrapStatement(RepairAction):
         l = filter(lambda s: s.els() is None, l) # no else branch
         l = list(l)
 
-        # contains a single statement (possibly contained within a block)
-        #l = filter(lambda s: not isinstance(s.then(), cgum.statement.Block) or len(s.then().contents()) == 1, \
-        #           l)
-        #l = list(l)
-        #print("Single statements: %d" % len(l))
-
         # ensure then branch is in Pa
         tmp = []
         for s in l:
@@ -197,9 +205,22 @@ class UnwrapStatement(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         deleted = map(DeleteStatement.statement, actions['DeleteStatement'])
-        l = filter(lambda s: s is cgum.statement.IfElse, deleted) # if stmt
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), deleted) # if stmt
         l = filter(lambda s: s.els() is None, l) # no else branch
-        l = filter(lambda s: not patch.was_is(s.then()) is None, l) # statement survived
+
+        # ensure the statement survived
+        tmp = []
+        for s in l:
+            if isinstance(s.then(), cgum.statement.Block):
+                if len(s.then().contents()) == 1:
+                    then = s.then().contents()[0]
+                else:
+                    continue
+            else:
+                then = s.then()
+            if not patch.is_was(then) is None:
+                tmp.append(s)
+        l = tmp
         actions['UnwrapStatement'] =\
             [UnwrapStatement(s, patch.was_is(s.then())) for s in l]
     def __init__(self, stmt, to):
