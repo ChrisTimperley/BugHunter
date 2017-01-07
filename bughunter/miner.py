@@ -235,7 +235,7 @@ class ReplaceIfCondition(RepairAction):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
         modified = filter(lambda s: isinstance(s, cgum.statement.IfElse), modified)
         l = map(lambda s: (patch.is_was(s), s), modified)
-        l = [(frm, to) for (frm, to) in l if frm.condition() != to.condition()]
+        l = [(frm, to) for (frm, to) in l if not frm.condition().equivalent(to.condition())]
         actions['ReplaceIfCondition'] =\
             [ReplaceIfCondition(frm, to, frm.condition(), to.condition()) for (frm, to) in l]
     def __init__(self, from_stmt, to_stmt, from_guard, to_guard):
@@ -247,12 +247,12 @@ class ReplaceIfCondition(RepairAction):
 class ReplaceThenBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
+        print(stmts_aft)
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P 
         l = map(lambda s: (patch.is_was(s), s), l)
         l = list(l)
-        pprint.pprint(l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: frm.then() != to.then()), l)
+        l = filter(star(lambda frm,to: not frm.then().equivalent(to.then())), l)
         actions['ReplaceThenBranch'] =\
             [ReplaceThenBranch(frm, to, frm.then(), to.then()) for (frm, to) in l]
 
@@ -262,14 +262,13 @@ class ReplaceThenBranch(RepairAction):
         self.__frm_then = frm_then
         self.__to_then = to_then
 
-# TODO: does not enforce checks on modification of if statement
 class ReplaceElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: frm.els() != to.els()), l) # else statements differ
+        l = filter(star(lambda frm,to: not frm.els().equivalent(to.els())), l) # else statements differ
         l = filter(star(lambda frm,to: not frm.els() is None), l) # not an insertion
         actions['ReplaceElseBranch'] =\
             [ReplaceElseBranch(frm, to, frm.els(), to.els()) for (frm, to) in l]
@@ -280,15 +279,14 @@ class ReplaceElseBranch(RepairAction):
         self.__frm_els = frm_els
         self.__to_els = to_els
 
-# TODO: does not enforce checks on modification of if statement
 class RemoveElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: s is cgum.statement.IfElse, stmts_aft) # ifs in P'
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: frm.els() != to.els()), l) # else statements differ
-        l = filter(star(lambda frm,to: frm.els() is None), l) # deleted else branch
+        l = filter(star(lambda frm,to: not frm.els().equivalent(to.els())), l) # else statements differ
+        l = filter(star(lambda frm,to: to.els() is None), l) # deleted else branch
         actions['RemoveElseBranch'] =\
             [RemoveElseBranch(frm, to, frm.els())  for (frm, to) in l]
 
