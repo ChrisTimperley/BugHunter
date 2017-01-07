@@ -250,7 +250,6 @@ class ReplaceThenBranch(RepairAction):
         print(stmts_aft)
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P 
         l = map(lambda s: (patch.is_was(s), s), l)
-        l = list(l)
         l = filter(star(lambda frm,to: not frm is None), l)
         l = filter(star(lambda frm,to: not frm.then().equivalent(to.then())), l)
         actions['ReplaceThenBranch'] =\
@@ -268,7 +267,7 @@ class ReplaceElseBranch(RepairAction):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: not frm.els().equivalent(to.els())), l) # else statements differ
+        l = filter(star(lambda frm,to: (frm.els() is None) != (to.els() is None) or frm.els().equivalent(to.els())), l) # else statements differ
         l = filter(star(lambda frm,to: not frm.els() is None), l) # not an insertion
         actions['ReplaceElseBranch'] =\
             [ReplaceElseBranch(frm, to, frm.els(), to.els()) for (frm, to) in l]
@@ -285,7 +284,7 @@ class RemoveElseBranch(RepairAction):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: not frm.els().equivalent(to.els())), l) # else statements differ
+        l = filter(star(lambda frm,to: (frm.els() is None) != (to.els() is None) or frm.els().equivalent(to.els())), l) # else statements differ
         l = filter(star(lambda frm,to: to.els() is None), l) # deleted else branch
         actions['RemoveElseBranch'] =\
             [RemoveElseBranch(frm, to, frm.els())  for (frm, to) in l]
@@ -305,7 +304,7 @@ class InsertElseBranch(RepairAction):
 
         l = filter(star(lambda frm,to: (frm.els() is None and (not to.els() is None))),\
                    modified)
-        l = filter(star(lambda _,to: not to.els() is cgum.statement.IfElse), l)
+        l = filter(star(lambda _,to: not isinstance(to.els(), cgum.statement.IfElse)), l)
         actions['InsertElseBranch'] =\
             [InsertElseBranch(frm, to, to.els()) for (frm, to) in l]
     def __init__(self, from_stmt, to_stmt, els):
