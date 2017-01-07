@@ -146,13 +146,7 @@ def nearest_stmt_to_subject(edit, patch, groups):
         stmts = [nearest_stmt(edit.deleted())]
 
     elif type(edit) is cgum.diff.Update:
-        print("Update?")
-        print("BEFORE: %s " % edit.before())
-        print("AFTER: %s" % edit.after())
-        print("ANCESTORS: %s" % edit.before().ancestors())
-        print("NEAREST: %s" % nearest_stmt(edit.before()))
         stmts = [nearest_stmt(edit.before())]
-        print(stmts)
 
     elif type(edit) is cgum.diff.Move:
         stmt_from = nearest_stmt(edit.moved_from())
