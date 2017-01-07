@@ -330,7 +330,6 @@ class InsertElseIfBranch(RepairAction):
         self.__to = to_stmt
         self.__elsif = elsif
 
-# TODO: VERIFY
 class GuardElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -361,10 +360,10 @@ class ReplaceSwitchExpression(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
-        modified = filter(lambda s: s is cgum.statement.Switch, modified)
+        modified = filter(lambda s: isinstance(s, cgum.statement.Switch), modified)
        
         l = map(lambda s: (patch.is_was(s), s), modified)
-        l = filter(star(lambda frm,to: frm.expr() != to.expr()), l)
+        l = filter(star(lambda frm,to: not frm.expr().equivalent(to.expr())), l)
         actions['ReplaceSwitchExpression'] =\
             [ReplaceSwitchExpression(frm, to, frm.expr(), to.expr()) for (frm, to) in l]
 
