@@ -146,7 +146,13 @@ def nearest_stmt_to_subject(edit, patch, groups):
         stmts = [nearest_stmt(edit.deleted())]
 
     elif type(edit) is cgum.diff.Update:
+        print("Update?")
+        print("BEFORE: %s " % edit.before())
+        print("AFTER: %s" % edit.after())
+        print("ANCESTORS: %s" % edit.before().ancestors())
+        print("NEAREST: %s" % nearest_stmt(edit.before()))
         stmts = [nearest_stmt(edit.before())]
+        print(stmts)
 
     elif type(edit) is cgum.diff.Move:
         stmt_from = nearest_stmt(edit.moved_from())
@@ -377,12 +383,22 @@ class ReplaceLoopGuard(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(lambda a: (a.frm(), a.to()), actions['ModifyStatement'])
-        modified = filter(star(lambda frm,to: isinstance(frm, cgum.statement.Loop)),\
-                          modified) # TODO: subtype?
-        l = filter(star(lambda frm,to: frm.guard() != to.guard()),\
+
+        tmp = []
+        for (frm, to) in modified:
+            if isinstance(frm, cgum.statement.Loop):
+                tmp.append((frm, to))
+            
+            # special for loop handling
+            if (not frm.parent() is None) and isinstance(frm.parent(), cgum.statement.Loop):
+                if frm.parent().condition() == frm:
+                    tmp.append((frm.parent(), to.parent()))
+        modified = tmp
+
+        l = filter(star(lambda frm,to: not frm.condition().equivalent(to.condition())),\
                    modified)
         actions['ReplaceLoopGuard'] =\
-            [ReplaceLoopGuard(frm, to, frm.guard(), to.guard()) for (frm, to) in l]
+            [ReplaceLoopGuard(frm, to, frm.condition(), to.condition()) for (frm, to) in l]
         
     def __init__(self, from_stmt, to_stmt, from_guard, to_guard):
         self.__from_stmt = from_stmt
