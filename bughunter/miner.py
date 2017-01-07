@@ -104,10 +104,12 @@ class ModifyStatement(RepairAction):
         for edit in patch.actions():
             nearest_stmt_to_subject(edit, patch, groups)
         for (stmt_bef, edits) in groups.items():
+            print("modified: %s" % stmt_bef)
             stmt_aft = patch.was_is(stmt_bef)
 
             # ensure the statement isn't deleted
             if stmt_aft is None:
+                print("statement was deleted - ignoring")
                 continue
             
             a = ModifyStatement(stmt_bef, stmt_aft, edits)
@@ -298,10 +300,11 @@ class RemoveElseBranch(RepairAction):
 class InsertElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        modified = map(ModifyStatement.to, actions['ModifyStatement'])
-        modified = filter(lambda s: s is cgum.statement.IfElse, modified)
+        modified = actions['ModifyStatement']
+        modified = filter(lambda a: isinstance(a.to(), cgum.statement.IfElse), modified)
         modified = map(lambda a: (a.frm(), a.to()), modified)
-
+        modified = list(modified)
+        pprint.pprint(modified)
         l = filter(star(lambda frm,to: (frm.els() is None and (not to.els() is None))),\
                    modified)
         l = filter(star(lambda _,to: not isinstance(to.els(), cgum.statement.IfElse)), l)
@@ -316,13 +319,13 @@ class InsertElseBranch(RepairAction):
 class InsertElseIfBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        modified = map(ModifyStatement.to, actions['ModifyStatement'])
-        modified = filter(lambda s: s is cgum.statement.IfElse, modified)
+        modified = actions['ModifyStatement']
+        modified = filter(lambda a: isinstance(a.to(), cgum.statement.IfElse), modified)
         modified = map(lambda a: (a.frm(), a.to()), modified)
 
         l = filter(star(lambda frm,to: (frm.els() is None) and (not to.els() is None)),\
                     modified)
-        l = filter(star(lambda _,to: to.els() is cgum.statement.IfElse), l)
+        l = filter(star(lambda _,to: isinstance(to.els(), cgum.statement.IfElse)), l)
         actions['InsertElseIfBranch'] =\
             [InsertElseIfBranch(frm, to, to.els()) for (frm, to) in l]
 
