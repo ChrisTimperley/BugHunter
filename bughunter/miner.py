@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 import cgum
+import pprint
 import cgum.diff
 
 def star(f):
@@ -29,7 +30,12 @@ class RepairActionMiner(object):
                                ReplaceAssignmentRHS,
                                ReplaceAssignmentLHS,
                                ReplaceAssignmentOp,
-                               ModifyCall]
+                               ModifyCall,
+                               ReplaceCallTarget,
+                               ModifyCallArgs,
+                               InsertCallArg,
+                               RemoveCallArg,
+                               ReplaceCallArg]
 
     # Returns a dict of all repair actions within a given AST, aggregated by
     # type
@@ -152,13 +158,36 @@ class WrapStatement(RepairAction):
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
         inserted = map(InsertStatement.statement, actions['InsertStatement'])
-        l = filter(lambda s: s is cgum.statement.IfElse, inserted) # if stmt
+
+        #l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft)
+        #print("W0: %d" % len(list(l)))
+        #l = filter(lambda s: patch.is_was(s) is None, l)
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), inserted) # if stmt
         l = filter(lambda s: s.els() is None, l) # no else branch
-        l = filter(lambda s: not patch.is_was(s.then()) is None, l) # then is in P
-        l = filter(lambda s: s.then() is cgum.statement.Statement, l) # P must be a statement
-        l = filter(lambda s: not s.then() in modified, l) # then wasn't modified
+        l = list(l)
+
+        # contains a single statement (possibly contained within a block)
+        #l = filter(lambda s: not isinstance(s.then(), cgum.statement.Block) or len(s.then().contents()) == 1, \
+        #           l)
+        #l = list(l)
+        #print("Single statements: %d" % len(l))
+
+        # ensure then branch is in Pa
+        tmp = []
+        for s in l:
+            if isinstance(s.then(), cgum.statement.Block):
+                # ensure the statement wasn't modified
+                if len(s.then().contents()) == 1 and (not s.then() in modified):
+                    then = s.then().contents()[0]
+                else:
+                    continue
+            else:
+                then = s.then()
+            if not patch.is_was(then) is None:
+                tmp.append(s)
+        l = tmp
         actions['WrapStatement'] =\
-            [WrapStatement(s.then(), s, s.guard()) for s in l]
+            [WrapStatement(s.then(), s, s.condition()) for s in l]
     def __init__(self, stmt, wrapper, guard):
         self.__stmt = stmt
         self.__wrapper = wrapper
@@ -470,10 +499,10 @@ class ReplaceCallTarget(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = actions['ModifyCall']
-        l = filter(lambda a: a.frm().target() != a.to().target(), l)
-        l = filter(lambda a: a.frm().args() == a.to().args(), l)
+        l = filter(lambda a: a.frm().function() != a.to().function(), l)
+        l = filter(lambda a: a.frm().arguments() == a.to().arguments(), l)
         actions['ReplaceCallTarget'] =\
-            [ReplaceCallTarget(a.frm().target(), a.to().target())]
+            [ReplaceCallTarget(a.frm().function(), a.to().function()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
@@ -488,10 +517,10 @@ class ModifyCallArgs(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = actions['ModifyCall']
-        l = filter(lambda a: a.frm().target() == a.to().target(), l)
-        l = filter(lambda a: a.frm().args() != a.to().args(), l)
-        actions['ModifyCall'] =\
-            [ModifyCallArgs(a.frm().args(), a.to().args(), a.edits())]
+        l = filter(lambda a: a.frm().function() == a.to().function(), l)
+        l = filter(lambda a: a.frm().arguments() != a.to().arguments(), l)
+        actions['ModifyCallArgs'] =\
+            [ModifyCallArgs(a.frm().arguments(), a.to().arguments(), a.edits()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
