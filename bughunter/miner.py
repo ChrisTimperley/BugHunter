@@ -29,7 +29,7 @@ class RepairActionMiner(object):
                                ModifyAssignment,
                                ReplaceAssignmentRHS,
                                ReplaceAssignmentLHS,
-                               ReplaceAssignmentOp,
+                               #ReplaceAssignmentOp,
                                ModifyCall,
                                ReplaceCallTarget,
                                ModifyCallArgs,
@@ -403,10 +403,10 @@ class ReplaceLoopGuard(RepairAction):
 class ReplaceLoopBody(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: s is cgum.statement.Loop, stmts_aft)
+        l = filter(lambda s: isinstance(s, cgum.statement.Loop), stmts_aft)
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: frm.body() != to.body()), l)
+        l = filter(star(lambda frm,to: not frm.body().equivalent(to.body())), l)
         actions['ReplaceLoopBody'] =\
             [ReplaceLoopBody(frm, to, frm.body(), to.body()) for (frm, to) in l]
 
@@ -417,25 +417,30 @@ class ReplaceLoopBody(RepairAction):
         self.__to_body = to_body
 
 ## ASSIGNMENT-RELATED OPERATORS
-#
-# TODO: deal with Assignment and InitExpr
 class ModifyAssignment(RepairAction):
     @staticmethod
     def detect_all_in_modified_statement(patch, stmt, actions):
-        l = stmt.find_all(lambda n: type(n) is cgum.expression.Assignment)
-        l = map(lambda c: (c, patch.was_is(c)), l)
-        l = filter(star(lambda frm,to: not to is None), l)
-        l = filter(star(lambda frm,to: frm != to), l)
-
-        for (frm, to) in l:
-            actions['ModifyAssignment'].append(ModifyAssignment(frm, to))
+        #l = stmt.find_all(lambda n: type(n) in [cgum.expression.Assignment, cgum.expression.InitExpr])
+        #l = list(l)
+        #l = filter(lambda a: isinstance(a.frm(), cgum.statement.DeclarationList), \
+        #           actions['ModifyStatement'])
+        #l = map(lambda a: (a.frm(), a.to()), l)
+        #l = filter(star(lambda frm,to: not frm.equivalent(to)), l)
+#
+        # TODO: for now, ModifyAssignment only triggers when there is the same number of
+        # declarations
+        #l = filter(star(lambda frm,to: len(frm.declarations()) == len(to.declarations())), l)
+        #for (frm, to) in l:
+        #    actions['ModifyAssignment'].append(ModifyAssignment(frm, to))
+        pass
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        stmts = map(lambda a: a.frm(), actions['ModifyStatement'])
-        actions['ModifyAssignment'] = []
-        for stmt in stmts:
-            ModifyAssignment.detect_all_in_modified_statement(patch, stmt, actions)
+        #stmts = map(lambda a: a.frm(), actions['ModifyStatement'])
+        #actions['ModifyAssignment'] = []
+        #for stmt in stmts:
+        #    ModifyAssignment.detect_all_in_modified_statement(patch, stmt, actions)
+        pass
 
     def __init__(self, frm, to):
         self.__frm = frm
@@ -449,12 +454,16 @@ class ModifyAssignment(RepairAction):
 class ReplaceAssignmentRHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda a: a.frm().lhs() == a.to().lhs(),\
-                   actions['ModifyAssignment'])
-        l = filter(lambda a: a.frm().op() == a.to().op(), l)
-        l = filter(lambda a: a.frm().rhs() != a.to().rhs(), l)
-        actions['ReplaceAssignmentRHS'] = \
-            [ReplaceAssignmentRHS(a.frm().rhs(), a.to().rhs()) for a in l]
+        pass
+        #l = []
+        #for act in actions['ModifyAssignment']:
+        #    bef = act.frm().declarations()
+         #   aft = act.to().declarations()
+         #   for ((blhs, brhs), (alhs, arhs)) in zip(bef, aft):
+         #       if blhs.equivalent(alhs) and not brhs.equivalent(arhs):
+        #            l.append((brhs, arhs))
+        #actions['ReplaceAssignmentRHS'] = \
+        #    [ReplaceAssignmentRHS(frm, to) for (frm, to) in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
@@ -468,12 +477,13 @@ class ReplaceAssignmentRHS(RepairAction):
 class ReplaceAssignmentLHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda a: a.frm().rhs() == a.to().rhs(),\
-                   actions['ModifyAssignment'])
-        l = filter(lambda a: a.frm().op() == a.to().op(), l)
-        l = filter(lambda a: a.frm().lhs() != a.to().lhs(), l)
-        actions['ReplaceAssignmentLHS'] = \
-            [ReplaceAssignmentLHS(a.frm().lhs(), a.to().lhs()) for a in l]
+        pass
+        #l = filter(lambda a: a.frm().rhs() == a.to().rhs(),\
+        #           actions['ModifyAssignment'])
+        #l = filter(lambda a: a.frm().op() == a.to().op(), l)
+        #l = filter(lambda a: a.frm().lhs() != a.to().lhs(), l)
+        #actions['ReplaceAssignmentLHS'] = \
+        #    [ReplaceAssignmentLHS(a.frm().lhs(), a.to().lhs()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
@@ -484,34 +494,35 @@ class ReplaceAssignmentLHS(RepairAction):
     def to(self):
         return self.__to
 
-class ReplaceAssignmentOp(RepairAction):
-    @staticmethod
-    def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda a: a.frm().rhs() == a.to().rhs(),\
-                   actions['ModifyAssignment'])
-        l = filter(lambda a: a.frm().op() != a.to().op(), l)
-        l = filter(lambda a: a.frm().lhs() == a.to().lhs(), l)
-        actions['ReplaceAssignmentOp'] = \
-            [ReplaceAssignmentOp(a.frm().op(), a.to().op()) for a in l]
-
-    def __init__(self, frm, to):
-        self.__frm = frm
-        self.__to = to
-
-    def frm(self):
-        return self.__frm
-    def to(self):
-        return self.__to
+#class ReplaceAssignmentOp(RepairAction):
+#    @staticmethod
+#    def detect(patch, stmts_bef, stmts_aft, actions):
+        #l = filter(lambda a: a.frm().rhs() == a.to().rhs(),\
+        #           actions['ModifyAssignment'])
+        #l = filter(lambda a: a.frm().op() != a.to().op(), l)
+        #l = filter(lambda a: a.frm().lhs() == a.to().lhs(), l)
+        #actions['ReplaceAssignmentOp'] = \
+        #    [ReplaceAssignmentOp(a.frm().op(), a.to().op()) for a in l]
+#
+#    def __init__(self, frm, to):
+#        self.__frm = frm
+##        self.__to = to
+#
+#    def frm(self):
+#        return self.__frm
+#    def to(self):
+#        return self.__to
 
 ## FUNCTION-CALL-RELATED ACTIONS
+#
+# TODO: compute list of edits
 class ModifyCall(RepairAction):
     @staticmethod
     def detect_all_in_modified_statement(patch, stmt, actions):
-        calls = stmt.find_all(lambda n: type(n) is cgum.expression.FunctionCall)
+        calls = stmt.find_all(lambda n: isinstance(n, cgum.expression.FunctionCall))
         calls = map(lambda c: (c, patch.was_is(c)), calls)
         calls = filter(star(lambda frm,to: not to is None), calls)
-        calls = filter(star(lambda frm,to: frm != to), calls)
-
+        calls = filter(star(lambda frm,to: not frm.equivalent(to)), calls)
         for (frm, to) in calls:
             actions['ModifyCall'].append(ModifyCall(frm, to))
 
@@ -535,8 +546,8 @@ class ReplaceCallTarget(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = actions['ModifyCall']
-        l = filter(lambda a: a.frm().function() != a.to().function(), l)
-        l = filter(lambda a: a.frm().arguments() == a.to().arguments(), l)
+        l = filter(lambda a: not a.frm().function().equivalent(a.to().function()), l)
+        l = filter(lambda a: a.frm().arguments().equivalent(a.to().arguments()), l)
         actions['ReplaceCallTarget'] =\
             [ReplaceCallTarget(a.frm().function(), a.to().function()) for a in l]
 
@@ -553,10 +564,10 @@ class ModifyCallArgs(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = actions['ModifyCall']
-        l = filter(lambda a: a.frm().function() == a.to().function(), l)
-        l = filter(lambda a: a.frm().arguments() != a.to().arguments(), l)
+        l = filter(lambda a: a.frm().function().equivalent(a.to().function()), l)
+        l = filter(lambda a: not a.frm().arguments().equivalent(a.to().arguments()), l)
         actions['ModifyCallArgs'] =\
-            [ModifyCallArgs(a.frm().arguments(), a.to().arguments(), a.edits()) for a in l]
+            [ModifyCallArgs(a.frm().arguments(), a.to().arguments()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
@@ -580,7 +591,7 @@ class InsertCallArg(RepairAction):
         arg = None
         offset = 0
         for n in enumerate(frm):
-            if frm[n] != to[n + offset]:
+            if not frm[n].equivalent(to[n + offset]):
                 if offset == 1:
                     return None
                 else:
@@ -593,7 +604,7 @@ class InsertCallArg(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
-        l = map(InsertCallArg.detect_one, l)
+        l = map(star(lambda frm,to: InsertCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
         actions['InsertCallArg'] = [InsertCallArg(arg) for arg in l]
 
@@ -608,7 +619,7 @@ class RemoveCallArg(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
-        l = map(RemoveCallArg.detect_one, l)
+        l = map(star(lambda frm,to: RemoveCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
         actions['RemoveCallArg'] = [RemoveCallArg(arg) for arg in l]
 
@@ -623,18 +634,18 @@ class ReplaceCallArg(RepairAction):
 
         args = None
         replaced = False
-        for (a, b) in zip(frm, to):
-            if a != b and not found_diff:
+        for (a, b) in zip(frm.contents(), to.contents()):
+            if not a.equivalent(b):
+                if replaced:
+                    return None
                 args = (a, b)
                 replaced = True
-            else:
-                return None
         return args
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
-        l = map(ReplaceCallArg.detect_one, l)
+        l = map(star(lambda frm,to: ReplaceCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
         actions['ReplaceCallArg'] =\
             [ReplaceCallArg(frm, to) for (frm, to) in l]
