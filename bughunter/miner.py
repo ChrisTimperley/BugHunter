@@ -47,9 +47,7 @@ class RepairActionMiner(object):
 
         actions = {}
         for action_type in self.__action_types:
-            print("Finding actions of type: %s" % action_type)
             action_type.detect(patch, stmts_bef, stmts_aft, actions)
-            print("- found %d actions of type: %s" % (len(actions[action_type.__name__]), action_type))
         return actions
 
 # Detects a deleted statement
@@ -249,7 +247,6 @@ class ReplaceIfCondition(RepairAction):
 class ReplaceThenBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        print(stmts_aft)
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P 
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
@@ -304,7 +301,6 @@ class InsertElseBranch(RepairAction):
         modified = filter(lambda a: isinstance(a.to(), cgum.statement.IfElse), modified)
         modified = map(lambda a: (a.frm(), a.to()), modified)
         modified = list(modified)
-        pprint.pprint(modified)
         l = filter(star(lambda frm,to: (frm.els() is None and (not to.els() is None))),\
                    modified)
         l = filter(star(lambda _,to: not isinstance(to.els(), cgum.statement.IfElse)), l)
@@ -338,12 +334,20 @@ class InsertElseIfBranch(RepairAction):
 class GuardElseBranch(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        inserted = actions['InsertStatement']
-        l = filter(lambda s: s is cgum.statement.IfElse, inserted) # add If
+        inserted = [a.statement() for a in actions['InsertStatement']]
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), inserted) # add If
         l = filter(lambda s: s.els() is None, l) # no else branch
-        l = filter(lambda s: patch.is_was(s.then()) == s.parent(), l)
+
+        # then branch used to be the else branch of the parent
+        tmp = []
+        for s in l:
+            before_branch = patch.is_was(s.then())
+            before_else = patch.is_was(s.parent()).els()
+            if before_branch == before_else:
+                tmp.append(s)
+        l = tmp
         actions['GuardElseBranch'] =\
-            [GuardElseBranch(frm, to, to.guard()) for (frm, to) in l]
+            [GuardElseBranch(patch.is_was(s.parent()), s.parent(), s.parent().condition()) for s in l]
 
     def __init__(self, frm_if, to_if, guard):
         self.__frm_if = frm_if
