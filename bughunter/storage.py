@@ -49,11 +49,6 @@ class Storage(object):
         path = os.path.join(self.root(), "artefacts", path)
         # 
 
-    # Returns a handler for a given source code file
-    # TODO: simplify; this is overly complicated
-    def source(self, ver, fn):
-        return SourceFile(self.__master, ver, fn)
-
     # Returns a handler for a given database file.
     def database(self, repo):
         return DatabaseFile(self.__master, repo)
