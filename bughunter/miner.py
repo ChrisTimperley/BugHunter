@@ -961,6 +961,16 @@ class InsertCallArg(RepairAction):
 
 class RemoveCallArg(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_call = before.find(jsn['before'])
+        after_call = after.find(jsn['after'])
+        arg = before.find(jsn['arg'])
+        assert not before_call is None
+        assert not after_call is None
+        assert not arg is None
+        return RemoveCallArg(before_call, after_call, arg)
+
+    @staticmethod
     def detect_one(frm, to):
         return InsertCallArg.detect_one(to, frm)
 
@@ -969,10 +979,25 @@ class RemoveCallArg(RepairAction):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
         l = map(star(lambda frm,to: RemoveCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
-        actions['RemoveCallArg'] = [RemoveCallArg(arg) for arg in l]
+        actions['RemoveCallArg'] = \
+            [RemoveCallArg(frm, to, arg) for (frm, to, arg) in l]
 
-    def __init__(self, arg):
+    def __init__(self, frm, to, arg):
+        self.__frm = frm
+        self.__to = to
         self.__arg = arg
+
+    def from_call(self):
+        return self.__frm
+    def to_call(self):
+        return self.__to
+    def arg(self):
+        return self.__arg
+
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number(), \
+                                'arg': self.__arg.number()})
 
 class ReplaceCallArg(RepairAction):
     @staticmethod
