@@ -392,6 +392,14 @@ class ReplaceElseBranch(RepairAction):
 
 class RemoveElseBranch(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_if = before.find(jsn['before_if'])
+        after_if = after.find(jsn['after_if'])
+        assert not before_if is None
+        assert not after_if is None
+        return RemoveElseBranch(before_if, after_if)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
@@ -399,12 +407,18 @@ class RemoveElseBranch(RepairAction):
         l = filter(star(lambda frm,to: (frm.els() is None) != (to.els() is None) or frm.els().equivalent(to.els())), l) # else statements differ
         l = filter(star(lambda frm,to: to.els() is None), l) # deleted else branch
         actions['RemoveElseBranch'] =\
-            [RemoveElseBranch(frm, to, frm.els())  for (frm, to) in l]
+            [RemoveElseBranch(frm, to)  for (frm, to) in l]
 
-    def __init__(self, frm_stmt, to_stmt, frm_els):
+    def __init__(self, frm_stmt, to_stmt):
         self.__frm_stmt = frm_stmt
         self.__to_stmt = to_stmt
-        self.__frm_els = frm_els
+
+    def from_els(self):
+        return self.__frm_stmt.els()
+
+    def to_json(self):
+        return super().to_json({'before_if': self.__frm_stmt.number(),
+                                'after_if': self.__to_stmt.number()})
 
 # Action: Insert Else Branch
 class InsertElseBranch(RepairAction):
