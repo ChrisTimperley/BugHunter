@@ -7,7 +7,11 @@ def star(f):
       return lambda args: f(*args)
 
 class RepairAction(object):
-    pass
+    
+    # Injects the type of the repair action into its JSON description
+    def to_json(self, jsn):
+        jsn['type'] = self.__class__.__name__
+        return jsn
 
 class RepairActionMiner(object):
     def __init__(self):
@@ -87,18 +91,15 @@ class DeleteStatement(RepairAction):
         return self.__stmt
 
     def to_json(self):
-        return {'type': DeleteStatement.LABEL, \
-                'deleted': self.__stmt.number()}
+        return super().to_json({'deleted': self.__stmt.number()})
 
 # Detects an inserted statement
 class InsertStatement(RepairAction):
-    LABEL = "InsertStatement"
-
     @staticmethod
     def from_json(jsn, before, after):
         stmt = before.find(jsn['inserted'])
         assert not stmt is None
-        return InsertStatement(stmt)       
+        return InsertStatement(stmt)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -116,8 +117,7 @@ class InsertStatement(RepairAction):
         return self.__stmt
 
     def to_json(self):
-        return {'type': InsertStatement.LABEL, \
-                'inserted': self.__stmt.number()}
+        return super().to_json({'inserted': self.__stmt.number()})
 
 # Detects that a statement has been modified (but neither deleted nor inserted)
 class ModifyStatement(RepairAction):
