@@ -86,21 +86,38 @@ class DeleteStatement(RepairAction):
     def statement(self):
         return self.__stmt
 
+    def to_json(self):
+        return {'type': DeleteStatement.LABEL, \
+                'deleted': self.__stmt.number()}
+
 # Detects an inserted statement
 class InsertStatement(RepairAction):
+    LABEL = "InsertStatement"
+
+    @staticmethod
+    def from_json(jsn, before, after):
+        stmt = before.find(jsn['inserted'])
+        assert not stmt is None
+        return InsertStatement(stmt)       
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: patch.is_was(s) is None, stmts_aft) # all inserts
         l = map(lambda s: (s, s.parent()), l) # get parents
         l = filter(star(lambda s,p: not patch.is_was(p) is None), l) # redundancy
-        actions['InsertStatement'] =\
+        actions[InsertStatement.LABEL] =\
             [InsertStatement(s, p) for (s, p) in l]
+
     def __init__(self, stmt, parent):
         self.__stmt = stmt
         self.__parent = parent
 
     def statement(self):
         return self.__stmt
+
+    def to_json(self):
+        return {'type': InsertStatement.LABEL, \
+                'inserted': self.__stmt.number()}
 
 # Detects that a statement has been modified (but neither deleted nor inserted)
 class ModifyStatement(RepairAction):
