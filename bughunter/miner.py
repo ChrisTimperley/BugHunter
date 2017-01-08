@@ -672,6 +672,14 @@ class ModifyAssignment(RepairAction):
  
 class ReplaceAssignmentRHS(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_assign = before.find(jsn['from'])
+        after_assign = after.find(jsn['to'])
+        assert not before_assign is None
+        assert not after_assign is None
+        return ReplaceAssignmentRHS(before_assign, after_assign)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyAssignment'])
         for (frm, to) in l:
@@ -705,6 +713,10 @@ class ReplaceAssignmentRHS(RepairAction):
         return self.__frm
     def to(self):
         return self.__to
+
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number()})
 
 # TODO: massive clone of the above action; unify?
 class ReplaceAssignmentLHS(RepairAction):
