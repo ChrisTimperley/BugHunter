@@ -450,8 +450,8 @@ class InsertElseBranch(RepairAction):
         return self.__to.els()
 
     def to_json(self):
-        return super().to_json({'before_if': self.__frm_stmt.number(),
-                                'after_if': self.__to_stmt.number()})
+        return super().to_json({'before_if': self.__from.number(),
+                                'after_if': self.__to.number()})
 
 # Action: Insert Else-If Branch
 class InsertElseIfBranch(RepairAction):
