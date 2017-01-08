@@ -634,6 +634,14 @@ class ReplaceLoopBody(RepairAction):
 ## ASSIGNMENT-RELATED OPERATORS
 class ModifyAssignment(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_stmt = before.find(jsn['from'])
+        after_stmt = after.find(jsn['to'])
+        assert not before_stmt is None
+        assert not after_stmt is None
+        return ModifyAssignment(before_stmt, after_stmt)
+
+    @staticmethod
     def detect_all_in_modified_statement(patch, stmt, actions):
         l = filter(lambda a: isinstance(a.frm(), cgum.statement.DeclarationList), \
                    actions['ModifyStatement'])
@@ -658,6 +666,10 @@ class ModifyAssignment(RepairAction):
     def to(self):
         return self.__to
 
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number()})
+ 
 class ReplaceAssignmentRHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
