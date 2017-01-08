@@ -1,0 +1,5 @@
+#!/usr/bin/python3
+import sys
+import cgum.program
+
+cgum.program.Program.from_source_file(sys.argv[1]).pp()
