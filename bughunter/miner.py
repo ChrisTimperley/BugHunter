@@ -635,8 +635,8 @@ class ReplaceLoopBody(RepairAction):
 class ModifyAssignment(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_stmt = before.find(jsn['from'])
-        after_stmt = after.find(jsn['to'])
+        before_stmt = before.find(jsn['before'])
+        after_stmt = after.find(jsn['after'])
         assert not before_stmt is None
         assert not after_stmt is None
         return ModifyAssignment(before_stmt, after_stmt)
@@ -673,8 +673,8 @@ class ModifyAssignment(RepairAction):
 class ReplaceAssignmentRHS(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_assign = before.find(jsn['from'])
-        after_assign = after.find(jsn['to'])
+        before_assign = before.find(jsn['before'])
+        after_assign = after.find(jsn['after'])
         assert not before_assign is None
         assert not after_assign is None
         return ReplaceAssignmentRHS(before_assign, after_assign)
@@ -722,8 +722,8 @@ class ReplaceAssignmentRHS(RepairAction):
 class ReplaceAssignmentLHS(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_assign = before.find(jsn['from'])
-        after_assign = after.find(jsn['to'])
+        before_assign = before.find(jsn['before'])
+        after_assign = after.find(jsn['after'])
         assert not before_assign is None
         assert not after_assign is None
         return ReplaceAssignmentLHS(before_assign, after_assign)
@@ -790,8 +790,8 @@ class ReplaceAssignmentLHS(RepairAction):
 class ModifyCall(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['from'])
-        after_call = after.find(jsn['to'])
+        before_call = before.find(jsn['before'])
+        after_call = after.find(jsn['after'])
         assert not before_call is None
         assert not after_call is None
         return ModifyCall(before_call, after_call)
@@ -827,39 +827,71 @@ class ModifyCall(RepairAction):
 
 class ReplaceCallTarget(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_call = before.find(jsn['from'])
+        after_call = after.find(jsn['to'])
+        assert not before_call is None
+        assert not after_call is None
+        return ReplaceCallTarget(before_call, after_call)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = actions['ModifyCall']
         l = filter(lambda a: not a.frm().function().equivalent(a.to().function()), l)
         l = filter(lambda a: a.frm().arguments().equivalent(a.to().arguments()), l)
         actions['ReplaceCallTarget'] =\
-            [ReplaceCallTarget(a.frm().function(), a.to().function()) for a in l]
+            [ReplaceCallTarget(a.frm(), a.to()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
         self.__to = to
 
-    def frm(self):
+    def frm_call(self):
         return self.__frm
-    def to(self):
+    def to_call(self):
         return self.__to
+    def frm_target(self):
+        return self.__frm.function()
+    def to_target(self):
+        return self.__to.function()
+
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number()})
 
 class ModifyCallArgs(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_call = before.find(jsn['from'])
+        after_call = after.find(jsn['to'])
+        assert not before_call is None
+        assert not after_call is None
+        return ModifyCallArgs(before_call, after_call)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = actions['ModifyCall']
         l = filter(lambda a: a.frm().function().equivalent(a.to().function()), l)
         l = filter(lambda a: not a.frm().arguments().equivalent(a.to().arguments()), l)
         actions['ModifyCallArgs'] =\
-            [ModifyCallArgs(a.frm().arguments(), a.to().arguments()) for a in l]
+            [ModifyCallArgs(a.frm(), a.to()) for a in l]
 
     def __init__(self, frm, to):
         self.__frm = frm
         self.__to = to
 
-    def frm(self):
+    def frm_call(self):
         return self.__frm
-    def to(self):
+    def to_call(self):
         return self.__to
+    def frm_args(self):
+        return self.__frm.arguments()
+    def to_args(self):
+        return self.__to.arguments()
+
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number()})
 
 class InsertCallArg(RepairAction):
     # detects whether a single argument added to "before" yields "to"
