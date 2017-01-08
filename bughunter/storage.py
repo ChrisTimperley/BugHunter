@@ -21,13 +21,11 @@ class Storage(object):
         utility.ensure_dir(self.__root)
 
     # Returns the CGum AST for a given SourceFile
-
     def ast(self, src):
         path = "after" if src.version().is_fixed() else "before"
         path = "%s.%s.ast.json" % (src.name(), path)
         path = os.path.join(src.version().fix().repository().id(),\
                             src.version().fix().identifier(),\
-                            src.name(),\
                             path)
         path = os.path.join(self.root(), "artefacts", path)
         
@@ -36,7 +34,10 @@ class Storage(object):
             try:
                 print("Parsing from: %s" % f_src.name)
                 print("Parsing to: %s" % path)
-                cgum.program.Program.parse_to_json_file(f_src.name, path)
+                with open(path, "w") as f_jsn:
+                    f_jsn.flush()
+                    cgum.program.Program.parse_to_json_file(f_src.name, f_jsn)
+                    f_jsn.flush()
                 print("Parsed")
             finally:
                 f_src.close()

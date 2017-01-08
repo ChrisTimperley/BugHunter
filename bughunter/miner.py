@@ -6,6 +6,46 @@ import cgum.diff
 def star(f):
       return lambda args: f(*args)
 
+# Finds the nearest ancestor to a given node (including the node itself) that
+# satisfies a given predicate over an AST node
+def matching_ancestor(node, predicate):
+    while (not node is None) and not predicate(node):
+        node = node.parent()
+    return node
+
+def nearest_stmt(node):
+    return matching_ancestor(node, lambda n: isinstance(n, cgum.statement.Statement))
+
+# Finds the corresponding node in P for the nearest statement to the subject
+def nearest_stmt_to_subject(edit, patch, groups):
+    stmts = []
+
+    if type(edit) is cgum.diff.Insert:
+        stmt = nearest_stmt(edit.inserted())
+        if not stmt is None:
+            stmts = [patch.is_was(stmt)]
+
+    elif type(edit) is cgum.diff.Delete:
+        stmts = [nearest_stmt(edit.deleted())]
+
+    elif type(edit) is cgum.diff.Update:
+        stmts = [nearest_stmt(edit.before())]
+
+    elif type(edit) is cgum.diff.Move:
+        stmt_from = nearest_stmt(edit.moved_from())
+
+        stmt_to = nearest_stmt(edit.moved_to())
+        if not stmt_to is None:
+            stmt_to = patch.is_was(stmt_to)
+
+        stmts = [stmt_from, stmt_to]
+
+    for stmt in stmts:
+        if not stmt is None:
+            if not stmt in groups:
+                groups[stmt] = []
+            groups[stmt].append(edit)
+
 class RepairAction(object):
     
     # Injects the type of the repair action into its JSON description
@@ -97,7 +137,7 @@ class DeleteStatement(RepairAction):
 class InsertStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        stmt = before.find(jsn['inserted'])
+        stmt = after.find(jsn['inserted'])
         assert not stmt is None
         return InsertStatement(stmt)
 
@@ -120,7 +160,17 @@ class InsertStatement(RepairAction):
         return super().to_json({'inserted': self.__stmt.number()})
 
 # Detects that a statement has been modified (but neither deleted nor inserted)
+#
+# TODO: handle serialisation of edits
 class ModifyStatement(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        stmt_frm = before.find(jsn['from'])
+        stmt_to = after.find(jsn['to'])
+        assert not stmt_frm is None
+        assert not stmt_to is None
+        return ModifyStatement(stmt_frm, stmt_to)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         groups = {}
@@ -149,51 +199,23 @@ class ModifyStatement(RepairAction):
     def to(self):
         return self.__to
 
-# Finds the nearest ancestor to a given node (including the node itself) that
-# satisfies a given predicate over an AST node
-def matching_ancestor(node, predicate):
-    while (not node is None) and not predicate(node):
-        node = node.parent()
-    return node
-
-def nearest_stmt(node):
-    return matching_ancestor(node, lambda n: isinstance(n, cgum.statement.Statement))
-
-# Finds the corresponding node in P for the nearest statement to the subject
-def nearest_stmt_to_subject(edit, patch, groups):
-    stmts = []
-
-    if type(edit) is cgum.diff.Insert:
-        stmt = nearest_stmt(edit.inserted())
-        if not stmt is None:
-            stmts = [patch.is_was(stmt)]
-
-    elif type(edit) is cgum.diff.Delete:
-        stmts = [nearest_stmt(edit.deleted())]
-
-    elif type(edit) is cgum.diff.Update:
-        stmts = [nearest_stmt(edit.before())]
-
-    elif type(edit) is cgum.diff.Move:
-        stmt_from = nearest_stmt(edit.moved_from())
-
-        stmt_to = nearest_stmt(edit.moved_to())
-        if not stmt_to is None:
-            stmt_to = patch.is_was(stmt_to)
-
-        stmts = [stmt_from, stmt_to]
-
-    for stmt in stmts:
-        if not stmt is None:
-            if not stmt in groups:
-                groups[stmt] = []
-            groups[stmt].append(edit)
+    def to_json(self):
+        return super().to_json({'from': self.__frm.number(), \
+                                'to': self.__to.number()})
 
 #####
 # GROUP: If-Statement-Related
 #####
 
 class WrapStatement(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        stmt_bef = before.find(jsn['stmt_before'])
+        wrapper = after.find(jsn['wrapper'])
+        assert not stmt_bef is None
+        assert not wrapper is None
+        return WrapStatement(stmt_bef, wrapper)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
@@ -221,11 +243,18 @@ class WrapStatement(RepairAction):
                 tmp.append(s)
         l = tmp
         actions['WrapStatement'] =\
-            [WrapStatement(s.then(), s, s.condition()) for s in l]
+            [WrapStatement(patch.is_was(s.then()), s) for s in l]
+
     def __init__(self, stmt, wrapper, guard):
         self.__stmt = stmt
         self.__wrapper = wrapper
-        self.__guard = guard
+
+    def guard(self):
+        return self.__wrapper.condition()
+
+    def to_json(self):
+        return super().to_json({'stmt_before': self.__stmt.number(), \
+                                'wrapper': self.__wrapper.number()})
 
 class UnwrapStatement(RepairAction):
     @staticmethod
