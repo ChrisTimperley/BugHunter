@@ -296,8 +296,15 @@ class UnwrapStatement(RepairAction):
                                 'after': self.__to.number()})
 
 # Action: Replace If Condition
-# TODO: should we check that the Else branch hasn't changed?
 class ReplaceIfCondition(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_if = before.find(jsn['before_if'])
+        after_if = after.find(jsn['after_if'])
+        assert not before_if is None
+        assert not after_if is None
+        return ReplaceIfCondition(before_if, after_if)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(ModifyStatement.to, actions['ModifyStatement'])
@@ -305,12 +312,20 @@ class ReplaceIfCondition(RepairAction):
         l = map(lambda s: (patch.is_was(s), s), modified)
         l = [(frm, to) for (frm, to) in l if not frm.condition().equivalent(to.condition())]
         actions['ReplaceIfCondition'] =\
-            [ReplaceIfCondition(frm, to, frm.condition(), to.condition()) for (frm, to) in l]
-    def __init__(self, from_stmt, to_stmt, from_guard, to_guard):
+            [ReplaceIfCondition(frm, to) for (frm, to) in l]
+
+    def __init__(self, from_stmt, to_stmt):
         self.__from_stmt = from_stmt
         self.__to_stmt = to_stmt
-        self.__from_guard = from_guard
-        self.__to_guard = to_guard
+
+    def from_guard(self):
+        return self.__from_stmt.condition()
+    def to_guard(self):
+        return self.__to_stmt.condition()
+
+    def to_json(self):
+        return super().to_json({'before_if': self.__from_stmt.number(), \
+                                'after_if': self.__to_stmt.number()})
 
 class ReplaceThenBranch(RepairAction):
     @staticmethod
