@@ -479,16 +479,33 @@ class ReplaceAssignmentRHS(RepairAction):
     def to(self):
         return self.__to
 
+# TODO: massive clone of the above action; unify?
 class ReplaceAssignmentLHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        pass
-        #l = filter(lambda a: a.frm().rhs() == a.to().rhs(),\
-        #           actions['ModifyAssignment'])
-        #l = filter(lambda a: a.frm().op() == a.to().op(), l)
-        #l = filter(lambda a: a.frm().lhs() != a.to().lhs(), l)
-        #actions['ReplaceAssignmentLHS'] = \
-        #    [ReplaceAssignmentLHS(a.frm().lhs(), a.to().lhs()) for a in l]
+        l = map(lambda a: (a.frm(), a.to()), actions['ModifyAssignment'])
+        for (frm, to) in l:
+
+            diffs = []
+            for (lhs_frm, rhs_frm) in frm.declarations():
+
+                # find each surviving RHS from P, checking that it still belongs to the same
+                # declaration list (it could have moved elsewhere)
+                rhs_to = patch.was_is(rhs_frm)
+                if rhs_to is None or rhs_to.parent() != to:
+                    continue
+
+                # find which child entry the matching RHS (in P') occupies, minus one from
+                # that entry to get its corresponding LHS
+                lhs_to = to.child(to.index_of_child(rhs_to) - 1)
+
+                # compare the old and new LHS for difference
+                if not lhs_frm.equivalent(lhs_to):
+                    diffs.append((lhs_frm, lhs_to))
+
+            # construct objects
+            actions['ReplaceAssignmentLHS'] = \
+                [ReplaceAssignmentLHS(frm, to) for (frm, to) in diffs]
 
     def __init__(self, frm, to):
         self.__frm = frm
