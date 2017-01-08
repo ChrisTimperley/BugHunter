@@ -420,27 +420,19 @@ class ReplaceLoopBody(RepairAction):
 class ModifyAssignment(RepairAction):
     @staticmethod
     def detect_all_in_modified_statement(patch, stmt, actions):
-        #l = stmt.find_all(lambda n: type(n) in [cgum.expression.Assignment, cgum.expression.InitExpr])
-        #l = list(l)
-        #l = filter(lambda a: isinstance(a.frm(), cgum.statement.DeclarationList), \
-        #           actions['ModifyStatement'])
-        #l = map(lambda a: (a.frm(), a.to()), l)
-        #l = filter(star(lambda frm,to: not frm.equivalent(to)), l)
-#
-        # TODO: for now, ModifyAssignment only triggers when there is the same number of
-        # declarations
-        #l = filter(star(lambda frm,to: len(frm.declarations()) == len(to.declarations())), l)
-        #for (frm, to) in l:
-        #    actions['ModifyAssignment'].append(ModifyAssignment(frm, to))
-        pass
+        l = filter(lambda a: isinstance(a.frm(), cgum.statement.DeclarationList), \
+                   actions['ModifyStatement'])
+        l = map(lambda a: (a.frm(), a.to()), l)
+        l = filter(star(lambda frm,to: not frm.equivalent(to)), l)
+        for (frm, to) in l:
+            actions['ModifyAssignment'].append(ModifyAssignment(frm, to))
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        #stmts = map(lambda a: a.frm(), actions['ModifyStatement'])
-        #actions['ModifyAssignment'] = []
-        #for stmt in stmts:
-        #    ModifyAssignment.detect_all_in_modified_statement(patch, stmt, actions)
-        pass
+        stmts = map(lambda a: a.frm(), actions['ModifyStatement'])
+        actions['ModifyAssignment'] = []
+        for stmt in stmts:
+            ModifyAssignment.detect_all_in_modified_statement(patch, stmt, actions)
 
     def __init__(self, frm, to):
         self.__frm = frm
@@ -454,16 +446,29 @@ class ModifyAssignment(RepairAction):
 class ReplaceAssignmentRHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        pass
-        #l = []
-        #for act in actions['ModifyAssignment']:
-        #    bef = act.frm().declarations()
-         #   aft = act.to().declarations()
-         #   for ((blhs, brhs), (alhs, arhs)) in zip(bef, aft):
-         #       if blhs.equivalent(alhs) and not brhs.equivalent(arhs):
-        #            l.append((brhs, arhs))
-        #actions['ReplaceAssignmentRHS'] = \
-        #    [ReplaceAssignmentRHS(frm, to) for (frm, to) in l]
+        l = map(lambda a: (a.frm(), a.to()), actions['ModifyAssignment'])
+        for (frm, to) in l:
+
+            diffs = []
+            for (lhs_frm, rhs_frm) in frm.declarations():
+
+                # find each surviving LHS from P, checking that it still belongs to the same
+                # declaration list (it could have moved elsewhere)
+                lhs_to = patch.was_is(lhs_frm)
+                if lhs_to is None or lhs_to.parent() != to:
+                    continue
+
+                # find which child entry the matching LHS (in P') occupies, add one to that
+                # entry to get its corresponding RHS
+                rhs_to = to.child(to.index_of_child(lhs_to) + 1)
+
+                # compare the old and new RHS for difference
+                if not rhs_frm.equivalent(rhs_to):
+                    diffs.append((rhs_frm, rhs_to))
+
+            # construct objects
+            actions['ReplaceAssignmentRHS'] = \
+                [ReplaceAssignmentRHS(frm, to) for (frm, to) in diffs]
 
     def __init__(self, frm, to):
         self.__frm = frm
