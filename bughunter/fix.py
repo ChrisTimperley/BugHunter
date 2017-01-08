@@ -1,5 +1,6 @@
 import json
 import tempfile
+import source
 import cgum.diff
 
 # Represents a version of a program for a particular bug fix, where the two
@@ -12,14 +13,9 @@ class ProgramVersion(object):
     def fix(self):
         return self.__fix
 
-    # Returns the AST for the (original, i.e. not pre-processed) file modified
-    # by this edit, with a given name
-    #def ast(self, fn):
-    #    return self.__fix.master().storage().ast(self, fn).ast()
-
     # Returns the source code for a given file
     def source(self, fn):
-        return self.__fix.master().storage().source(self, fn)
+        return source.SourceFile(self.__fix.master(), self, fn)
 
     # Returns the pre-processed source code for a given file that was modified
     # by this edit, as a readable file.
