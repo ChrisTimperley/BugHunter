@@ -456,6 +456,14 @@ class InsertElseBranch(RepairAction):
 # Action: Insert Else-If Branch
 class InsertElseIfBranch(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_if = before.find(jsn['before_if'])
+        after_if = after.find(jsn['after_if'])
+        assert not before_if is None
+        assert not after_if is None
+        return InsertElseIfBranch(before_if, after_if)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = actions['ModifyStatement']
         modified = filter(lambda a: isinstance(a.to(), cgum.statement.IfElse), modified)
@@ -465,12 +473,18 @@ class InsertElseIfBranch(RepairAction):
                     modified)
         l = filter(star(lambda _,to: isinstance(to.els(), cgum.statement.IfElse)), l)
         actions['InsertElseIfBranch'] =\
-            [InsertElseIfBranch(frm, to, to.els()) for (frm, to) in l]
+            [InsertElseIfBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, from_stmt, to_stmt, elsif):
+    def __init__(self, from_stmt, to_stmt):
         self.__from = from_stmt
         self.__to = to_stmt
-        self.__elsif = elsif
+
+    def elsif(self):
+        return self.__to.els()
+
+    def to_json(self):
+        return super().to_json({'before_if': self.__frm_stmt.number(),
+                                'after_if': self.__to_stmt.number()})
 
 class GuardElseBranch(RepairAction):
     @staticmethod
