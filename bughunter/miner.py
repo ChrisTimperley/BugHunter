@@ -258,6 +258,14 @@ class WrapStatement(RepairAction):
 
 class UnwrapStatement(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        frm = before.find(jsn['before'])
+        to = after.find(jsn['after'])
+        assert not frm is None
+        assert not to is None
+        return UnwrapStatement(frm, to)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         deleted = map(DeleteStatement.statement, actions['DeleteStatement'])
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), deleted) # if stmt
@@ -278,9 +286,14 @@ class UnwrapStatement(RepairAction):
         l = tmp
         actions['UnwrapStatement'] =\
             [UnwrapStatement(s, patch.was_is(s.then())) for s in l]
+
     def __init__(self, stmt, to):
         self.__stmt = stmt
         self.__to = to
+
+    def to_json(self):
+        return super().to_json({'before': self.__stmt.number(), \
+                                'after': self.__to.number()})
 
 # Action: Replace If Condition
 # TODO: should we check that the Else branch hasn't changed?
