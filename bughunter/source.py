@@ -3,7 +3,8 @@ import tempfile
 # Provides access to the original source code contained within a given file
 # belonging to a specified program version
 class SourceFile(object):
-    def __init__(self, version, name):
+    def __init__(self, master, version, name):
+        self.__master = master
         self.__version = version
         self.__name = name
 
@@ -32,7 +33,4 @@ class SourceFile(object):
 
     # Returns the abstract syntax tree for this file.
     def ast(self):
-        with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
-            f.write(self.contents())
-            f.flush()
-            return cgum.program.Program.from_source_file(f.name)
+        return self.__master.storage().ast(self)

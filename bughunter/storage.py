@@ -20,25 +20,21 @@ class Storage(object):
             self.__root = os.path.join(os.path.expanduser('~'), 'bughunter')
         utility.ensure_dir(self.__root)
 
-    # Returns a handler for a given diff
-    #def diff(self, repo, fix, fn):
-    #    return DiffFile(self, repo, fix, fn)
-
-    # Returns the CGum AST of a given file
-    def ast(self, ver, fn):
+    # Returns the CGum AST for a given SourceFile
+    def ast(self, src):
         path = os.path.join(ver.fix().repository().id(),\
                             ver.fix().identifier(),\
                             fn,\
                             ("after" if ver.is_fixed() else "before"),\
                             ".ast.json")
         path = os.path.join(self.root(), "artefacts", path)
+        
+        if not os.path.exists(path):
+            f_src = src.readable()
+            cgum.program.Program.parse_to_json_file(f_src.name, path)
+            f_src.close()
 
-        if not os.path.isfile(path):
-            f = ver.file(fn)
-            try:
-                cgum.program.Program.from_source_file(f.name)
-            finally:
-                f.close()
+        return cgum.program.Program.from_file(path)
 
     # Returns the CGum annotated diff for a BugHunter diff
     def diff(self, df):
