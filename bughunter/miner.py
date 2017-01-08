@@ -862,8 +862,8 @@ class ReplaceCallTarget(RepairAction):
 class ModifyCallArgs(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['from'])
-        after_call = after.find(jsn['to'])
+        before_call = before.find(jsn['before'])
+        after_call = after.find(jsn['after'])
         assert not before_call is None
         assert not after_call is None
         return ModifyCallArgs(before_call, after_call)
@@ -894,6 +894,16 @@ class ModifyCallArgs(RepairAction):
                                 'after': self.__to.number()})
 
 class InsertCallArg(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_call = before.find(jsn['before'])
+        after_call = after.find(jsn['after'])
+        arg = after.find(jsn['arg'])
+        assert not before_call is None
+        assert not after_call is None
+        assert not arg is None
+        return InsertCallArg(before_call, after_call, arg)
+
     # detects whether a single argument added to "before" yields "to"
     # returns the argument, if one can be found, else None is returned
     @staticmethod
@@ -922,17 +932,32 @@ class InsertCallArg(RepairAction):
             arg = to[-1]
 
         # return inserted arg
-        return arg
+        return (frm, to, arg)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
         l = map(star(lambda frm,to: InsertCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
-        actions['InsertCallArg'] = [InsertCallArg(arg) for arg in l]
+        actions['InsertCallArg'] = \
+            [InsertCallArg(frm, to, arg) for (frm, to, arg) in l]
 
-    def __init__(self, arg):
+    def __init__(self, frm, to, arg):
+        self.__frm = frm
+        self.__to = to
         self.__arg = arg
+
+    def from_call(self):
+        return self.__frm
+    def to_call(self):
+        return self.__to
+    def arg(self):
+        return self.__arg
+
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number(), \
+                                'arg': self.__arg.number()})
 
 class RemoveCallArg(RepairAction):
     @staticmethod
