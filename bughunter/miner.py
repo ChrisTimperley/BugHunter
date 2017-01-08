@@ -52,6 +52,14 @@ class RepairActionMiner(object):
 
 # Detects a deleted statement
 class DeleteStatement(RepairAction):
+    LABEL = "DeleteStatement"
+
+    @staticmethod
+    def from_json(jsn, before, after):
+        stmt = before.find(jsn['deleted'])
+        assert not stmt is None
+        return DeleteStatement(stmt)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: patch.was_is(s) is None, stmts_bef) # all deletes
@@ -71,6 +79,7 @@ class DeleteStatement(RepairAction):
         l = tmp
 
         actions['DeleteStatement'] = [DeleteStatement(s) for s in l]
+
     def __init__(self, stmt):
         self.__stmt = stmt
     

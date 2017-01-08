@@ -1,6 +1,7 @@
 # Represents the difference between two files 
 class FileDiff(object):
-    def __init__(self, fix, name):
+    def __init__(self, master, fix, name):
+        self.__master = master
         self.__fix = fix
         self.__name = name
         self.__cgum = None
@@ -13,18 +14,20 @@ class FileDiff(object):
     def fix(self):
         return self.__fix
     
-    # Returns the 'before' state of the file
+    # Returns the 'before' file
     def before(self):
-        return self.cgum().before()
+        print("FileDiff - fetching before: %s" % self.__name)
+        return self.fix().before().source(self.__name)
 
-    # Returns the 'after' state of the file
+    # Returns the 'after' file
     def after(self):
-        return self.cgum().after()
+        print("FileDiff - fetching after: %s" % self.__name)
+        return self.fix().after().source(self.__name)
 
     # Returns the PyCGum difference representation of this diff
     def cgum(self):
         if self.__cgum is None:
-            self.__cgum = self.__main.storage.diff(self)
+            self.__cgum = self.__master.storage().diff(self)
         return self.__cgum
 
     # Returns a list of repair actions mined from this diff

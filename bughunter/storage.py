@@ -21,33 +21,51 @@ class Storage(object):
         utility.ensure_dir(self.__root)
 
     # Returns the CGum AST for a given SourceFile
+
     def ast(self, src):
-        path = os.path.join(ver.fix().repository().id(),\
-                            ver.fix().identifier(),\
-                            fn,\
-                            ("after" if ver.is_fixed() else "before"),\
-                            ".ast.json")
+        path = "after" if src.version().is_fixed() else "before"
+        path = "%s.%s.ast.json" % (src.name(), path)
+        path = os.path.join(src.version().fix().repository().id(),\
+                            src.version().fix().identifier(),\
+                            src.name(),\
+                            path)
         path = os.path.join(self.root(), "artefacts", path)
         
         if not os.path.exists(path):
             f_src = src.readable()
-            cgum.program.Program.parse_to_json_file(f_src.name, path)
-            f_src.close()
+            try:
+                print("Parsing from: %s" % f_src.name)
+                print("Parsing to: %s" % path)
+                cgum.program.Program.parse_to_json_file(f_src.name, path)
+                print("Parsed")
+            finally:
+                f_src.close()
 
         return cgum.program.Program.from_file(path)
 
     # Returns the CGum annotated diff for a BugHunter diff
     def diff(self, df):
-        # get the before and after ASTs for this file
-        before = XASTASGAS
+        ast_before = df.before().ast()
+        ast_after = df.after().ast()
 
-        # compute the path to the cached JSON diff file
         path = os.path.join(df.fix().repository().id(),\
                             df.fix().identifier(),\
                             df.name(),\
                             ".diff.json")
         path = os.path.join(self.root(), "artefacts", path)
-        # 
+
+        if not os.path.exists(path):
+            src_before_h = df.before().readable()
+            src_after_h = df.after().readable()
+            try:
+                cgum.diff.AnnotatedDiff.parse_to_json_file(src_before_h.name, \
+                                                           src_after_h.name, \
+                                                           path)
+            finally:
+                src_before_h.close()
+                src_after_h.close()
+
+        return cgum.diff.AnnotatedDiff.from_file(path, ast_before, ast_after)
 
     # Returns a handler for a given database file.
     def database(self, repo):
