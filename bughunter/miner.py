@@ -360,6 +360,14 @@ class ReplaceThenBranch(RepairAction):
 
 class ReplaceElseBranch(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_if = before.find(jsn['before_if'])
+        after_if = after.find(jsn['after_if'])
+        assert not before_if is None
+        assert not after_if is None
+        return ReplaceElseBranch(before_if, after_if)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
@@ -367,13 +375,20 @@ class ReplaceElseBranch(RepairAction):
         l = filter(star(lambda frm,to: (frm.els() is None) != (to.els() is None) or frm.els().equivalent(to.els())), l) # else statements differ
         l = filter(star(lambda frm,to: not frm.els() is None), l) # not an insertion
         actions['ReplaceElseBranch'] =\
-            [ReplaceElseBranch(frm, to, frm.els(), to.els()) for (frm, to) in l]
+            [ReplaceElseBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, frm_stmt, to_stmt, frm_els, to_els):
+    def __init__(self, frm_stmt, to_stmt):
         self.__frm_stmt = frm_stmt
         self.__to_stmt = to_stmt
-        self.__frm_els = frm_els
-        self.__to_els = to_els
+
+    def from_els(self):
+        return self.__frm_stmt.els()
+    def to_els(self):
+        return self.__to_stmt.els()
+
+    def to_json(self):
+        return super().to_json({'before_if': self.__frm_stmt.number(),
+                                'after_if': self.__to_stmt.number()})
 
 class RemoveElseBranch(RepairAction):
     @staticmethod
