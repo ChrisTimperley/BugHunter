@@ -1001,6 +1001,18 @@ class RemoveCallArg(RepairAction):
 
 class ReplaceCallArg(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_call = before.find(jsn['before_call'])
+        after_call = after.find(jsn['after_call'])
+        before_arg = before.find(jsn['before_arg'])
+        after_arg = after.find(jsn['after_arg'])
+        assert not before_call is None
+        assert not after_call is None
+        assert not before_arg is None
+        assert not after_arg is None
+        return ReplaceCallArg(before_call, after_call, before_arg, after_arg)
+
+    @staticmethod
     def detect_one(frm, to):
         if len(to) != len(frm):
             return None
@@ -1013,16 +1025,33 @@ class ReplaceCallArg(RepairAction):
                     return None
                 args = (a, b)
                 replaced = True
-        return args
+        return (frm, to, args[0], args[1])
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
         l = map(star(lambda frm,to: ReplaceCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
-        actions['ReplaceCallArg'] =\
-            [ReplaceCallArg(frm, to) for (frm, to) in l]
+        actions['ReplaceCallArg'] = [ReplaceCallArg(frm_call, to_call, frm_arg, to_arg) \
+                                     for (frm_call, to_call, frm_arg, to_arg) in l]
 
-    def __init__(self, frm, to):
-        self.__frm = frm
-        self.__to = to
+    def __init__(self, frm_call, to_call, frm_arg, to_arg):
+        self.__frm_call = frm_call
+        self.__to_call = to_call
+        self.__frm_arg = frm_arg
+        self.__to_arg = to_arg
+
+    def frm_call(self):
+        return self.__frm_call
+    def to_call(self):
+        return self.__to_call
+    def frm_arg(self):
+        return self.__frm_arg
+    def to_arg(self):
+        return self.__to_arg
+
+    def to_json(self):
+        return super().to_json({'before_call': self.__frm_call.number(), \
+                                'after_call': self.__to_call.number(), \
+                                'before_arg': self.__frm_arg.number(), \
+                                'after_arg': self.__to_arg.number()})
