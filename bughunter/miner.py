@@ -329,19 +329,34 @@ class ReplaceIfCondition(RepairAction):
 
 class ReplaceThenBranch(RepairAction):
     @staticmethod
+    def from_json(jsn, before, after):
+        before_if = before.find(jsn['before_if'])
+        after_if = after.find(jsn['after_if'])
+        assert not before_if is None
+        assert not after_if is None
+        return ReplaceThenBranch(before_if, after_if)
+
+    @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P 
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
         l = filter(star(lambda frm,to: not frm.then().equivalent(to.then())), l)
         actions['ReplaceThenBranch'] =\
-            [ReplaceThenBranch(frm, to, frm.then(), to.then()) for (frm, to) in l]
+            [ReplaceThenBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, frm_stmt, to_stmt, frm_then, to_then):
+    def __init__(self, frm_stmt, to_stmt):
         self.__frm_stmt = frm_stmt
         self.__to_stmt = to_stmt
-        self.__frm_then = frm_then
-        self.__to_then = to_then
+
+    def from_then(self);
+        return self.__frm_stmt.then()
+    def to_then(self):
+        return self.__to_stmt.then()
+
+    def to_json(self):
+        return super().to_json({'before_if': self.__frm_stmt.number(),
+                                'after_if': self.__to_stmt.number()})
 
 class ReplaceElseBranch(RepairAction):
     @staticmethod
