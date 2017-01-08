@@ -483,10 +483,18 @@ class InsertElseIfBranch(RepairAction):
         return self.__to.els()
 
     def to_json(self):
-        return super().to_json({'before_if': self.__frm_stmt.number(),
-                                'after_if': self.__to_stmt.number()})
+        return super().to_json({'before_if': self.__from.number(),
+                                'after_if': self.__to.number()})
 
 class GuardElseBranch(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_if = before.find(jsn['before_if'])
+        after_if = after.find(jsn['after_if'])
+        assert not before_if is None
+        assert not after_if is None
+        return GuardElseBranch(before_if, after_if)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         inserted = [a.statement() for a in actions['InsertStatement']]
@@ -502,12 +510,18 @@ class GuardElseBranch(RepairAction):
                 tmp.append(s)
         l = tmp
         actions['GuardElseBranch'] =\
-            [GuardElseBranch(patch.is_was(s.parent()), s.parent(), s.parent().condition()) for s in l]
+            [GuardElseBranch(patch.is_was(s.parent()), s.parent()) for s in l]
 
-    def __init__(self, frm_if, to_if, guard):
+    def __init__(self, frm_if, to_if):
         self.__frm_if = frm_if
         self.__to_if = to_if
-        self.__guard = guard
+
+    def guard(self):
+        return self.__to_if.condition()
+
+    def to_json(self):
+        return super().to_json({'before_if': self.__frm_if.number(),
+                                'after_if': self.__to_if.number()})
 
 ####
 # GROUP: Switch-Related Actions
