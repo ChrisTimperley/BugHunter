@@ -7,7 +7,7 @@ class DonorPool(object):
     def contents(self):
         return self.__contents
     def contains(self, node):
-        pass
+        return hash(node) in self.__contents
 
 # Used to specify which nodes should be entered into the donor pool
 class DonorPoolCriterion(object):
