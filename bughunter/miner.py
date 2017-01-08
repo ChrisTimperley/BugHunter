@@ -787,9 +787,15 @@ class ReplaceAssignmentLHS(RepairAction):
 #        return self.__to
 
 ## FUNCTION-CALL-RELATED ACTIONS
-#
-# TODO: compute list of edits
 class ModifyCall(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_call = before.find(jsn['from'])
+        after_call = after.find(jsn['to'])
+        assert not before_call is None
+        assert not after_call is None
+        return ModifyCall(before_call, after_call)
+
     @staticmethod
     def detect_all_in_modified_statement(patch, stmt, actions):
         calls = stmt.find_all(lambda n: isinstance(n, cgum.expression.FunctionCall))
@@ -814,6 +820,10 @@ class ModifyCall(RepairAction):
         return self.__frm
     def to(self):
         return self.__to
+
+    def to_json(self):
+        return super().to_json({'before': self.__frm.number(), \
+                                'after': self.__to.number()})
 
 class ReplaceCallTarget(RepairAction):
     @staticmethod
