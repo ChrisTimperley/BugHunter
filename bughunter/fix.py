@@ -1,6 +1,6 @@
 import json
 import tempfile
-import source
+import bughunter.source
 import cgum.diff
 
 # Represents a version of a program for a particular bug fix, where the two
@@ -15,7 +15,7 @@ class ProgramVersion(object):
 
     # Returns the source code for a given file
     def source(self, fn):
-        return source.SourceFile(self.__fix.master(), self, fn)
+        return bughunter.source.SourceFile(self.__fix.master(), self, fn)
 
     # Returns the pre-processed source code for a given file that was modified
     # by this edit, as a readable file.
