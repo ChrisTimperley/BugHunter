@@ -24,17 +24,39 @@ class Storage(object):
     #def diff(self, repo, fix, fn):
     #    return DiffFile(self, repo, fix, fn)
 
-    # Returns a handler for the AST of a given (pre-processed) file
+    # Returns the CGum AST of a given file
     def ast(self, ver, fn):
-        return AstFile(self.__master, ver, fn)
+        path = os.path.join(ver.fix().repository().id(),\
+                            ver.fix().identifier(),\
+                            fn,\
+                            ("after" if ver.is_fixed() else "before"),\
+                            ".ast.json")
+        path = os.path.join(self.root(), "artefacts", path)
+
+        if not os.path.isfile(path):
+            f = ver.file(fn)
+            try:
+                cgum.program.Program.from_source_file(f.name)
+            finally:
+                f.close()
+
+    # Returns the CGum annotated diff for a BugHunter diff
+    def diff(self, df):
+        # get the before and after ASTs for this file
+        before = XASTASGAS
+
+        # compute the path to the cached JSON diff file
+        path = os.path.join(df.fix().repository().id(),\
+                            df.fix().identifier(),\
+                            df.name(),\
+                            ".diff.json")
+        path = os.path.join(self.root(), "artefacts", path)
+        # 
 
     # Returns a handler for a given source code file
+    # TODO: simplify; this is overly complicated
     def source(self, ver, fn):
         return SourceFile(self.__master, ver, fn)
-
-    # Returns a handler for a given (pre-processed) source code file
-    def preprocessed(self, ver, fn):
-        return PreprocessedFile(self.__master, ver, fn)
 
     # Returns a handler for a given database file.
     def database(self, repo):
@@ -59,22 +81,6 @@ class Storage(object):
     def locator(self, artefact):
         if isinstance(artefact, DatabaseFile):
             rel = os.path.join(artefact.repository().id(), "fixes.json")
-        elif isinstance(artefact, PreprocessedFile):
-            fn = artefact.name()[:-2] # remove ".c" suffix
-            suffix = "after" if artefact.version().is_fixed() else "before"
-            fn = "%s.%s.c" % (fn.replace('/', '-'), suffix)
-            fix = artefact.version().fix()
-            rel = os.path.join(fix.repository().id(),\
-                               fix.identifier(),\
-                               fn)
-        elif isinstance(artefact, AstFile):
-            fn = artefact.name()[:-2] # remove ".c" suffix
-            suffix = "after" if artefact.version().is_fixed() else "before"
-            fn = "%s.%s.cgum.json" % (fn.replace('/', '-'), suffix)
-            fix = artefact.version().fix()
-            rel = os.path.join(fix.repository().id(),\
-                               fix.identifier(),\
-                               fn)
         return os.path.join(self.root(), "artefacts", rel)
 
     # Determines whether a given artefact exists on disk.
@@ -171,7 +177,6 @@ class SourceFile(object):
         return blob.data_stream.read().decode()
 
     # Returns the abstract syntax tree for this file.
-    # NOTE: does not cache to disk, for now
     # TODO: add caching to disk
     def ast(self):
         with tempfile.NamedTemporaryFile(mode='w+', suffix='.c') as f:
@@ -179,40 +184,4 @@ class SourceFile(object):
             f.flush()
             return cgum.program.Program.from_source_file(f.name)
 
-# Provides access to the pre-processed form of a given source code file from
-# a particular program version
-class PreprocessedFile(object):
-    def __init__(self, master, version, name):
-        self.__master = master
-        self.__version = version
-        self.__name = name
 
-    # Determines whether this file exists on disk
-    def exists(self):
-        return self.__master.storage().exists(self)
-
-    # Returns the program version that this preprocessed file belongs to
-    def version(self):
-        return self.__version
-
-    # Returns the name of the original source file, relative to its
-    # repository
-    def name(self):
-        return self.__name
-    
-    # Returns a readable file for this preprocessed file, which may or may
-    # not represent the physical file on disk
-    def readable(self):
-        print("getting readable")
-        if not self.exists():
-            pp = self.__version.fix().repository().preprocessor()
-            pp.preprocess(self.version())
-        return self.__master.storage().reader(self)
-
-    # Writes to the preprocessed file, using another file as source
-    def write_from(self, src_fn):
-        assert not self.exists(), "pre-processed file already exists"
-        writer = self.__master.storage().writer(self)
-        with open(src_fn, 'r') as src:
-            writer.write(src.read())
-        writer.close()
