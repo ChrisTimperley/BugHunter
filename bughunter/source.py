@@ -19,7 +19,7 @@ class SourceFile(object):
 
     # Returns a readable file handler; responsibility of the requestee to close
     def readable(self):
-        f = tempfile.NamedTemporaryFile(mode="w+")
+        f = tempfile.NamedTemporaryFile(suffix=".c", mode="w+")
         f.write(self.contents())
         f.flush()
         f.seek(0)

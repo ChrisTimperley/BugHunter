@@ -7,6 +7,7 @@ import git
 import hashlib
 import os
 import json
+from bughunter.utility import *
 
 # The Storage class is responsible for abstracting away the details of how and
 # where BugHunter's artefacts are stored, including pre-processed, parsed, and
@@ -30,19 +31,19 @@ class Storage(object):
         path = os.path.join(self.root(), "artefacts", path)
         
         if not os.path.exists(path):
+            ensure_dir(os.path.dirname(path))
             f_src = src.readable()
             try:
                 print("Parsing from: %s" % f_src.name)
                 print("Parsing to: %s" % path)
                 with open(path, "w") as f_jsn:
-                    f_jsn.flush()
                     cgum.program.Program.parse_to_json_file(f_src.name, f_jsn)
                     f_jsn.flush()
                 print("Parsed")
             finally:
                 f_src.close()
 
-        return cgum.program.Program.from_file(path)
+        return cgum.program.Program.from_json_file(path)
 
     # Returns the CGum annotated diff for a BugHunter diff
     def diff(self, df):
