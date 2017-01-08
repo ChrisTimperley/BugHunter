@@ -555,10 +555,18 @@ class ReplaceSwitchExpression(RepairAction):
         return self.__to_stmt.expr()
 
     def to_json(self):
-        return super().to_json({'before_if': self.__from_stmt.number(),
-                                'after_if': self.__to_stmt.number()})
+        return super().to_json({'before_stmt': self.__from_stmt.number(),
+                                'after_stmt': self.__to_stmt.number()})
 
 class ReplaceLoopGuard(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_loop = before.find(jsn['before_loop'])
+        after_loop = after.find(jsn['after_loop'])
+        assert not before_loop is None
+        assert not after_loop is None
+        return ReplaceLoopGuard(before_loop, after_loop)
+
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         modified = map(lambda a: (a.frm(), a.to()), actions['ModifyStatement'])
@@ -577,13 +585,20 @@ class ReplaceLoopGuard(RepairAction):
         l = filter(star(lambda frm,to: not frm.condition().equivalent(to.condition())),\
                    modified)
         actions['ReplaceLoopGuard'] =\
-            [ReplaceLoopGuard(frm, to, frm.condition(), to.condition()) for (frm, to) in l]
+            [ReplaceLoopGuard(frm, to) for (frm, to) in l]
         
-    def __init__(self, from_stmt, to_stmt, from_guard, to_guard):
+    def __init__(self, from_stmt, to_stmt):
         self.__from_stmt = from_stmt
         self.__to_stmt = to_stmt
-        self.__from_guard = from_guard
-        self.__to_guard = to_guard
+
+    def from_guard(self):
+        return self.__from_stmt.condition()
+    def to_guard(self):
+        return self.__to_stmt.condition()
+
+    def to_json(self):
+        return super().to_json({'before_loop': self.__from_stmt.number(), \
+                                'after_loop': self.__to_stmt.number()})
        
 class ReplaceLoopBody(RepairAction):
     @staticmethod
