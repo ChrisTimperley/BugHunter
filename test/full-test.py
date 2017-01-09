@@ -3,6 +3,7 @@ import pprint
 import traceback
 from bughunter.bughunter import BugHunter
 from bughunter.action import RepairActions
+from bughunter.pool import DonorPoolSet
 
 bh = BugHunter()
 repo = bh.repository("https://github.com/curl/curl", "bughunter:curl")
@@ -15,7 +16,8 @@ for fix in fixes:
         print(fix.identifier())
         for diff in fix.diffs():
             print("Mining actions for file: %s" % diff.name())
-            actions = RepairActions.mine(diff)
+            pools = DonorPoolSet.build(diff)
+            #actions = RepairActions.mine(diff)
             #pprint.pprint(actions)
 
     except (KeyboardInterrupt, SystemExit):

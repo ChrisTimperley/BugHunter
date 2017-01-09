@@ -1,4 +1,4 @@
-from utility import *
+from bughunter.utility import *
 import cgum.statement
 import json
 import os.path
@@ -7,7 +7,7 @@ class DonorPool(object):
     @staticmethod
     def build(name, diff, criterion):
         tree = diff.before().ast()
-        contents = tree.collect(lambda n: criterion.include(n))
+        contents = tree.collect(lambda n: criterion.covers(n))
         contents = frozenset(hash(n) for n in contents)
         return DonorPool(name, contents)
 
@@ -21,34 +21,34 @@ class DonorPool(object):
         return hash(node) in self.__contents
 
     def to_json(self):
-        return list(contents)
+        return list(self.__contents)
 
 # Used to specify which nodes should be entered into the donor pool
 class DonorPoolCriterion(object):
-    def include(self, node):
+    def covers(self, node):
         raise NotImplementedError
 
 # Donor pool containing all nodes from the corpus
 class AtomicCriterion(DonorPoolCriterion):
-    def include(self, node):
+    def covers(self, node):
         return True
 
 # Donor pool of statements
 class StatementCriterion(DonorPoolCriterion):
-    def include(self, node):
+    def covers(self, node):
         return isinstance(node, cgum.statement.Statement)
 
 # Donor pool of blocks
 class BlockCriterion(DonorPoolCriterion):
-    def include(self, node):
+    def covers(self, node):
         return isinstance(node, cgum.statement.Block)
 
 class DonorPoolSet(object):
     # labels for each of the available pools
     POOLS = {
-        'atomic': AtomicCriterion,
-        'statement': StatementCriterion,
-        'block': BlockCriterion
+        'atomic': AtomicCriterion(),
+        'statement': StatementCriterion(),
+        'block': BlockCriterion()
     }
 
     # Returns the location on disk of the donor pool file for
@@ -68,26 +68,28 @@ class DonorPoolSet(object):
     @staticmethod
     def __save(pools, loc):
         pools = {n: pl.to_json() for (n, pl) in pools.items()}
-        ensuredir(os.path.dirname(loc))
+        ensure_dir(os.path.dirname(loc))
         with open(loc, "w") as f:
             json.dump(pools, f)
     
     # Builds the set of donor pools for a given diff, using on-disk
     # caches where possible
+    #
+    # TODO: check encoding
     @staticmethod
     def build(diff):
         loc = DonorPoolSet.locator(diff)
-        if os.path.exist(loc):
+        if os.path.exists(loc):
             with open(loc, "r") as f:
                 pools = json.load(loc)
             for (pname, pool) in pools.items():
-                pools[pname] = DonorPool(pname, pool)
+                pools[pname] = DonorPool(pname, frozenset(pool))
         else:
             pools = {}
 
         # build remaining pools
         modified = False
-        for (pname, criterion) in DonorPoolSet.POOLS:
+        for (pname, criterion) in DonorPoolSet.POOLS.items():
             if pname in pools:
                 continue
 
