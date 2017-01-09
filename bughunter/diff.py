@@ -16,12 +16,12 @@ class FileDiff(object):
     
     # Returns the 'before' file
     def before(self):
-        print("FileDiff - fetching before: %s" % self.__name)
+        #print("FileDiff - fetching before: %s" % self.__name)
         return self.fix().before().source(self.__name)
 
     # Returns the 'after' file
     def after(self):
-        print("FileDiff - fetching after: %s" % self.__name)
+        #print("FileDiff - fetching after: %s" % self.__name)
         return self.fix().after().source(self.__name)
 
     # Returns the PyCGum difference representation of this diff

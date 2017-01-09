@@ -17,8 +17,8 @@ for fix in fixes:
         for diff in fix.diffs():
             print("Mining actions for file: %s" % diff.name())
             pools = DonorPoolSet.build(diff)
-            #actions = RepairActions.mine(diff)
-            #pprint.pprint(actions)
+            actions = RepairActions.mine(diff)
+            pprint.pprint(actions)
 
     except (KeyboardInterrupt, SystemExit):
         raise

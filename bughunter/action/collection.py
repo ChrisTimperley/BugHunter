@@ -117,7 +117,7 @@ class RepairActions(object):
     # Loads the mined repair actions for a given diff from disk
     # Responsibility of the callee to ensure the file exists
     @staticmethod
-    def __load(master, diff, loc):
+    def __load(diff, loc):
         assert not diff is None
         assert os.path.exists(loc), "given repair action file must exist"
 

@@ -43,7 +43,7 @@ class WrapStatement(RepairAction):
         actions['WrapStatement'] =\
             [WrapStatement(patch.is_was(s.then()), s) for s in l]
 
-    def __init__(self, stmt, wrapper, guard):
+    def __init__(self, stmt, wrapper):
         self.__stmt = stmt
         self.__wrapper = wrapper
 
@@ -326,7 +326,7 @@ class GuardElseBranch(RepairAction):
                 parent_if = s.parent().parent()
             else:
                 parent_if = s.parent()
-            assert isinstance(parent_if, cgum.statement.IfThen)
+            assert isinstance(parent_if, cgum.statement.IfElse)
 
             before_else = patch.is_was(parent_if).els()
             if before_branch == before_else:

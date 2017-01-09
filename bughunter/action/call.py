@@ -135,7 +135,7 @@ class InsertCallArg(RepairAction):
         i = k = 0
         while i < len(frm):
             if not frm[i].equivalent(to[i + k]):
-                if offset == 1:
+                if not arg is None:
                     return None
                 arg = to[i + k]
                 k = 1
@@ -151,7 +151,7 @@ class InsertCallArg(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
+        l = map(lambda a: (a.frm_args(), a.to_args()), actions['ModifyCallArgs'])
         l = map(star(lambda frm,to: InsertCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
         actions['InsertCallArg'] = \
@@ -191,7 +191,7 @@ class RemoveCallArg(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
+        l = map(lambda a: (a.frm_args(), a.to_args()), actions['ModifyCallArgs'])
         l = map(star(lambda frm,to: RemoveCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
         actions['RemoveCallArg'] = \
@@ -244,7 +244,7 @@ class ReplaceCallArg(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = map(lambda a: (a.frm(), a.to()), actions['ModifyCallArgs'])
+        l = map(lambda a: (a.frm_args(), a.to_args()), actions['ModifyCallArgs'])
         l = map(star(lambda frm,to: ReplaceCallArg.detect_one(frm, to)), l)
         l = filter(lambda arg: not arg is None, l)
         actions['ReplaceCallArg'] = [ReplaceCallArg(frm_call, to_call, frm_arg, to_arg) \

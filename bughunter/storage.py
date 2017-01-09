@@ -34,12 +34,9 @@ class Storage(object):
             ensure_dir(os.path.dirname(path))
             f_src = src.readable()
             try:
-                print("Parsing from: %s" % f_src.name)
-                print("Parsing to: %s" % path)
                 with open(path, "w") as f_jsn:
                     cgum.program.Program.parse_to_json_file(f_src.name, f_jsn)
                     f_jsn.flush()
-                print("Parsed")
             finally:
                 f_src.close()
 
@@ -62,17 +59,14 @@ class Storage(object):
             src_after_h = df.after().readable()
             try:
                 with open(path, "w") as f_jsn:
-                    print("Generating diff file...")
                     cgum.diff.AnnotatedDiff.parse_to_json_file(src_before_h.name, \
                                                                src_after_h.name, \
                                                                f_jsn)
                     f_jsn.flush()
-                    print("Generated diff file")
             finally:
                 src_before_h.close()
                 src_after_h.close()
 
-        print("Loading diff from file...")
         return cgum.diff.AnnotatedDiff.from_file(path, ast_before, ast_after)
 
     # Returns a handler for a given database file.
