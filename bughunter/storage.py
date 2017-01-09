@@ -1,6 +1,6 @@
 import bughunter.utility as utility
 import bughunter.fix as fix
-import cgum
+import cgum.diff
 import cgum.program
 import tempfile
 import git
@@ -50,23 +50,29 @@ class Storage(object):
         ast_before = df.before().ast()
         ast_after = df.after().ast()
 
+        path = "%s.diff.json" % df.name()
         path = os.path.join(df.fix().repository().id(),\
                             df.fix().identifier(),\
-                            df.name(),\
-                            ".diff.json")
+                            path)
         path = os.path.join(self.root(), "artefacts", path)
 
         if not os.path.exists(path):
+            ensure_dir(os.path.dirname(path))
             src_before_h = df.before().readable()
             src_after_h = df.after().readable()
             try:
-                cgum.diff.AnnotatedDiff.parse_to_json_file(src_before_h.name, \
-                                                           src_after_h.name, \
-                                                           path)
+                with open(path, "w") as f_jsn:
+                    print("Generating diff file...")
+                    cgum.diff.AnnotatedDiff.parse_to_json_file(src_before_h.name, \
+                                                               src_after_h.name, \
+                                                               f_jsn)
+                    f_jsn.flush()
+                    print("Generated diff file")
             finally:
                 src_before_h.close()
                 src_after_h.close()
 
+        print("Loading diff from file...")
         return cgum.diff.AnnotatedDiff.from_file(path, ast_before, ast_after)
 
     # Returns a handler for a given database file.

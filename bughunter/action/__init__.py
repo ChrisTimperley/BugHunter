@@ -5,4 +5,4 @@ from bughunter.action.switch import *
 from bughunter.action.loop import *
 from bughunter.action.assignment import *
 from bughunter.action.call import *
-from bughunter.action.miner import RepairActionMiner
+from bughunter.action.collection import RepairActions
