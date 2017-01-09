@@ -1,8 +1,8 @@
-import bughunter.action.core
+from bughunter.action.core import *
 import cgum.statement
 
 # Detects a deleted statement
-class DeleteStatement(bughunter.action.core.RepairAction):
+class DeleteStatement(RepairAction):
     LABEL = "DeleteStatement"
 
     @staticmethod
@@ -41,7 +41,7 @@ class DeleteStatement(bughunter.action.core.RepairAction):
         return super().to_json({'deleted': self.__stmt.number()})
 
 # Detects an inserted statement
-class InsertStatement(bughunter.action.core.RepairAction):
+class InsertStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         stmt = after.find(jsn['inserted'])
@@ -67,7 +67,7 @@ class InsertStatement(bughunter.action.core.RepairAction):
         return super().to_json({'inserted': self.__stmt.number()})
 
 # Detects that a statement has been modified (but neither deleted nor inserted)
-class ModifyStatement(bughunter.action.core.RepairAction):
+class ModifyStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         stmt_frm = before.find(jsn['from'])

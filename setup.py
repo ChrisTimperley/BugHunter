@@ -10,6 +10,6 @@ setup(
     author_email='christimperley@gmail.com',
     url='https://github.com/ChrisTimperley/BugHunter',
     license='MIT',
-    packages=['bughunter'],
+    packages=['bughunter', 'bughunter.action'],
     include_package_data=True
 )

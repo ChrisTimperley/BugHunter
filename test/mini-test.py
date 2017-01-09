@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import pprint
 import cgum.diff
-from bughunter.miner import RepairActionMiner
+from bughunter.action import RepairActionMiner
 
 # Create the miner
 miner = RepairActionMiner()

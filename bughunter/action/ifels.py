@@ -1,10 +1,11 @@
+from bughunter.action.core import *
 from bughunter.action.basic import ModifyStatement, InsertStatement, DeleteStatement
 import cgum.statement
 
 #####
 # GROUP: If-Statement-Related
 #####
-class WrapStatement(bughunter.action.core.RepairAction):
+class WrapStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         stmt_bef = before.find(jsn['stmt_before'])
@@ -53,7 +54,7 @@ class WrapStatement(bughunter.action.core.RepairAction):
         return super().to_json({'stmt_before': self.__stmt.number(), \
                                 'wrapper': self.__wrapper.number()})
 
-class UnwrapStatement(bughunter.action.core.RepairAction):
+class UnwrapStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         frm = before.find(jsn['before'])
@@ -93,7 +94,7 @@ class UnwrapStatement(bughunter.action.core.RepairAction):
                                 'after': self.__to.number()})
 
 # Action: Replace If Condition
-class ReplaceIfCondition(bughunter.action.core.RepairAction):
+class ReplaceIfCondition(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
@@ -124,7 +125,7 @@ class ReplaceIfCondition(bughunter.action.core.RepairAction):
         return super().to_json({'before_if': self.__from_stmt.number(), \
                                 'after_if': self.__to_stmt.number()})
 
-class ReplaceThenBranch(bughunter.action.core.RepairAction):
+class ReplaceThenBranch(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
@@ -155,7 +156,7 @@ class ReplaceThenBranch(bughunter.action.core.RepairAction):
         return super().to_json({'before_if': self.__frm_stmt.number(),
                                 'after_if': self.__to_stmt.number()})
 
-class ReplaceElseBranch(bughunter.action.core.RepairAction):
+class ReplaceElseBranch(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
@@ -187,7 +188,7 @@ class ReplaceElseBranch(bughunter.action.core.RepairAction):
         return super().to_json({'before_if': self.__frm_stmt.number(),
                                 'after_if': self.__to_stmt.number()})
 
-class RemoveElseBranch(bughunter.action.core.RepairAction):
+class RemoveElseBranch(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
@@ -218,7 +219,7 @@ class RemoveElseBranch(bughunter.action.core.RepairAction):
                                 'after_if': self.__to_stmt.number()})
 
 # Action: Insert Else Branch
-class InsertElseBranch(bughunter.action.core.RepairAction):
+class InsertElseBranch(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
@@ -251,7 +252,7 @@ class InsertElseBranch(bughunter.action.core.RepairAction):
                                 'after_if': self.__to.number()})
 
 # Action: Insert Else-If Branch
-class InsertElseIfBranch(bughunter.action.core.RepairAction):
+class InsertElseIfBranch(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
@@ -283,7 +284,7 @@ class InsertElseIfBranch(bughunter.action.core.RepairAction):
         return super().to_json({'before_if': self.__from.number(),
                                 'after_if': self.__to.number()})
 
-class GuardElseBranch(bughunter.action.core.RepairAction):
+class GuardElseBranch(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         before_if = before.find(jsn['before_if'])
