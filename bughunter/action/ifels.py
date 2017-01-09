@@ -170,8 +170,16 @@ class ReplaceElseBranch(RepairAction):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: (frm.els() is None) != (to.els() is None) or frm.els().equivalent(to.els())), l) # else statements differ
-        l = filter(star(lambda frm,to: not frm.els() is None), l) # not an insertion
+
+        # ensure that an else statement couldn't have been inserted
+        l = filter(star(lambda frm,to: not frm.els() is None), l)
+
+        # ensure that there is an else statement in the after version of the IfThen
+        l = filter(star(lambda frm,to: not to.els() is None), l)
+
+        # check that the else statements differ
+        l = filter(star(lambda frm,to: frm.els().equivalent(to.els())), l)
+
         actions['ReplaceElseBranch'] =\
             [ReplaceElseBranch(frm, to) for (frm, to) in l]
 
@@ -201,9 +209,13 @@ class RemoveElseBranch(RepairAction):
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
+
+        # Check the IfElse statement was in P
         l = filter(star(lambda frm,to: not frm is None), l)
-        l = filter(star(lambda frm,to: (frm.els() is None) != (to.els() is None) or frm.els().equivalent(to.els())), l) # else statements differ
-        l = filter(star(lambda frm,to: to.els() is None), l) # deleted else branch
+
+        # Check that there was an else branch in P, but not P'
+        l = filter(star(lambda frm,to: (not frm.els() is None) and (to.els() is None)), l)
+
         actions['RemoveElseBranch'] =\
             [RemoveElseBranch(frm, to)  for (frm, to) in l]
 
@@ -233,7 +245,6 @@ class InsertElseBranch(RepairAction):
         modified = actions['ModifyStatement']
         modified = filter(lambda a: isinstance(a.to(), cgum.statement.IfElse), modified)
         modified = map(lambda a: (a.frm(), a.to()), modified)
-        modified = list(modified)
         l = filter(star(lambda frm,to: (frm.els() is None and (not to.els() is None))),\
                    modified)
         l = filter(star(lambda _,to: not isinstance(to.els(), cgum.statement.IfElse)), l)
@@ -295,18 +306,33 @@ class GuardElseBranch(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
+        # Find all inserted statements without any else branch which belong to an
+        # IfThen statement
         inserted = [a.statement() for a in actions['InsertStatement']]
-        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), inserted) # add If
-        l = filter(lambda s: s.els() is None, l) # no else branch
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), inserted)
+        l = filter(lambda s: s.els() is None, l)
+        l = filter(lambda s: isinstance(s.parent(), cgum.statement.IfElse) or \
+                             (isinstance(s.parent(), cgum.statement.Block) and \
+                              isinstance(s.parent().parent(), cgum.statement.IfElse)), l)
 
-        # then branch used to be the else branch of the parent
+        # Ensure that the the branch of this IfThen was formerly the else branch
+        # of its parent IfThen
         tmp = []
         for s in l:
             before_branch = patch.is_was(s.then())
-            before_else = patch.is_was(s.parent()).els()
+   
+            # fetch the parent IfThen of this statement
+            if isinstance(s.parent(), cgum.statement.Block):
+                parent_if = s.parent().parent()
+            else:
+                parent_if = s.parent()
+            assert isinstance(parent_if, cgum.statement.IfThen)
+
+            before_else = patch.is_was(parent_if).els()
             if before_branch == before_else:
                 tmp.append(s)
         l = tmp
+
         actions['GuardElseBranch'] =\
             [GuardElseBranch(patch.is_was(s.parent()), s.parent()) for s in l]
 
@@ -314,8 +340,12 @@ class GuardElseBranch(RepairAction):
         self.__frm_if = frm_if
         self.__to_if = to_if
 
+    def from_els(self):
+        return self.__from_if.els()
+    def to_els(self):
+        return self.__to_if.els()
     def guard(self):
-        return self.__to_if.condition()
+        return self.from_els().condition()
 
     def to_json(self):
         return super().to_json({'before_if': self.__frm_if.number(),
