@@ -4,14 +4,24 @@ import json
 import os.path
 
 class DonorPool(object):
+    @staticmethod
+    def build(name, diff, criterion):
+        tree = diff.before().ast()
+        contents = tree.collect(lambda n: criterion.include(n))
+        contents = frozenset(hash(n) for n in contents)
+        return DonorPool(name, contents)
 
-    def __init__(self, program, criterion):
-        nodes = program.collect(lambda n: criterion.include(n))
-        self.__contents = frozenset(hash(n) for n in nodes)
+    def __init__(self, name, contents):
+        self.__name = name
+        self.__contents = contents
+
     def contents(self):
         return self.__contents
     def contains(self, node):
         return hash(node) in self.__contents
+
+    def to_json(self):
+        return list(contents)
 
 # Used to specify which nodes should be entered into the donor pool
 class DonorPoolCriterion(object):
