@@ -2,7 +2,7 @@
 import pprint
 import traceback
 from bughunter.bughunter import BugHunter
-from bughunter.miner import RepairActionMiner
+from bughunter.action import RepairActions
 
 bh = BugHunter()
 repo = bh.repository("https://github.com/curl/curl", "bughunter:curl")
@@ -10,17 +10,12 @@ git = repo.repository()
 fixes = repo.fixes()
 fixes = fixes[1:10]
 
-miner = RepairActionMiner()
-
 for fix in fixes:
     try:
         print(fix.identifier())
         for diff in fix.diffs():
-            print("Analysing diff for file: %s" % diff.name())
-
-            cgum = diff.cgum()
-
-            #actions = miner.mine(diff)
+            print("Mining actions for file: %s" % diff.name())
+            actions = RepairActions.mine(diff)
             #pprint.pprint(actions)
 
     except (KeyboardInterrupt, SystemExit):

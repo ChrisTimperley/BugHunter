@@ -1,6 +1,15 @@
 import cgum.statement
 
+class DonorPools(object):
+    
+    @staticmethod
+    def load(diff):
+
 class DonorPool(object):
+
+    @staticmethod
+    def load(diff):
+
     def __init__(self, program, criterion):
         nodes = program.collect(lambda n: criterion.include(n))
         self.__contents = frozenset(hash(n) for n in nodes)
