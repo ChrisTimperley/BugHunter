@@ -81,7 +81,7 @@ class DonorPoolSet(object):
         loc = DonorPoolSet.locator(diff)
         if os.path.exists(loc):
             with open(loc, "r") as f:
-                pools = json.load(loc)
+                pools = json.load(f)
             for (pname, pool) in pools.items():
                 pools[pname] = DonorPool(pname, frozenset(pool))
         else:
