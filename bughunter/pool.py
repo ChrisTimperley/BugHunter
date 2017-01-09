@@ -1,9 +1,30 @@
 import cgum.statement
 
-class DonorPools(object):
+class DonorPoolSet(object):
     
     @staticmethod
     def load(diff):
+        pass
+
+    def __init__(self, pools):
+        self.__pools = pools
+
+    # Returns the pools within this set as a dictionary, where each pool is
+    # indexed by its label
+    def pools(self):
+        return self.__pools
+    
+    # Returns a pool with a given name from this set of pools
+    def pool(self, name):
+        return self.__pools[name]
+
+    # Checks if a given node can be found within any of the named pools contained
+    # within this set of donor pools
+    def contains(self, node, pools):
+        for pool in self.__pools:
+            if pool.contains(node):
+                return True
+        return False
 
 class DonorPool(object):
 
