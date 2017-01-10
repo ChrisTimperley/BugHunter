@@ -73,7 +73,7 @@ class RepairActions(object):
     @staticmethod
     def locator(diff):
         storage = diff.fix().master().storage()
-        path = "%s.actions.json" % diff.name()
+        path = "%s.actions.json" % diff.clean_name()
         path = os.path.join(diff.fix().repository().id(),\
                             diff.fix().identifier(),\
                             path)

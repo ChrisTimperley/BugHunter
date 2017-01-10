@@ -3,6 +3,10 @@ import tempfile
 # Provides access to the original source code contained within a given file
 # belonging to a specified program version
 class SourceFile(object):
+    @staticmethod
+    def clean_filename(fn):
+        return fn.replace('/', '-')
+
     def __init__(self, master, version, name):
         self.__master = master
         self.__version = version
@@ -16,6 +20,10 @@ class SourceFile(object):
     # repository
     def name(self):
         return self.__name
+
+    # Returns a sanitised form of the name of this source file
+    def clean_name(self):
+        return SourceFile.clean_filename(self.__name)
 
     # Returns a readable file handler; responsibility of the requestee to close
     def readable(self):

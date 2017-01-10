@@ -24,7 +24,7 @@ class Storage(object):
     # Returns the CGum AST for a given SourceFile
     def ast(self, src):
         path = "after" if src.version().is_fixed() else "before"
-        path = "%s.%s.ast.json" % (src.name(), path)
+        path = "%s.%s.ast.json" % (src.clean_name(), path)
         path = os.path.join(src.version().fix().repository().id(),\
                             src.version().fix().identifier(),\
                             path)
@@ -37,6 +37,10 @@ class Storage(object):
                 with open(path, "w") as f_jsn:
                     cgum.program.Program.parse_to_json_file(f_src.name, f_jsn)
                     f_jsn.flush()
+            # prevent any cache-destroying partial ASTs
+            except:
+                if os.path.exists(path):
+                    os.unlink(path)
             finally:
                 f_src.close()
 
@@ -47,7 +51,7 @@ class Storage(object):
         ast_before = df.before().ast()
         ast_after = df.after().ast()
 
-        path = "%s.diff.json" % df.name()
+        path = "%s.diff.json" % df.clean_name()
         path = os.path.join(df.fix().repository().id(),\
                             df.fix().identifier(),\
                             path)
@@ -63,6 +67,11 @@ class Storage(object):
                                                                src_after_h.name, \
                                                                f_jsn)
                     f_jsn.flush()
+
+            # again, prevent cache-destroying diffs
+            except:
+                if os.path.exists(path):
+                    os.unlink(path)
             finally:
                 src_before_h.close()
                 src_after_h.close()

@@ -1,3 +1,5 @@
+import bughunter.source
+
 # Represents the difference between two files 
 class FileDiff(object):
     def __init__(self, master, fix, name):
@@ -9,6 +11,10 @@ class FileDiff(object):
     # Returns the name of the file
     def name(self):
         return self.__name
+
+    # Returns the sanitised form of the file name
+    def clean_name(self):
+        return bughunter.source.SourceFile.clean_filename(self.__name)
 
     # Returns the fix that this diff belongs to
     def fix(self):
