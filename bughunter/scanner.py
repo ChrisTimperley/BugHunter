@@ -6,7 +6,7 @@ import bughunter.fix as fix
 # Any commit containing a bug marker will be treated as a bug fix, unless the
 # commit also contains an anti-marker
 class Scanner(object):
-    BUG_MARKERS = ['fixed', 'bug']
+    BUG_MARKERS = ['fixed', 'bug', 'patch', 'patched', 'fails', 'fail']
     BUG_ANTI_MARKERS = ['compile', 'compilation', 'debug', 'merge', 'revert']
 
     def __init__(self, master):
