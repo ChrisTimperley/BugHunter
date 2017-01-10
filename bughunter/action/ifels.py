@@ -38,10 +38,10 @@ class WrapStatement(RepairAction):
             else:
                 then = s.then()
             if not patch.is_was(then) is None:
-                tmp.append(s)
+                tmp.append((then, s))
         l = tmp
         actions['WrapStatement'] =\
-            [WrapStatement(patch.is_was(s.then()), s) for s in l]
+            [WrapStatement(patch.is_was(then), s) for (then, s) in l]
 
     def __init__(self, stmt, wrapper):
         self.__stmt = stmt

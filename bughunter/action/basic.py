@@ -45,8 +45,10 @@ class InsertStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
         stmt = after.find(jsn['inserted'])
+        parent = after.find(jsn['parent_after'])
         assert not stmt is None
-        return InsertStatement(stmt)
+        assert not parent is None
+        return InsertStatement(stmt, parent)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -62,9 +64,12 @@ class InsertStatement(RepairAction):
 
     def statement(self):
         return self.__stmt
+    def parent(self):
+        return self.__parent
 
     def to_json(self):
-        return super().to_json({'inserted': self.__stmt.number()})
+        return super().to_json({'inserted': self.__stmt.number(),\
+                                'parent_after': self.__parent.number()})
 
 # Detects that a statement has been modified (but neither deleted nor inserted)
 class ModifyStatement(RepairAction):
@@ -83,12 +88,12 @@ class ModifyStatement(RepairAction):
         for edit in patch.actions():
             nearest_stmt_to_subject(edit, patch, groups)
         for (stmt_bef, edits) in groups.items():
-            print("modified: %s" % stmt_bef)
+            #print("modified: %s" % stmt_bef)
             stmt_aft = patch.was_is(stmt_bef)
 
             # ensure the statement isn't deleted
             if stmt_aft is None:
-                print("statement was deleted - ignoring")
+                #print("statement was deleted - ignoring")
                 continue
             
             a = ModifyStatement(stmt_bef, stmt_aft)

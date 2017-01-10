@@ -64,9 +64,9 @@ class RepairActions(object):
     # Reads a JSON repair action description and transforms it into a
     # repair action instance
     @staticmethod
-    def __action_from_json(jsn):
+    def __action_from_json(jsn, before_ast, after_ast):
         assert 'type' in jsn, "expected 'type' parameter in JSON repair action description"
-        return RepairActions.ACTION_MAP[jsn['type']].from_json(jsn)
+        return RepairActions.ACTION_MAP[jsn['type']].from_json(jsn, before_ast, after_ast)
 
     # Returns the location on disk of the repair actions cache file for
     # a given diff
@@ -122,12 +122,16 @@ class RepairActions(object):
         assert os.path.exists(loc), "given repair action file must exist"
 
         with open(loc, "r") as f:
-            actions = json.load(f)
+            action_sets = json.load(f)
 
-        for (typ_name, actions) in actions.items():
-            actions[typ_name] = [RepairActions.__action_from_json(a) for a in actions]
+        before_ast = diff.before().ast()
+        after_ast = diff.after().ast()
 
-        return actions
+        for (typ_name, actions) in action_sets.items():
+            action_sets[typ_name] = \
+                [RepairActions.__action_from_json(a, before_ast, after_ast) for a in actions]
+
+        return action_sets
     
     # Saves the mined repair actions for a given diff to disk, overwriting
     # any existing cache file

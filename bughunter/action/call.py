@@ -43,8 +43,8 @@ class ModifyCall(RepairAction):
 class ReplaceCallTarget(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['from'])
-        after_call = after.find(jsn['to'])
+        before_call = before.find(jsn['before'])
+        after_call = after.find(jsn['after'])
         assert not before_call is None
         assert not after_call is None
         return ReplaceCallTarget(before_call, after_call)
