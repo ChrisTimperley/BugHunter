@@ -61,6 +61,11 @@ class RepairActions(object):
     def __init__(self, actions):
         self.__actions = actions
 
+    # Returns a breakdown of the number of repair actions within this
+    # collection by their type
+    def stats(self):
+        return {name: len(lst) for (name, lst) in self.__actions.items()}
+
     # Reads a JSON repair action description and transforms it into a
     # repair action instance
     @staticmethod
