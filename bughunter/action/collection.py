@@ -79,6 +79,11 @@ class RepairActions(object):
                             path)
         path = os.path.join(storage.root(), "artefacts", path)
         return path
+
+    # Determines whether the repair actions for a given diff are cached to disk
+    @staticmethod
+    def cached(diff):
+        return os.path.exists(RepairActions.locator(diff))
  
     # Extracts all repair actions within a given file (utilising the cache where
     # possible)

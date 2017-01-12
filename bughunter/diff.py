@@ -40,7 +40,9 @@ class FileDiff(object):
         #print("FileDiff - fetching after: %s" % self.__name)
         return self.fix().after().source(self.__name)
 
-    def is_cached(self):
+    # Determines whether the CGum diff file for this file is cached
+    # to disk
+    def cached(self):
         return os.path.exists(self.location())
 
     # Returns the PyCGum difference representation of this diff
