@@ -11,9 +11,9 @@ class FileDiff(object):
 
     # Returns the absolute path to this diff file on disk
     def location(self):
-        path = "%s.diff.json" % df.clean_name()
-        path = os.path.join(df.fix().repository().id(),\
-                            df.fix().identifier(),\
+        path = "%s.diff.json" % self.clean_name()
+        path = os.path.join(self.fix().repository().id(),\
+                            self.fix().identifier(),\
                             path)
         path = os.path.join(master.storage().root(), "artefacts", path)
         return path
