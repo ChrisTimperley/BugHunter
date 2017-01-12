@@ -35,8 +35,10 @@ class Storage(object):
             f_src = src.readable()
             try:
                 with open(path, "w") as f_jsn:
+                    #print("Parsing AST: %s" % path)
                     cgum.program.Program.parse_to_json_file(f_src.name, f_jsn)
                     f_jsn.flush()
+                    #print("Parsed")
             # prevent any cache-destroying partial ASTs
             except:
                 if os.path.exists(path):
@@ -52,12 +54,7 @@ class Storage(object):
         ast_before = df.before().ast()
         ast_after = df.after().ast()
 
-        path = "%s.diff.json" % df.clean_name()
-        path = os.path.join(df.fix().repository().id(),\
-                            df.fix().identifier(),\
-                            path)
-        path = os.path.join(self.root(), "artefacts", path)
-
+        path = df.location()
         if not os.path.exists(path):
             ensure_dir(os.path.dirname(path))
             src_before_h = df.before().readable()

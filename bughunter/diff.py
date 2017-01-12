@@ -1,4 +1,5 @@
 import bughunter.source
+import os.path
 
 # Represents the difference between two files 
 class FileDiff(object):
@@ -7,6 +8,15 @@ class FileDiff(object):
         self.__fix = fix
         self.__name = name
         self.__cgum = None
+
+    # Returns the absolute path to this diff file on disk
+    def location(self):
+        path = "%s.diff.json" % df.clean_name()
+        path = os.path.join(df.fix().repository().id(),\
+                            df.fix().identifier(),\
+                            path)
+        path = os.path.join(master.storage().root(), "artefacts", path)
+        return path
     
     # Returns the name of the file
     def name(self):
@@ -29,6 +39,9 @@ class FileDiff(object):
     def after(self):
         #print("FileDiff - fetching after: %s" % self.__name)
         return self.fix().after().source(self.__name)
+
+    def is_cached(self):
+        return os.path.exists(self.location())
 
     # Returns the PyCGum difference representation of this diff
     def cgum(self):
