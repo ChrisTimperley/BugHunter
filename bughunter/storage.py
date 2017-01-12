@@ -41,6 +41,7 @@ class Storage(object):
             except:
                 if os.path.exists(path):
                     os.unlink(path)
+                raise
             finally:
                 f_src.close()
 
@@ -72,6 +73,7 @@ class Storage(object):
             except:
                 if os.path.exists(path):
                     os.unlink(path)
+                raise
             finally:
                 src_before_h.close()
                 src_after_h.close()
