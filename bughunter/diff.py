@@ -15,7 +15,7 @@ class FileDiff(object):
         path = os.path.join(self.fix().repository().id(),\
                             self.fix().identifier(),\
                             path)
-        path = os.path.join(master.storage().root(), "artefacts", path)
+        path = os.path.join(self.__master.storage().root(), "artefacts", path)
         return path
     
     # Returns the name of the file
