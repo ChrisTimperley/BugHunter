@@ -73,6 +73,10 @@ class DonorPoolBuilder(object):
             self.add('block', node)
         if isinstance(node, cgum.expression.Identity):
             self.add('identity', node)
+        if isinstance(node, cgum.expression.FunctionCall):
+            self.add('call-target', node.function())
+            for arg in node.arguments().contents():
+                self.add('call-arg', arg)
 
         for child in node.children():
             self.visit(child)
