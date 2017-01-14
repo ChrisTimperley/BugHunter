@@ -1,5 +1,6 @@
 from bughunter.utility import *
 import cgum.statement
+import cgum.expression
 import json
 import os.path
 
@@ -22,66 +23,65 @@ class DonorPool(object):
     def to_json(self):
         return list(self.__contents)
 
-# Used to specify which nodes should be entered into the donor pool
-class DonorPoolCriterion(object):
-    def covers(self, node):
-        raise NotImplementedError
-
-# Donor pool containing all nodes from the corpus
-class AtomicCriterion(DonorPoolCriterion):
-    def covers(self, node):
-        return True
-
-# Donor pool of statements
-class StatementCriterion(DonorPoolCriterion):
-    def covers(self, node):
-        return isinstance(node, cgum.statement.Statement)
-
-# Donor pool of blocks
-class BlockCriterion(DonorPoolCriterion):
-    def covers(self, node):
-        return isinstance(node, cgum.statement.Block)
-
-class DonorPoolSet(object):
-    # labels for each of the available pools
-    POOLS = {
-        'atomic': AtomicCriterion(),
-        'statement': StatementCriterion(),
-        'block': BlockCriterion()
-    }
-
+class DonorPoolBuilder(object):
     @staticmethod
-    def __save(pools, loc):
-        pools = {n: pl.to_json() for (n, pl) in pools.items()}
-        ensure_dir(os.path.dirname(loc))
-        with open(loc, "w") as f:
-            json.dump(pools, f)
-    
-    @staticmethod
-    def build(diff, ast, loc):
+    def build(ast, loc):
+        # Load existing pools from disk
         if os.path.exists(loc):
             with open(loc, "r") as f:
-                pools = json.load(f)
+                existing = json.load(f)
             for (pname, pool) in pools.items():
-                pools[pname] = DonorPool(pname, frozenset(pool))
+                existing[pname] = DonorPool(pname, frozenset(pool))
         else:
             pools = {}
 
-        # build remaining pools
-        modified = False
-        for (pname, criterion) in DonorPoolSet.POOLS.items():
-            if pname in pools:
-                continue
-            modified = True
-            pools[pname] = DonorPool.build(pname, ast, criterion)
+        # Build the remaining pools
+        buffers = DonorPoolBuilder(ast, pools).collect()
+        pools.update(buffers)
 
-        # update cache file, if necessary
-        # TODO: refactor
-        if modified:
-            DonorPoolSet.__save(pools, loc)
-
+        # If any new pools have been built, save the set to disk
+        if not buffers:
+            jsn = {n: pl.to_json() for (n, pl) in pools.items()}
+            ensure_dir(os.path.dirname(loc))
+            with open(loc, "w") as f:
+                json.dump(jsn, f)
+       
         return pools
 
+    def __init__(self, ast, existing):
+        pools = ['atomic', 'expression', 'statement', 'block', 'identity']
+        self.__ast = ast
+        self.__buffers = {p: [] for p in pools if not p in existing}
+
+    def collect(self):
+        if not self.__buffers:
+            return {}
+        
+        self.visit(self.__ast)
+        for (pool, contents) in self.__buffers.items():
+            contents = frozenset(hash(n) for n in contents)
+            self.__buffers[pool] = DonorPool(pool, contents)
+        return self.__buffers
+
+    def visit(self, node):
+        self.add('atomic', node)
+        if isinstance(node, cgum.expression.Expression):
+            self.add('expression', node)
+        if isinstance(node, cgum.statement.Statement):
+            self.add('statement', node)
+        if isinstance(node, cgum.statement.Block):
+            self.add('block', node)
+        if isinstance(node, cgum.expression.Identity):
+            self.add('identity', node)
+
+        for child in node.children():
+            self.visit(child)
+
+    def add(self, pool, node):
+        if pool in self.__buffers:
+            self.__buffers[pool].append(node)
+
+class DonorPoolSet(object):
     def __init__(self, diff, pools):
         self.__diff = diff
         self.__pools = pools
@@ -122,7 +122,7 @@ class AbstractDonorPoolSet(DonorPoolSet):
     def build(diff):
         loc = AbstractDonorPoolSet.locator(diff)
         ast = diff.before().ast().strip_variable_names()
-        pools = DonorPoolSet.build(diff, ast, loc)
+        pools = DonorPoolBuilder.build(ast, loc)
         return AbstractDonorPoolSet(diff, pools)
 
 class ConcreteDonorPoolSet(DonorPoolSet):
@@ -140,5 +140,5 @@ class ConcreteDonorPoolSet(DonorPoolSet):
     def build(diff):
         loc = ConcreteDonorPoolSet.locator(diff)
         ast = diff.before().ast()
-        pools = DonorPoolSet.build(diff, ast, loc)
+        pools = DonorPoolBuilder.build(ast, loc)
         return ConcreteDonorPoolSet(diff, pools)
