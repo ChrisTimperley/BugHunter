@@ -107,7 +107,7 @@ class DonorPoolSet(object):
                 return True
         return False
 
-class AbstractDonorPoolSet(object):
+class AbstractDonorPoolSet(DonorPoolSet):
     @staticmethod
     def locator(diff):
         storage = diff.fix().master().storage()
@@ -121,8 +121,7 @@ class AbstractDonorPoolSet(object):
     @staticmethod
     def build(diff):
         loc = AbstractDonorPoolSet.locator(diff)
-        # TODO: strip labels
-        ast = diff.before().ast()
+        ast = diff.before().ast().strip_variable_names()
         pools = DonorPoolSet.build(diff, ast, loc)
         return AbstractDonorPoolSet(diff, pools)
 
