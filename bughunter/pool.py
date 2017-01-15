@@ -5,12 +5,6 @@ import json
 import os.path
 
 class DonorPool(object):
-    @staticmethod
-    def build(name, tree, criterion):
-        contents = tree.collect(lambda n: criterion.covers(n))
-        contents = frozenset(hash(n) for n in contents)
-        return DonorPool(name, contents)
-
     def __init__(self, name, contents):
         self.__name = name
         self.__contents = contents
@@ -40,7 +34,7 @@ class DonorPoolBuilder(object):
         pools.update(buffers)
 
         # If any new pools have been built, save the set to disk
-        if not buffers:
+        if buffers:
             jsn = {n: pl.to_json() for (n, pl) in pools.items()}
             ensure_dir(os.path.dirname(loc))
             with open(loc, "w") as f:
@@ -51,7 +45,7 @@ class DonorPoolBuilder(object):
     def __init__(self, ast, existing):
         pools = ['atomic', 'expression', 'statement', 'block', 'identity', \
                  'call-target', 'call-arg', 'switch-expr', 'guard', 'for-init', \
-                 'for-after']
+                 'for-after', 'rhs', 'lhs']
         self.__ast = ast
         self.__buffers = {p: [] for p in pools if not p in existing}
 
