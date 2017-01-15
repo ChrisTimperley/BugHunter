@@ -133,8 +133,8 @@ class DonorPoolSet(object):
     # Checks if a given node can be found within any of the named pools contained
     # within this set of donor pools
     def contains(self, node, pools):
-        for pool in self.__pools:
-            if pool.contains(node):
+        for pool in pools:
+            if self.__pools[pool].contains(node):
                 return True
         return False
 
