@@ -29,9 +29,9 @@ class DonorPoolBuilder(object):
         # Load existing pools from disk
         if os.path.exists(loc):
             with open(loc, "r") as f:
-                existing = json.load(f)
+                pools = json.load(f)
             for (pname, pool) in pools.items():
-                existing[pname] = DonorPool(pname, frozenset(pool))
+                pools[pname] = DonorPool(pname, frozenset(pool))
         else:
             pools = {}
 
@@ -49,7 +49,9 @@ class DonorPoolBuilder(object):
         return pools
 
     def __init__(self, ast, existing):
-        pools = ['atomic', 'expression', 'statement', 'block', 'identity']
+        pools = ['atomic', 'expression', 'statement', 'block', 'identity', \
+                 'call-target', 'call-arg', 'switch-expr', 'guard', 'for-init', \
+                 'for-after']
         self.__ast = ast
         self.__buffers = {p: [] for p in pools if not p in existing}
 
@@ -65,18 +67,43 @@ class DonorPoolBuilder(object):
 
     def visit(self, node):
         self.add('atomic', node)
-        if isinstance(node, cgum.expression.Expression):
-            self.add('expression', node)
-        if isinstance(node, cgum.statement.Statement):
-            self.add('statement', node)
+
+        # block
         if isinstance(node, cgum.statement.Block):
             self.add('block', node)
-        if isinstance(node, cgum.expression.Identity):
-            self.add('identity', node)
-        if isinstance(node, cgum.expression.FunctionCall):
-            self.add('call-target', node.function())
-            for arg in node.arguments().contents():
-                self.add('call-arg', arg)
+
+        # expression
+        elif isinstance(node, cgum.expression.Expression):
+            self.add('expression', node)
+
+            if isinstance(node, cgum.expression.Assignment):
+                self.add('lhs', node.lhs())
+                self.add('rhs', node.rhs())
+            elif isinstance(node, cgum.expression.Identity):
+                self.add('identity', node)
+            elif isinstance(node, cgum.expression.FunctionCall):
+                self.add('call-target', node.function())
+                for arg in node.arguments().contents():
+                    self.add('call-arg', arg)
+        
+        # statement
+        elif isinstance(node, cgum.statement.Statement):
+            self.add('statement', node)
+
+            if isinstance(node, cgum.statement.Switch):
+                self.add('switch-expr', node.expr()) 
+            elif isinstance(node, cgum.statement.Loop):
+                self.add('guard', node.condition())
+
+                if isinstance(node, cgum.statement.For):
+                    init = node.initialisation()
+                    after = node.after()
+                    if not init is None:
+                        self.add('for-init', init)
+                    if not after is None:
+                        self.add('for-after', init)
+            elif isinstance(node, cgum.statement.IfElse):
+                self.add('guard', node.condition())
 
         for child in node.children():
             self.visit(child)
