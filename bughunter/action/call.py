@@ -123,28 +123,28 @@ class InsertCallArg(RepairAction):
     # returns the argument, if one can be found, else None is returned
     @staticmethod
     def detect_one(frm, to):
-        frm = frm.contents()
-        to = to.contents()
+        frm_args = frm.contents()
+        to_args = to.contents()
 
         # "To" must be one unit longer than "From"
-        if len(to) != (len(frm) + 1):
+        if len(to_args) != (len(frm_args) + 1):
             return None
 
         # Ensure order is preserved
         arg = None
         i = k = 0
-        while i < len(frm):
-            if not frm[i].equivalent(to[i + k]):
+        while i < len(frm_args):
+            if not frm_args[i].equivalent(to_args[i + k]):
                 if not arg is None:
                     return None
-                arg = to[i + k]
+                arg = to_args[i + k]
                 k = 1
             else:
                 i += 1
 
         # check if the (single) new argument was appended
         if arg is None:
-            arg = to[-1]
+            arg = to_args[-1]
 
         # return inserted arg
         return (frm, to, arg)

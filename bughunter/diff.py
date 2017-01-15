@@ -62,7 +62,3 @@ class FileDiff(object):
         if self.__cgum is None:
             self.__cgum = self.__master.storage().diff(self)
         return self.__cgum
-
-    # Returns a list of repair actions mined from this diff
-    def actions(self):
-        raise NotImplementedError
