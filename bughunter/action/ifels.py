@@ -72,6 +72,7 @@ class UnwrapStatement(RepairAction):
         # ensure the statement survived
         tmp = []
         for s in l:
+            # get the then statement
             if isinstance(s.then(), cgum.statement.Block):
                 if len(s.then().contents()) == 1:
                     then = s.then().contents()[0]
@@ -79,11 +80,13 @@ class UnwrapStatement(RepairAction):
                     continue
             else:
                 then = s.then()
-            if not patch.is_was(then) is None:
-                tmp.append(s)
+
+            # Ensure the then statement survived
+            if not patch.was_is(then) is None:
+                tmp.append((s, then))
         l = tmp
         actions['UnwrapStatement'] =\
-            [UnwrapStatement(s, patch.was_is(s.then())) for s in l]
+            [UnwrapStatement(s, then) for (s, then) in l]
 
     def __init__(self, stmt, to):
         self.__stmt = stmt
@@ -167,7 +170,8 @@ class ReplaceElseBranch(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
+        # find all IfElse in P' that are also in P
+        l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft)
         l = map(lambda s: (patch.is_was(s), s), l)
         l = filter(star(lambda frm,to: not frm is None), l)
 
@@ -178,7 +182,7 @@ class ReplaceElseBranch(RepairAction):
         l = filter(star(lambda frm,to: not to.els() is None), l)
 
         # check that the else statements differ
-        l = filter(star(lambda frm,to: frm.els().equivalent(to.els())), l)
+        l = filter(star(lambda frm,to: not frm.els().equivalent(to.els())), l)
 
         actions['ReplaceElseBranch'] =\
             [ReplaceElseBranch(frm, to) for (frm, to) in l]
@@ -207,10 +211,9 @@ class RemoveElseBranch(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
+        # find all IfElse in P' that are also in P
         l = filter(lambda s: isinstance(s, cgum.statement.IfElse), stmts_aft) # ifs in P'
         l = map(lambda s: (patch.is_was(s), s), l)
-
-        # Check the IfElse statement was in P
         l = filter(star(lambda frm,to: not frm is None), l)
 
         # Check that there was an else branch in P, but not P'
