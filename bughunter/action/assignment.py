@@ -50,11 +50,10 @@ class ModifyAssignment(RepairAction):
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
-        modified = filter(lambda a: isinstance(a.frm(), cgum.statement.ExprStatement), \
-                          actions['ModifyStatement'])
+        modified = [a.frm() for a in actions['ModifyStatement'] \
+                    if isinstance(a.frm(), cgum.statement.ExprStatement)]
         assigns = []
-        for stmt in modified:
-            bef = modified.frm()
+        for bef in modified:
             assigns += \
                 bef.collect(lambda n: isinstance(n, cgum.expression.Assignment))
         assigns = [(frm, patch.was_is(frm)) for frm in assigns]
@@ -86,6 +85,8 @@ class ReplaceAssignmentLHS(RepairAction):
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = [(a.frm(), a.to()) for a in actions['ModifyAssignment']]
+        l = [(frm, to) for (frm, to) in l \
+             if frm.op().equivalent(to.op())]
         l = [(frm, to) for (frm, to) in l \
              if not frm.lhs().equivalent(to.lhs())]
         l = [(frm, to) for (frm, to) in l \
@@ -123,6 +124,8 @@ class ReplaceAssignmentRHS(RepairAction):
     def detect(patch, stmts_bef, stmts_aft, actions):
         l = [(a.frm(), a.to()) for a in actions['ModifyAssignment']]
         l = [(frm, to) for (frm, to) in l \
+             if frm.op().equivalent(to.op())]
+        l = [(frm, to) for (frm, to) in l \
              if frm.lhs().equivalent(to.lhs())]
         l = [(frm, to) for (frm, to) in l \
              if not frm.rhs().equivalent(to.rhs())]
@@ -145,6 +148,45 @@ class ReplaceAssignmentRHS(RepairAction):
     def to_json(self):
         return super().to_json({'before_assignment': self.__frm_assign.number(), \
                                 'after_assignment': self.__to_assign.number()})
+
+class ReplaceAssignmentOp(RepairAction):
+    @staticmethod
+    def from_json(jsn, before, after):
+        before_assign = before.find(jsn['before_assignment'])
+        after_assign = after.find(jsn['after_assignment'])
+        assert not before_assign is None
+        assert not after_assign is None
+        return ReplaceAssignmentOp(before_assign, after_assign)
+
+    @staticmethod
+    def detect(patch, stmts_bef, stmts_aft, actions):
+        l = [(a.frm(), a.to()) for a in actions['ModifyAssignment']]
+        l = [(frm, to) for (frm, to) in l \
+             if not frm.op().equivalent(to.op())]
+        l = [(frm, to) for (frm, to) in l \
+             if frm.lhs().equivalent(to.lhs())]
+        l = [(frm, to) for (frm, to) in l \
+             if frm.rhs().equivalent(to.rhs())]
+        actions['ReplaceAssignmentOp'] = \
+            [ReplaceAssignmentOp(frm, to) for (frm, to) in l]
+
+    def __init__(self, frm_assign, to_assign):
+        self.__frm_assign = frm_assign
+        self.__to_assign = to_assign
+
+    def frm_assignment(self):
+        return self.__frm_assign
+    def to_assignment(self):
+        return self.__to_assign
+    def frm_op(self):
+        return self.__frm_assign.op()
+    def to_op(self):
+        return self.__to_assign.op()
+
+    def to_json(self):
+        return super().to_json({'before_assignment': self.__frm_assign.number(), \
+                                'after_assignment': self.__to_assign.number()})
+
 
 #class ReplaceAssignmentRHS(RepairAction):
 #    @staticmethod

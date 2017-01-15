@@ -20,7 +20,8 @@ from bughunter.action.loop          import  ReplaceLoopGuard,\
                                             ReplaceLoopBody
 from bughunter.action.assignment    import  ModifyAssignment,\
                                             ReplaceAssignmentRHS,\
-                                            ReplaceAssignmentLHS
+                                            ReplaceAssignmentLHS,\
+                                            ReplaceAssignmentOp
 from bughunter.action.call          import  ModifyCall,\
                                             ReplaceCallTarget,\
                                             ModifyCallArgs,\
@@ -44,10 +45,10 @@ class RepairActions(object):
                 ReplaceSwitchExpression,
                 ReplaceLoopGuard,
                 ReplaceLoopBody,
-                #bughunter.action.assignment.ModifyAssignment,
-                #bughunter.action.assignment.ReplaceAssignmentRHS,
-                #bughunter.action.assignment.ReplaceAssignmentLHS,
-                #bughunter.action.assignment.ReplaceAssignmentOp,
+                ModifyAssignment,
+                ReplaceAssignmentLHS,
+                ReplaceAssignmentRHS,
+                ReplaceAssignmentOp,
                 ModifyCall,
                 ReplaceCallTarget,
                 ModifyCallArgs,

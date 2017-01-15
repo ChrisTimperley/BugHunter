@@ -1,4 +1,6 @@
 import bughunter.source
+from bughunter.action.collection import RepairActions
+from bughunter.pool import ConcreteDonorPoolSet, AbstractDonorPoolSet
 import os.path
 
 # Represents the difference between two files 
@@ -26,18 +28,28 @@ class FileDiff(object):
     def clean_name(self):
         return bughunter.source.SourceFile.clean_filename(self.__name)
 
+    # Returns the repair actions for this diff
+    def actions(self):
+        return RepairActions.mine(self)
+
+    # Returns the concrete repair pool for this diff
+    def concrete_pool(self):
+        return ConcreteDonorPoolSet.build(self)
+
+    # Returns the abstract repair pool for this diff
+    def abstract_pool(self):
+        return AbstractDonorPoolSet.build(self)
+
     # Returns the fix that this diff belongs to
     def fix(self):
         return self.__fix
     
     # Returns the 'before' file
     def before(self):
-        #print("FileDiff - fetching before: %s" % self.__name)
         return self.fix().before().source(self.__name)
 
     # Returns the 'after' file
     def after(self):
-        #print("FileDiff - fetching after: %s" % self.__name)
         return self.fix().after().source(self.__name)
 
     # Determines whether the CGum diff file for this file is cached
