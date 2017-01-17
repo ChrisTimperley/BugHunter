@@ -2,14 +2,10 @@ from bughunter.action.core import *
 import cgum.statement
 import cgum.expression
 
-class ModifyCall(RepairAction):
+class ModifyCall(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['before'])
-        after_call = after.find(jsn['after'])
-        assert not before_call is None
-        assert not after_call is None
-        return ModifyCall(before_call, after_call)
+        return ReplaceRepairAction.from_json(ModifyCall, jsn, before, after)
 
     @staticmethod
     def detect_all_in_modified_statement(patch, stmt, actions):
@@ -27,27 +23,13 @@ class ModifyCall(RepairAction):
         for stmt in stmts:
             ModifyCall.detect_all_in_modified_statement(patch, stmt, actions)
 
-    def __init__(self, frm, to):
-        self.__frm = frm
-        self.__to = to
+    def parts(self):
+        return [self.to()]
 
-    def frm(self):
-        return self.__frm
-    def to(self):
-        return self.__to
-
-    def to_json(self):
-        return super().to_json({'before': self.__frm.number(), \
-                                'after': self.__to.number()})
-
-class ReplaceCallTarget(RepairAction):
+class ReplaceCallTarget(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['before'])
-        after_call = after.find(jsn['after'])
-        assert not before_call is None
-        assert not after_call is None
-        return ReplaceCallTarget(before_call, after_call)
+        return ReplaceRepairAction.from_json(ReplaceCallTarget, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -57,31 +39,22 @@ class ReplaceCallTarget(RepairAction):
         actions['ReplaceCallTarget'] =\
             [ReplaceCallTarget(a.frm(), a.to()) for a in l]
 
-    def __init__(self, frm, to):
-        self.__frm = frm
-        self.__to = to
-
     def frm_call(self):
-        return self.__frm
+        return self.frm()
     def to_call(self):
-        return self.__to
+        return self.to()
     def frm_target(self):
-        return self.__frm.function()
+        return self.frm_call().function()
     def to_target(self):
-        return self.__to.function()
+        return self.to_call().function()
 
-    def to_json(self):
-        return super().to_json({'before': self.__frm.number(), \
-                                'after': self.__to.number()})
+    def parts(self):
+        return [self.to_target()]
 
-class ModifyCallArgs(RepairAction):
+class ModifyCallArgs(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['before'])
-        after_call = after.find(jsn['after'])
-        assert not before_call is None
-        assert not after_call is None
-        return ModifyCallArgs(before_call, after_call)
+        return ReplaceRepairAction.from_json(ModifyCallArgs, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -91,33 +64,34 @@ class ModifyCallArgs(RepairAction):
         actions['ModifyCallArgs'] =\
             [ModifyCallArgs(a.frm(), a.to()) for a in l]
 
-    def __init__(self, frm, to):
-        self.__frm = frm
-        self.__to = to
-
     def frm_call(self):
-        return self.__frm
+        return self.frm()
     def to_call(self):
-        return self.__to
+        return self.to()
     def frm_args(self):
-        return self.__frm.arguments()
+        return self.frm_call().arguments()
     def to_args(self):
-        return self.__to.arguments()
+        return self.to_call().arguments()
 
-    def to_json(self):
-        return super().to_json({'before': self.__frm.number(), \
-                                'after': self.__to.number()})
+    def parts(self):
+        return [self.to_args()]
 
 class InsertCallArg(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['before'])
-        after_call = after.find(jsn['after'])
+        frm = before.find(jsn['from'])
+        to = after.find(jsn['to'])
         arg = after.find(jsn['arg'])
-        assert not before_call is None
-        assert not after_call is None
+
+        assert not frm is None
+        assert not to is None
         assert not arg is None
-        return InsertCallArg(before_call, after_call, arg)
+
+        assert frm.hash() == jsn['from_hash']
+        assert to.hash() == jsn['to_hash']
+        assert arg.hash() == jsn['arg_hash']
+
+        return InsertCallArg(frm, to, arg)
 
     # detects whether a single argument added to "before" yields "to"
     # returns the argument, if one can be found, else None is returned
@@ -169,21 +143,37 @@ class InsertCallArg(RepairAction):
     def arg(self):
         return self.__arg
 
+    def parts(self):
+        return [self.arg()]
+
     def to_json(self):
-        return super().to_json({'before': self.__frm.number(), \
-                                'after': self.__to.number(), \
-                                'arg': self.__arg.number()})
+        jsn = {
+            'from': self.__frm.number(),
+            'from_hash': self.__frm.hash(),
+            'to': self.__to.number(),
+            'to_hash': self.__to.hash(),
+            'arg': self.__arg.number(),
+            'arg_hash': self.__arg.hash()
+        }
+        return super().to_json(jsn)
 
 class RemoveCallArg(RepairAction):
+    # TODO: CODE CLONE - InsertCallArg.from_json
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['before'])
-        after_call = after.find(jsn['after'])
-        arg = before.find(jsn['arg'])
-        assert not before_call is None
-        assert not after_call is None
+        frm = before.find(jsn['from'])
+        to = after.find(jsn['to'])
+        arg = after.find(jsn['arg'])
+
+        assert not frm is None
+        assert not to is None
         assert not arg is None
-        return RemoveCallArg(before_call, after_call, arg)
+
+        assert frm.hash() == jsn['from_hash']
+        assert to.hash() == jsn['to_hash']
+        assert arg.hash() == jsn['arg_hash']
+
+        return RemoveCallArg(frm, to, arg)
 
     @staticmethod
     def detect_one(frm, to):
@@ -209,23 +199,40 @@ class RemoveCallArg(RepairAction):
     def arg(self):
         return self.__arg
 
+    def parts(self):
+        return []
+
     def to_json(self):
-        return super().to_json({'before': self.__frm.number(), \
-                                'after': self.__to.number(), \
-                                'arg': self.__arg.number()})
+        jsn = {
+            'from': self.__frm.number(),
+            'from_hash': self.__frm.hash(),
+            'to': self.__to.number(),
+            'to_hash': self.__to.hash(),
+            'arg': self.__arg.number(),
+            'arg_hash': self.__arg.hash()
+        }
+        return super().to_json(jsn)
 
 class ReplaceCallArg(RepairAction):
+    # TODO: CODE CLONE - InsertCallArg.from_json
     @staticmethod
     def from_json(jsn, before, after):
-        before_call = before.find(jsn['before_call'])
-        after_call = after.find(jsn['after_call'])
-        before_arg = before.find(jsn['before_arg'])
-        after_arg = after.find(jsn['after_arg'])
-        assert not before_call is None
-        assert not after_call is None
-        assert not before_arg is None
-        assert not after_arg is None
-        return ReplaceCallArg(before_call, after_call, before_arg, after_arg)
+        frm = before.find(jsn['from'])
+        to = after.find(jsn['to'])
+        frm_arg = before.find(jsn['from_arg'])
+        to_arg = after.find(jsn['to_arg'])
+
+        assert not frm is None
+        assert not to is None
+        assert not frm_arg is None
+        assert not to_arg is None
+
+        assert frm.hash() == jsn['from_hash']
+        assert to.hash() == jsn['to_hash']
+        assert frm_arg.hash() == jsn['from_arg_hash']
+        assert to_arg.hash() == jsn['to_arg_hash']
+
+        return ReplaceCallArg(frm, to, frm_arg, to_arg)
 
     @staticmethod
     def detect_one(frm, to):
@@ -251,22 +258,33 @@ class ReplaceCallArg(RepairAction):
                                      for (frm_call, to_call, frm_arg, to_arg) in l]
 
     def __init__(self, frm_call, to_call, frm_arg, to_arg):
-        self.__frm_call = frm_call
-        self.__to_call = to_call
+        self.__frm = frm_call
+        self.__to = to_call
         self.__frm_arg = frm_arg
         self.__to_arg = to_arg
 
     def frm_call(self):
-        return self.__frm_call
+        return self.__frm
     def to_call(self):
-        return self.__to_call
+        return self.__to
     def frm_arg(self):
         return self.__frm_arg
     def to_arg(self):
         return self.__to_arg
 
+    def parts(self):
+        return [self.to_arg()]
+
     def to_json(self):
-        return super().to_json({'before_call': self.__frm_call.number(), \
-                                'after_call': self.__to_call.number(), \
-                                'before_arg': self.__frm_arg.number(), \
-                                'after_arg': self.__to_arg.number()})
+        jsn = {
+            'from': self.__frm.number(),
+            'from_hash': self.__frm.hash(),
+            'to': self.__to.number(),
+            'to_hash': self.__to.hash(),
+            'from_arg': self.__frm_arg.number(),
+            'from_arg_hash': self.__frm_arg.hash(),
+            'to_arg': self.__to_arg.number(),
+            'to_arg_hash': self.__to_arg.hash()
+
+        }
+        return super().to_json(jsn)
