@@ -5,14 +5,19 @@ import json
 import os.path
 
 class DonorPool(object):
+    @staticmethod
+    def from_json(name, contents):
+        return DonorPool(name, frozenset(contents))
+
     def __init__(self, name, contents):
+        assert type(contents) is frozenset
         self.__name = name
         self.__contents = contents
 
     def contents(self):
         return self.__contents
     def contains(self, node):
-        return hash(node) in self.__contents
+        return node.hash() in self.__contents
 
     def to_json(self):
         return list(self.__contents)
@@ -25,7 +30,7 @@ class DonorPoolBuilder(object):
             with open(loc, "r") as f:
                 pools = json.load(f)
             for (pname, pool) in pools.items():
-                pools[pname] = DonorPool(pname, frozenset(pool))
+                pools[pname] = DonorPool.from_json(pname, pool)
         else:
             pools = {}
 
@@ -55,7 +60,7 @@ class DonorPoolBuilder(object):
         
         self.visit(self.__ast)
         for (pool, contents) in self.__buffers.items():
-            contents = frozenset(hash(n) for n in contents)
+            contents = frozenset(n.hash() for n in contents)
             self.__buffers[pool] = DonorPool(pool, contents)
         return self.__buffers
 
