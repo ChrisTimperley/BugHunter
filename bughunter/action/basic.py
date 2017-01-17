@@ -28,7 +28,7 @@ class DeleteStatement(DeleteRepairAction):
         actions['DeleteStatement'] = [DeleteStatement(s) for s in l]
 
     def statement(self):
-        return self.__deleted()
+        return self.deleted()
 
     def parts(self):
         return []
