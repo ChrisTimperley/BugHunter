@@ -2,14 +2,10 @@ from bughunter.action.core import *
 import cgum.statement
 
 # Detects a deleted statement
-class DeleteStatement(RepairAction):
-    LABEL = "DeleteStatement"
-
+class DeleteStatement(DeleteRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        stmt = before.find(jsn['deleted'])
-        assert not stmt is None
-        return DeleteStatement(stmt)
+        return DeleteRepairAction.from_json(DeleteStatement, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -31,23 +27,25 @@ class DeleteStatement(RepairAction):
 
         actions['DeleteStatement'] = [DeleteStatement(s) for s in l]
 
-    def __init__(self, stmt):
-        self.__stmt = stmt
-    
     def statement(self):
-        return self.__stmt
+        return self.__deleted()
 
-    def to_json(self):
-        return super().to_json({'deleted': self.__stmt.number()})
+    def parts(self):
+        return []
 
 # Detects an inserted statement
 class InsertStatement(RepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        stmt = after.find(jsn['inserted'])
-        parent = after.find(jsn['parent_after'])
+        stmt = after.find(jsn['stmt'])
+        parent = after.find(jsn['parent'])
+
         assert not stmt is None
         assert not parent is None
+
+        assert stmt.hash() == jsn['stmt_hash']
+        assert parent.hash() == jsn['parent_hash']
+
         return InsertStatement(stmt, parent)
 
     @staticmethod
@@ -64,22 +62,27 @@ class InsertStatement(RepairAction):
 
     def statement(self):
         return self.__stmt
+
+    # parent in P'
     def parent(self):
         return self.__parent
 
+    def parts(self):
+        return [self.statement()]
+
     def to_json(self):
-        return super().to_json({'inserted': self.__stmt.number(),\
-                                'parent_after': self.__parent.number()})
+        return super().to_json({
+            'stmt': self.__stmt.number(),
+            'stmt_hash': self.__stmt.hash(),
+            'parent': self.__parent.number(),
+            'parent_hash': self.__parent.hash()
+        })
 
 # Detects that a statement has been modified (but neither deleted nor inserted)
-class ModifyStatement(RepairAction):
+class ModifyStatement(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        stmt_frm = before.find(jsn['from'])
-        stmt_to = after.find(jsn['to'])
-        assert not stmt_frm is None
-        assert not stmt_to is None
-        return ModifyStatement(stmt_frm, stmt_to)
+        return ReplaceRepairAction.from_json(ModifyStatement, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -88,26 +91,14 @@ class ModifyStatement(RepairAction):
         for edit in patch.actions():
             nearest_stmt_to_subject(edit, patch, groups)
         for (stmt_bef, edits) in groups.items():
-            #print("modified: %s" % stmt_bef)
             stmt_aft = patch.was_is(stmt_bef)
 
             # ensure the statement isn't deleted
             if stmt_aft is None:
-                #print("statement was deleted - ignoring")
                 continue
             
             a = ModifyStatement(stmt_bef, stmt_aft)
             actions['ModifyStatement'].append(a)
 
-    def __init__(self, frm, to):
-        self.__frm = frm
-        self.__to = to
-
-    def frm(self):
-        return self.__frm
-    def to(self):
-        return self.__to
-
-    def to_json(self):
-        return super().to_json({'from': self.__frm.number(), \
-                                'to': self.__to.number()})
+    def parts(self):
+        return [self.to()]
