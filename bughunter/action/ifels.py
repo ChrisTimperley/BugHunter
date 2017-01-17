@@ -50,18 +50,17 @@ class WrapStatement(RepairAction):
     def guard(self):
         return self.__wrapper.condition()
 
+    def parts(self):
+        return [self.guard()]
+
     def to_json(self):
         return super().to_json({'stmt_before': self.__stmt.number(), \
                                 'wrapper': self.__wrapper.number()})
 
-class UnwrapStatement(RepairAction):
+class UnwrapStatement(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        frm = before.find(jsn['before'])
-        to = after.find(jsn['after'])
-        assert not frm is None
-        assert not to is None
-        return UnwrapStatement(frm, to)
+        return ReplaceRepairAction.from_json(UnwrapStatement, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -88,23 +87,14 @@ class UnwrapStatement(RepairAction):
         actions['UnwrapStatement'] =\
             [UnwrapStatement(s, then) for (s, then) in l]
 
-    def __init__(self, stmt, to):
-        self.__stmt = stmt
-        self.__to = to
-
-    def to_json(self):
-        return super().to_json({'before': self.__stmt.number(), \
-                                'after': self.__to.number()})
+    def parts(self):
+        return []
 
 # Action: Replace If Condition
-class ReplaceIfCondition(RepairAction):
+class ReplaceIfCondition(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return ReplaceIfCondition(before_if, after_if)
+        return ReplaceRepairAction.from_json(ReplaceIfCondition, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -115,27 +105,18 @@ class ReplaceIfCondition(RepairAction):
         actions['ReplaceIfCondition'] =\
             [ReplaceIfCondition(frm, to) for (frm, to) in l]
 
-    def __init__(self, from_stmt, to_stmt):
-        self.__from_stmt = from_stmt
-        self.__to_stmt = to_stmt
-
     def from_guard(self):
-        return self.__from_stmt.condition()
+        return self.frm().condition()
     def to_guard(self):
-        return self.__to_stmt.condition()
+        return self.to().condition()
 
-    def to_json(self):
-        return super().to_json({'before_if': self.__from_stmt.number(), \
-                                'after_if': self.__to_stmt.number()})
+    def parts(self):
+        return [self.to_guard()]
 
-class ReplaceThenBranch(RepairAction):
+class ReplaceThenBranch(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return ReplaceThenBranch(before_if, after_if)
+        return ReplaceRepairAction.from_json(ReplaceThenBranch, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -146,27 +127,18 @@ class ReplaceThenBranch(RepairAction):
         actions['ReplaceThenBranch'] =\
             [ReplaceThenBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, frm_stmt, to_stmt):
-        self.__frm_stmt = frm_stmt
-        self.__to_stmt = to_stmt
-
     def from_then(self):
-        return self.__frm_stmt.then()
+        return self.frm().then()
     def to_then(self):
-        return self.__to_stmt.then()
+        return self.to().then()
 
-    def to_json(self):
-        return super().to_json({'before_if': self.__frm_stmt.number(),
-                                'after_if': self.__to_stmt.number()})
+    def parts(self):
+        return [self.to_then()]
 
-class ReplaceElseBranch(RepairAction):
+class ReplaceElseBranch(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return ReplaceElseBranch(before_if, after_if)
+        return ReplaceRepairAction.from_json(ReplaceElseBranch, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -187,27 +159,18 @@ class ReplaceElseBranch(RepairAction):
         actions['ReplaceElseBranch'] =\
             [ReplaceElseBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, frm_stmt, to_stmt):
-        self.__frm_stmt = frm_stmt
-        self.__to_stmt = to_stmt
-
     def from_els(self):
-        return self.__frm_stmt.els()
+        return self.frm().els()
     def to_els(self):
-        return self.__to_stmt.els()
+        return self.to().els()
 
-    def to_json(self):
-        return super().to_json({'before_if': self.__frm_stmt.number(),
-                                'after_if': self.__to_stmt.number()})
+    def parts(self):
+        return [self.to_els()]
 
-class RemoveElseBranch(RepairAction):
+class RemoveElseBranch(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return RemoveElseBranch(before_if, after_if)
+        return ReplaceRepairAction.from_json(RemoveElseBranch, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -222,26 +185,17 @@ class RemoveElseBranch(RepairAction):
         actions['RemoveElseBranch'] =\
             [RemoveElseBranch(frm, to)  for (frm, to) in l]
 
-    def __init__(self, frm_stmt, to_stmt):
-        self.__frm_stmt = frm_stmt
-        self.__to_stmt = to_stmt
+   def from_els(self):
+        return self.frm().els()
 
-    def from_els(self):
-        return self.__frm_stmt.els()
-
-    def to_json(self):
-        return super().to_json({'before_if': self.__frm_stmt.number(),
-                                'after_if': self.__to_stmt.number()})
+    def parts(self):
+        return []
 
 # Action: Insert Else Branch
-class InsertElseBranch(RepairAction):
+class InsertElseBranch(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return InsertElseBranch(before_if, after_if)
+        return ReplaceRepairAction.from_json(InsertElseBranch, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -254,26 +208,17 @@ class InsertElseBranch(RepairAction):
         actions['InsertElseBranch'] =\
             [InsertElseBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, from_stmt, to_stmt):
-        self.__from = from_stmt
-        self.__to = to_stmt
-
     def els(self):
-        return self.__to.els()
+        return self.to().els()
 
-    def to_json(self):
-        return super().to_json({'before_if': self.__from.number(),
-                                'after_if': self.__to.number()})
+    def parts(self):
+        return [self.els()]
 
 # Action: Insert Else-If Branch
-class InsertElseIfBranch(RepairAction):
+class InsertElseIfBranch(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return InsertElseIfBranch(before_if, after_if)
+        return ReplaceRepairAction.from_json(InsertElseIfBranch, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -287,25 +232,16 @@ class InsertElseIfBranch(RepairAction):
         actions['InsertElseIfBranch'] =\
             [InsertElseIfBranch(frm, to) for (frm, to) in l]
 
-    def __init__(self, from_stmt, to_stmt):
-        self.__from = from_stmt
-        self.__to = to_stmt
-
     def elsif(self):
-        return self.__to.els()
+        return self.to().els()
 
-    def to_json(self):
-        return super().to_json({'before_if': self.__from.number(),
-                                'after_if': self.__to.number()})
+    def parts(self):
+        return [self.elsif()]
 
-class GuardElseBranch(RepairAction):
+class GuardElseBranch(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_if = before.find(jsn['before_if'])
-        after_if = after.find(jsn['after_if'])
-        assert not before_if is None
-        assert not after_if is None
-        return GuardElseBranch(before_if, after_if)
+        return ReplaceRepairAction.from_json(GuardElseBranch, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -322,34 +258,34 @@ class GuardElseBranch(RepairAction):
         # of its parent IfThen
         tmp = []
         for s in l:
+            # ensure branch existed in P
             before_branch = patch.is_was(s.then())
+            if before_branch is None:
+                continue
    
-            # fetch the parent IfThen of this statement
+            # fetch the parent IfThen of the inserted IfThen statement
             if isinstance(s.parent(), cgum.statement.Block):
                 parent_if = s.parent().parent()
             else:
                 parent_if = s.parent()
             assert isinstance(parent_if, cgum.statement.IfElse)
 
+            # check that the else branch of the parent IfThen in P is the
+            # same as the then branch of the inserted IfThen in P'
             before_else = patch.is_was(parent_if).els()
             if before_branch == before_else:
-                tmp.append(s)
+                tmp.append((patch.is_was(parent_if), parent_if))
         l = tmp
 
         actions['GuardElseBranch'] =\
-            [GuardElseBranch(patch.is_was(s.parent()), s.parent()) for s in l]
-
-    def __init__(self, frm_if, to_if):
-        self.__frm_if = frm_if
-        self.__to_if = to_if
+            [GuardElseBranch(frm, to) for (frm, to) in l]
 
     def from_els(self):
-        return self.__from_if.els()
+        return self.frm().els()
     def to_els(self):
-        return self.__to_if.els()
+        return self.to().els()
     def guard(self):
-        return self.from_els().condition()
+        return self.to_els().condition()
 
-    def to_json(self):
-        return super().to_json({'before_if': self.__frm_if.number(),
-                                'after_if': self.__to_if.number()})
+    def parts(self):
+        return [self.guard()]
