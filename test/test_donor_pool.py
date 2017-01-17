@@ -1,4 +1,6 @@
 #!/usr/bin/python3
+import cgum
+import cgum.program
 import random
 import unittest
 import bughunter
@@ -13,6 +15,14 @@ class TestDonorPool(unittest.TestCase):
         
         loaded = DonorPool.from_json("hello", list(entries))
         self.assertEqual(loaded.contents(), entries)
+
+    def testHashing(self):
+        x = cgum.program.Program.from_json_file("random_hash.json")
+        y = cgum.program.Program.from_json_file("random_hash.json")
+
+        print(x.hash())
+
+        self.assertEqual(x.hash(), y.hash())
 
 if __name__ == "__main__":
     unittest.main()
