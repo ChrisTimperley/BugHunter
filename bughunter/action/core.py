@@ -45,8 +45,63 @@ def nearest_stmt_to_subject(edit, patch, groups):
 
 # Base class used by all repair actions
 class RepairAction(object):
-    
     # Injects the type of the repair action into its JSON description
     def to_json(self, jsn):
         jsn['type'] = self.__class__.__name__
         return jsn
+
+    # Returns the materials required to complete this repair
+    def parts(self):
+        raise NotImplementedError
+
+# Base class for repair actions that delete a node in P
+class DeleteRepairAction(RepairAction):
+    @staticmethod
+    def from_json(typ, jsn, before, after):
+        deleted = before.find(jsn['deleted'])
+        assert not deleted is None
+        assert deleted.hash() == jsn['deleted_hash']
+        return typ(deleted)
+
+    def to_json(self):
+        jsn['deleted'] = self.deleted().number()
+        jsn['deleted_hash'] = self.deleted().hash()
+        return super().to_json(jsn)
+
+    def __init__(self, deleted):
+        self.__deleted = deleted
+
+    def deleted(self):
+        return self.__deleted
+
+    # Delete-based repair actions require no parts
+    def parts(self):
+        return []
+
+# Base class for repair actions that replace a node in P
+class ReplaceRepairAction(RepairAction):
+    @staticmethod
+    def from_json(typ, jsn, before, after):
+        frm = before.find(jsn['from'])
+        to = after.find(jsn['to'])
+        assert not frm is None
+        assert not to is None
+        assert to.hash() == jsn['to_hash']
+        assert frm.hash() == jsn['from_hash']
+        return typ(frm, to)
+
+    def to_json(self):
+        jsn['from'] = self.frm().number()
+        jsn['from_hash'] = self.frm().hash()
+        jsn['to'] = self.to().number()
+        jsn['to_hash'] = self.to().hash()
+        return super().to_json(jsn)
+
+    def __init__(self, frm, to):
+        self.__frm = frm
+        self.__to = to
+
+    def frm(self):
+        return self.__frm
+    def to(self):
+        return self.__to
