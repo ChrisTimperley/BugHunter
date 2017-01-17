@@ -42,7 +42,7 @@ class InsertStatement(RepairAction):
 
         assert not stmt is None
         assert not parent is None
-
+   
         assert stmt.hash() == jsn['stmt_hash']
         assert parent.hash() == jsn['parent_hash']
 

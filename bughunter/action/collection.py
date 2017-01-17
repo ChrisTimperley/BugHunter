@@ -1,6 +1,8 @@
 import cgum.statement
 import os.path
 import json
+import codecs
+from collections import Counter
 
 from bughunter.action.core import *
 from bughunter.action.basic         import  DeleteStatement,\
@@ -62,10 +64,13 @@ class RepairActions(object):
     def __init__(self, actions):
         self.__actions = actions
 
+    def contents(self):
+        return [a for l in self.__actions.values() for a in l]
+
     # Returns a breakdown of the number of repair actions within this
     # collection by their type
     def stats(self):
-        return {name: len(lst) for (name, lst) in self.__actions.items()}
+        return Counter({name: len(lst) for (name, lst) in self.__actions.items()})
 
     # Reads a JSON repair action description and transforms it into a
     # repair action instance
@@ -132,13 +137,13 @@ class RepairActions(object):
         assert not diff is None
         assert os.path.exists(loc), "given repair action file must exist"
 
-        with open(loc, "r") as f:
+        with codecs.open(loc, 'r', 'utf-8') as f:
             action_sets = json.load(f)
 
         before_ast = diff.before().ast()
         after_ast = diff.after().ast()
 
-        for (typ_name, actions) in action_sets.items():
+        for (typ_name, actions) in sorted(action_sets.items()):
             action_sets[typ_name] = \
                 [RepairActions.__action_from_json(a, before_ast, after_ast) for a in actions]
 

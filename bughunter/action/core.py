@@ -64,6 +64,7 @@ class DeleteRepairAction(RepairAction):
         return typ(deleted)
 
     def to_json(self):
+        jsn = {}
         jsn['deleted'] = self.deleted().number()
         jsn['deleted_hash'] = self.deleted().hash()
         return super().to_json(jsn)
@@ -86,11 +87,13 @@ class ReplaceRepairAction(RepairAction):
         to = after.find(jsn['to'])
         assert not frm is None
         assert not to is None
+       
         assert to.hash() == jsn['to_hash']
         assert frm.hash() == jsn['from_hash']
         return typ(frm, to)
 
     def to_json(self):
+        jsn = {}
         jsn['from'] = self.frm().number()
         jsn['from_hash'] = self.frm().hash()
         jsn['to'] = self.to().number()

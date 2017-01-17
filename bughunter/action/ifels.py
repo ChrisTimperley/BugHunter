@@ -5,14 +5,10 @@ import cgum.statement
 #####
 # GROUP: If-Statement-Related
 #####
-class WrapStatement(RepairAction):
+class WrapStatement(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        stmt_bef = before.find(jsn['stmt_before'])
-        wrapper = after.find(jsn['wrapper'])
-        assert not stmt_bef is None
-        assert not wrapper is None
-        return WrapStatement(stmt_bef, wrapper)
+        return ReplaceRepairAction.from_json(WrapStatement, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -43,19 +39,11 @@ class WrapStatement(RepairAction):
         actions['WrapStatement'] =\
             [WrapStatement(patch.is_was(then), s) for (then, s) in l]
 
-    def __init__(self, stmt, wrapper):
-        self.__stmt = stmt
-        self.__wrapper = wrapper
-
     def guard(self):
-        return self.__wrapper.condition()
+        return self.to().condition()
 
     def parts(self):
         return [self.guard()]
-
-    def to_json(self):
-        return super().to_json({'stmt_before': self.__stmt.number(), \
-                                'wrapper': self.__wrapper.number()})
 
 class UnwrapStatement(ReplaceRepairAction):
     @staticmethod
@@ -185,7 +173,7 @@ class RemoveElseBranch(ReplaceRepairAction):
         actions['RemoveElseBranch'] =\
             [RemoveElseBranch(frm, to)  for (frm, to) in l]
 
-   def from_els(self):
+    def from_els(self):
         return self.frm().els()
 
     def parts(self):
