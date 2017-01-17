@@ -10,8 +10,9 @@ RUN apt-get update && \
     cd /tmp/pycgum &&\
     python3 setup.py install && \
     cd /tmp/bughunter && \
-    python3 setup.py install && \
-    apt-get remove -y python3-setuptools && \
+    python3 setup.py install
+RUN cd /tmp/bughunter/test && ./test_donor_pool.py
+RUN apt-get remove -y python3-setuptools && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 ADD test /test
