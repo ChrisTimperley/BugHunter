@@ -1,14 +1,10 @@
 from bughunter.action.core import *
 import cgum.statement
 
-class ReplaceLoopGuard(RepairAction):
+class ReplaceLoopGuard(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_loop = before.find(jsn['before_loop'])
-        after_loop = after.find(jsn['after_loop'])
-        assert not before_loop is None
-        assert not after_loop is None
-        return ReplaceLoopGuard(before_loop, after_loop)
+        return ReplaceRepairAction.from_json(ReplaceLoopGuard, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -30,27 +26,18 @@ class ReplaceLoopGuard(RepairAction):
         actions['ReplaceLoopGuard'] =\
             [ReplaceLoopGuard(frm, to) for (frm, to) in l]
         
-    def __init__(self, from_stmt, to_stmt):
-        self.__from_stmt = from_stmt
-        self.__to_stmt = to_stmt
-
     def from_guard(self):
-        return self.__from_stmt.condition()
+        return self.frm().condition()
     def to_guard(self):
-        return self.__to_stmt.condition()
+        return self.to().condition()
 
-    def to_json(self):
-        return super().to_json({'before_loop': self.__from_stmt.number(), \
-                                'after_loop': self.__to_stmt.number()})
-       
-class ReplaceLoopBody(RepairAction):
+    def parts(self):
+        return [self.to_guard()]
+
+class ReplaceLoopBody(ReplaceRepairAction):
     @staticmethod
     def from_json(jsn, before, after):
-        before_loop = before.find(jsn['before_loop'])
-        after_loop = after.find(jsn['after_loop'])
-        assert not before_loop is None
-        assert not after_loop is None
-        return ReplaceLoopBody(before_loop, after_loop)
+        return ReplaceRepairAction.from_json(ReplaceLoopBody, jsn, before, after)
 
     @staticmethod
     def detect(patch, stmts_bef, stmts_aft, actions):
@@ -61,15 +48,10 @@ class ReplaceLoopBody(RepairAction):
         actions['ReplaceLoopBody'] =\
             [ReplaceLoopBody(frm, to) for (frm, to) in l]
 
-    def __init__(self, from_stmt, to_stmt):
-        self.__from_stmt = from_stmt
-        self.__to_stmt = to_stmt
-
     def from_body(self):
-        return self.__from_stmt.body()
+        return self.frm().body()
     def to_body(self):
-        return self.__to_stmt.body()
+        return self.to().body()
 
-    def to_json(self):
-        return super().to_json({'before_loop': self.__from_stmt.number(), \
-                                'after_loop': self.__to_stmt.number()})
+    def parts(self):
+        return [self.to_body()]
