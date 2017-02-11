@@ -112,6 +112,11 @@ class Fix(object):
     def modifies_multiple_source_files(self):
         return len(list(self.source_files())) > 1
 
+    # Prepares all on-disk files needed to analyse this fix
+    def prepare(self):
+        for diff in diffs:
+            diff.prepare()
+
     # Returns a pointer to the version of the program before the fix
     def before(self):
         return FaultyVersion(self)
