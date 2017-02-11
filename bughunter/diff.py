@@ -57,6 +57,11 @@ class FileDiff(object):
     def cached(self):
         return os.path.exists(self.location())
 
+    # Ensures that the files for this diff are cached to disk
+    def prepare(self):
+        if not self.cached():
+            self.cgum()
+
     # Returns the PyCGum difference representation of this diff
     def cgum(self):
         if self.__cgum is None:
