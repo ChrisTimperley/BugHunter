@@ -57,10 +57,17 @@ class FileDiff(object):
     def cached(self):
         return os.path.exists(self.location())
 
-    # Ensures that the files for this diff are cached to disk
+    # Ensures that the files for this diff are cached to disk, including its
+    # donor pool
+    #
+    # TODO: could be more efficient if we just didn't load existing donor pools from
+    #       disk, but that involves a bit more refactoring; this is good enough for
+    #       now
     def prepare(self):
         if not self.cached():
             self.cgum()
+        ConcreteDonorPoolSet.build(self)
+        AbstractDonorPoolSet.build(self)
 
     # Returns the PyCGum difference representation of this diff
     def cgum(self):
