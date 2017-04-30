@@ -64,10 +64,13 @@ class FileDiff(object):
     #       disk, but that involves a bit more refactoring; this is good enough for
     #       now
     def prepare(self):
-        if not self.cached():
-            self.cgum()
-        ConcreteDonorPoolSet.build(self)
-        AbstractDonorPoolSet.build(self)
+        try:
+            if not self.cached():
+                self.cgum()
+            ConcreteDonorPoolSet.build(self)
+            AbstractDonorPoolSet.build(self)
+        except:
+            pass 
 
     # Returns the PyCGum difference representation of this diff
     def cgum(self):

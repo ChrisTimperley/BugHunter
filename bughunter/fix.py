@@ -114,7 +114,8 @@ class Fix(object):
 
     # Prepares all on-disk files needed to analyse this fix
     def prepare(self):
-        for diff in diffs:
+        print("Preparing bug: {}".format(self.identifier()))
+        for diff in self.diffs():
             diff.prepare()
 
     # Returns a pointer to the version of the program before the fix
